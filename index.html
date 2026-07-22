@@ -433,6 +433,21 @@
   .hp-why-label{color:var(--clay);display:block;margin-bottom:9px;font-size:.64rem}
   .hp-why p{font-size:.92rem;line-height:1.75;color:#3c4a48}
   .hp-cta{background:var(--clay)}
+  /* inline editing inside the profile popup */
+  .hp-editnote{background:var(--paper-2);border:1px dashed var(--clay);border-radius:10px;padding:9px 13px;font-size:.78rem;color:var(--clay);margin-bottom:16px;text-align:center}
+  .hp-edit{outline:1px dashed rgba(201,111,82,.45);outline-offset:3px;border-radius:3px;cursor:text;transition:background .15s}
+  .hp-edit:hover{background:rgba(201,111,82,.07);outline-color:var(--clay)}
+  .hp-edit:focus{background:rgba(201,111,82,.05);outline:2px solid var(--clay)}
+  .hp-stat{position:relative}
+  .hp-tl-item{position:relative}
+  .hp-skill{position:relative;display:inline-flex;align-items:center;gap:5px}
+  .hp-x{background:var(--clay);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:.75rem;line-height:1;cursor:pointer;position:absolute;top:-6px;right:-6px;display:grid;place-items:center;padding:0;z-index:2}
+  .hp-x.sm{position:static;width:15px;height:15px;font-size:.62rem;margin-left:2px}
+  .hp-x:hover{filter:brightness(1.15)}
+  .hp-add{background:none;border:1px dashed var(--line);border-radius:14px;color:var(--sage);cursor:pointer;font-family:inherit;font-size:1rem;display:grid;place-items:center;min-height:44px;transition:.2s}
+  .hp-add:hover{border-color:var(--clay);color:var(--clay)}
+  .hp-add.wide{width:100%;font-size:.84rem;margin-top:6px;border-radius:10px}
+  .hp-add.sm{min-height:auto;padding:7px 16px;border-radius:30px;font-size:.9rem}
 
   @media (max-width:520px){
     .hp-hero{flex-direction:column;text-align:center;gap:14px}
@@ -1415,83 +1430,126 @@ function toggleNav(i){
 /* ============ HOST BIO POPUP ============ */
 function openHostBio(){
   if(textEditMode)return;
-  const t=I18N[lang],h=STATE.host||DEFAULT_HOST,ko=lang==="ko";
-  const D=DEFAULT_HOST;
+  const t=I18N[lang],h=STATE.host||DEFAULT_HOST,ko=lang==="ko",D=DEFAULT_HOST;
+  const ed=adminMode?' contenteditable="true" class="hp-edit"':'';
   const stats=(h.stats&&h.stats.length?h.stats:D.stats)||[];
   const tl=(h.timeline&&h.timeline.length?h.timeline:D.timeline)||[];
-  const skills=(h.skills&&tx(h.skills).length?tx(h.skills):tx(D.skills))||[];
+  const skills=(h.skills&&tx(h.skills)&&tx(h.skills).length?tx(h.skills):tx(D.skills))||[];
   document.getElementById("modalRoot").innerHTML=`
     <div class="modal-bg" onclick="if(event.target===this)closeModal()">
       <div class="modal hp-modal">
         <button class="close" onclick="closeModal()">&times;</button>
+        ${adminMode?`<div class="hp-editnote">${ko?"✏️ 아무 글자나 클릭해서 바로 수정하세요":"✏️ Click any text to edit it"}</div>`:""}
 
         <div class="hp-hero">
           <div class="hp-photo" style="${h.photo?`background-image:url(${h.photo})`:""}">${h.photo?"":`<span>ZEN</span>`}</div>
           <div class="hp-hero-txt">
-            <div class="hp-tag">${esc(tx(h.tagline)||tx(D.tagline))}</div>
-            <div class="hp-role mono">${esc(tx(h.exp))}</div>
-            <div class="hp-langs">${esc(tx(h.langs))}</div>
+            <div class="hp-tag"${ed} data-hp="tagline">${esc(tx(h.tagline)||tx(D.tagline))}</div>
+            <div class="hp-role mono"${ed} data-hp="exp">${esc(tx(h.exp))}</div>
+            <div class="hp-langs"${ed} data-hp="langs">${esc(tx(h.langs))}</div>
           </div>
         </div>
 
-        <p class="hp-intro">${esc(tx(h.intro)||tx(D.intro))}</p>
+        <p class="hp-intro"${ed} data-hp="intro">${esc(tx(h.intro)||tx(D.intro))}</p>
 
         <div class="hp-stats">
-          ${stats.map(st=>`<div class="hp-stat"><b>${esc(st.n)}</b><span>${esc(tx(st.l))}</span></div>`).join("")}
+          ${stats.map((st,i)=>`<div class="hp-stat">
+            <b${ed} data-hs="${i}.n">${esc(st.n)}</b>
+            <span${ed} data-hs="${i}.l">${esc(tx(st.l))}</span>
+            ${adminMode?`<button class="hp-x" onclick="delStat(${i})">&times;</button>`:""}
+          </div>`).join("")}
+          ${adminMode?`<button class="hp-add" onclick="addStat()">+</button>`:""}
         </div>
 
         <div class="hp-sec-title mono">${ko?"경력":"Experience"}</div>
         <div class="hp-timeline">
-          ${tl.map(item=>`
+          ${tl.map((item,i)=>`
             <div class="hp-tl-item">
-              <span class="hp-tl-year">${esc(item.y)}</span>
-              <div><b>${esc(tx(item.t))}</b><p>${esc(tx(item.d))}</p></div>
+              <span class="hp-tl-year"${ed} data-ht="${i}.y">${esc(item.y)}</span>
+              <div><b${ed} data-ht="${i}.t">${esc(tx(item.t))}</b>
+              <p${ed} data-ht="${i}.d">${esc(tx(item.d))}</p></div>
+              ${adminMode?`<button class="hp-x" onclick="delTl(${i})">&times;</button>`:""}
             </div>`).join("")}
+          ${adminMode?`<button class="hp-add wide" onclick="addTl()">+ ${ko?"경력 추가":"Add experience"}</button>`:""}
         </div>
 
         <div class="hp-sec-title mono">${ko?"전문 분야":"What I'm good at"}</div>
-        <div class="hp-skills">${skills.map(k=>`<span class="hp-skill">${esc(k)}</span>`).join("")}</div>
+        <div class="hp-skills">
+          ${skills.map((k,i)=>`<span class="hp-skill"${ed} data-hk="${i}">${esc(k)}${adminMode?`<button class="hp-x sm" onclick="delSkill(${i})">&times;</button>`:""}</span>`).join("")}
+          ${adminMode?`<button class="hp-add sm" onclick="addSkill()">+</button>`:""}
+        </div>
 
         <div class="hp-why">
           <div class="hp-why-label mono">${ko?"이 일을 하는 이유":"Why I do this"}</div>
-          <p>${esc(tx(h.why)||tx(D.why))}</p>
+          <p${ed} data-hp="why">${esc(tx(h.why)||tx(D.why))}</p>
         </div>
 
         <button class="submit hp-cta" onclick="closeModal();setTimeout(openBooking,150)">${ko?"함께할 날 예약하기 →":"Book a day with me →"}</button>
-        ${adminMode?`<button class="submit" style="background:#fff;color:var(--ink);border:1px solid var(--line);margin-top:8px" onclick="editHostProfile()">${t.host_edit}</button>`:""}
       </div>
     </div>`;
+  if(adminMode)wireHostEdit();
 }
-/* admin: edit the profile fields for the current language */
-function editHostProfile(){
-  const ko=lang==="ko",h=STATE.host?structuredClone(STATE.host):structuredClone(DEFAULT_HOST);
-  const D=DEFAULT_HOST;
-  const ask=(label,cur)=>{const v=prompt(label,cur||"");return v;};
-  const set=(obj,key,val)=>{if(val===null)return false;obj[key]=obj[key]||{};obj[key][lang]=val;return true;};
+/* inline editing inside the profile popup */
+function wireHostEdit(){
+  const grab=el=>{const c=el.cloneNode(true);c.querySelectorAll(".hp-x").forEach(b=>b.remove());return c.innerText.trim();};
+  const host=()=>STATE.host?structuredClone(STATE.host):structuredClone(DEFAULT_HOST);
+  const save=h=>{STATE.host=h;saveAll();applyHost();flashSaved();};
 
-  let v;
-  v=ask(ko?"인사말 (예: 안녕하세요, Zen이에요 👋)":"Greeting", tx(h.tagline)||tx(D.tagline)); if(v===null)return; set(h,"tagline",v);
-  v=ask(ko?"한 줄 직함":"Role / title", tx(h.exp)); if(v===null)return; set(h,"exp",v);
-  v=ask(ko?"자기소개 (2~3문장)":"Intro (2–3 sentences)", tx(h.intro)||tx(D.intro)); if(v===null)return; set(h,"intro",v);
-  v=ask(ko?"전문 분야 (쉼표로 구분)":"Skills (comma separated)", (tx(h.skills)||tx(D.skills)).join(", "));
-  if(v===null)return; h.skills=h.skills||{}; h.skills[lang]=v.split(",").map(x=>x.trim()).filter(Boolean);
-  v=ask(ko?"이 일을 하는 이유":"Why I do this", tx(h.why)||tx(D.why)); if(v===null)return; set(h,"why",v);
+  document.querySelectorAll("[data-hp]").forEach(el=>{
+    el.addEventListener("blur",()=>{
+      const k=el.getAttribute("data-hp"),h=host();
+      h[k]=h[k]||{};h[k][lang]=grab(el);save(h);
+    });
+  });
+  document.querySelectorAll("[data-hs]").forEach(el=>{
+    el.addEventListener("blur",()=>{
+      const [i,f]=el.getAttribute("data-hs").split(".");const h=host();
+      h.stats=h.stats&&h.stats.length?h.stats:structuredClone(DEFAULT_HOST.stats);
+      if(f==="n")h.stats[+i].n=grab(el);
+      else{h.stats[+i].l=h.stats[+i].l||{};h.stats[+i].l[lang]=grab(el);}
+      save(h);
+    });
+  });
+  document.querySelectorAll("[data-ht]").forEach(el=>{
+    el.addEventListener("blur",()=>{
+      const [i,f]=el.getAttribute("data-ht").split(".");const h=host();
+      h.timeline=h.timeline&&h.timeline.length?h.timeline:structuredClone(DEFAULT_HOST.timeline);
+      if(f==="y")h.timeline[+i].y=grab(el);
+      else{h.timeline[+i][f]=h.timeline[+i][f]||{};h.timeline[+i][f][lang]=grab(el);}
+      save(h);
+    });
+  });
+  document.querySelectorAll("[data-hk]").forEach(el=>{
+    el.addEventListener("blur",()=>{
+      const i=+el.getAttribute("data-hk"),h=host();
+      const cur=(h.skills&&h.skills[lang])?structuredClone(h.skills[lang]):structuredClone(tx(DEFAULT_HOST.skills));
+      cur[i]=grab(el);
+      h.skills=h.skills||{};h.skills[lang]=cur;save(h);
+    });
+  });
+  // formatting toolbar works here too
+  document.querySelectorAll(".hp-edit").forEach(el=>{
+    el.addEventListener("mouseup",()=>setTimeout(showToolbarIfSelection,10));
+    el.addEventListener("keyup",()=>setTimeout(showToolbarIfSelection,10));
+    el.addEventListener("keydown",e=>{if(e.key==="Escape")el.blur();});
+  });
+}
+function hostNow(){return STATE.host?structuredClone(STATE.host):structuredClone(DEFAULT_HOST);}
+function addStat(){const h=hostNow();h.stats=h.stats&&h.stats.length?h.stats:structuredClone(DEFAULT_HOST.stats);
+  h.stats.push({n:"0",l:{[lang]:lang==="ko"?"항목":"Label"}});STATE.host=h;saveAll();openHostBio();}
+function delStat(i){const h=hostNow();h.stats=h.stats&&h.stats.length?h.stats:structuredClone(DEFAULT_HOST.stats);
+  h.stats.splice(i,1);STATE.host=h;saveAll();openHostBio();}
+function addTl(){const h=hostNow();h.timeline=h.timeline&&h.timeline.length?h.timeline:structuredClone(DEFAULT_HOST.timeline);
+  h.timeline.push({y:lang==="ko"?"연도":"Year",t:{[lang]:lang==="ko"?"직함":"Title"},d:{[lang]:lang==="ko"?"설명":"Description"}});
+  STATE.host=h;saveAll();openHostBio();}
+function delTl(i){const h=hostNow();h.timeline=h.timeline&&h.timeline.length?h.timeline:structuredClone(DEFAULT_HOST.timeline);
+  h.timeline.splice(i,1);STATE.host=h;saveAll();openHostBio();}
+function addSkill(){const h=hostNow();const cur=(h.skills&&h.skills[lang])?structuredClone(h.skills[lang]):structuredClone(tx(DEFAULT_HOST.skills));
+  cur.push(lang==="ko"?"새 분야":"New skill");h.skills=h.skills||{};h.skills[lang]=cur;STATE.host=h;saveAll();openHostBio();}
+function delSkill(i){const h=hostNow();const cur=(h.skills&&h.skills[lang])?structuredClone(h.skills[lang]):structuredClone(tx(DEFAULT_HOST.skills));
+  cur.splice(i,1);h.skills=h.skills||{};h.skills[lang]=cur;STATE.host=h;saveAll();openHostBio();}
 
-  STATE.host=h;saveAll();openHostBio();
-}
-function editHostStats(){
-  const ko=lang==="ko",h=STATE.host?structuredClone(STATE.host):structuredClone(DEFAULT_HOST);
-  const cur=(h.stats&&h.stats.length?h.stats:DEFAULT_HOST.stats);
-  const v=prompt(ko?"숫자 3개를 이렇게 입력: 10+|스킨케어 경력, 1000+|상담한 고객, 2|사용 언어":"Enter as: 10+|Years, 1000+|Clients, 2|Languages",
-    cur.map(s=>`${s.n}|${tx(s.l)}`).join(", "));
-  if(v===null)return;
-  const stats=v.split(",").map(part=>{
-    const [n,l]=part.split("|").map(x=>(x||"").trim());
-    return {n:n||"",l:{[lang]:l||""}};
-  }).filter(s=>s.n);
-  if(stats.length){h.stats=stats;STATE.host=h;saveAll();openHostBio();}
-}
-function editHostBio(){editHostProfile();}
+function editHostBio(){openHostBio();}
 
 
 /* ---- guest: manage own review with password ---- */
@@ -2162,9 +2220,8 @@ function openSettings(){
           <input id="st_langs" type="text" value="${esc(tx(h.langs))}"></div>
         <div class="field"><label>${ko?"케어 철학 (카드에 표시)":"Philosophy (shown on card)"}</label>
           <textarea id="st_phil" rows="3">${esc(tx(h.phil))}</textarea></div>
-        <div class="field" style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="reset-btn" style="flex:1" onclick="closeModal();editHostProfile()">${ko?"프로필 내용 수정 →":"Edit profile content →"}</button>
-          <button class="reset-btn" style="flex:1" onclick="closeModal();editHostStats()">${ko?"숫자 3개 수정 →":"Edit the 3 stats →"}</button>
+        <div class="field">
+          <button class="reset-btn" style="width:100%" onclick="closeModal();setTimeout(openHostBio,150)">${ko?"프로필 팝업 열어서 수정하기 →":"Open profile to edit →"}</button>
         </div>
 
         <div class="set-label mono">${ko?"연락 채널":"Contact channels"}</div>
