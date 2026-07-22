@@ -58,6 +58,20 @@ function checkAdmin(request, env) {
   const token = request.headers.get("x-admin-token") || "";
   return token && token === env.ADMIN_PASSWORD;
 }
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(str)));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+async function audit(db, entity, entityId, action, actor, before, after) {
+  try {
+    await db
+      .prepare("INSERT INTO audit_log (entity,entity_id,action,actor,before_data,after_data,created_at) VALUES (?,?,?,?,?,?,?)")
+      .bind(entity, entityId, action, actor, before ? JSON.stringify(before) : null, after ? JSON.stringify(after) : null, nowISO())
+      .run();
+  } catch (e) { /* audit table may not exist yet */ }
+}
+
 function safeParse(s) {
   try { return JSON.parse(s); } catch { return []; }
 }
@@ -77,15 +91,29 @@ export async function onRequest(context) {
   try {
     /* ---------------- public: config ---------------- */
     if (route === "/config" && request.method === "GET") {
-      const [packages, hours, dayhours, closed, blocked, zh] = await Promise.all([
+      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms] = await Promise.all([
         getSetting(db, "packages", null),
         getSetting(db, "hours", { open: 10, close: 21 }),
         getSetting(db, "dayhours", {}),
         getSetting(db, "closed", []),
         getSetting(db, "blocked", {}),
         getSetting(db, "zh", false),
+        getSetting(db, "feats", null),
+        getSetting(db, "host", null),
+        getSetting(db, "contact", null),
+        getSetting(db, "faq", null),
+        getSetting(db, "media", null),
+        getSetting(db, "privacy", null),
+        getSetting(db, "terms", null),
       ]);
-      return json({ packages, hours, dayhours, closed, blocked, zh });
+      let reviews = [];
+      try {
+        const { results } = await db
+          .prepare("SELECT id,name,rating,text,created_at FROM reviews WHERE hidden=0 ORDER BY id DESC LIMIT 60")
+          .all();
+        reviews = results || [];
+      } catch (e) { /* reviews table may not exist yet */ }
+      return json({ packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, reviews });
     }
 
     /* ---------------- public: slots (+ queue counts) ---------------- */
@@ -131,7 +159,7 @@ export async function onRequest(context) {
     /* ---------------- public: create request ---------------- */
     if (route === "/book" && request.method === "POST") {
       const body = await request.json();
-      const { name, email, pkg, date, time, people, note, addons } = body || {};
+      const { name, email, pkg, date, time, people, note, addons, contact, needs } = body || {};
       if (!name || !email || !pkg || !date || !time) return json({ error: "missing fields" }, 400);
 
       const [packages, hours, dayhours, closed, blocked] = await Promise.all([
@@ -166,13 +194,15 @@ export async function onRequest(context) {
 
       await db
         .prepare(
-          `INSERT INTO bookings (code,name,email,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?)`
+          `INSERT INTO bookings (code,name,email,contact,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?)`
         )
         .bind(
           code,
           String(name).slice(0, 120),
           String(email).slice(0, 160),
+          String(contact || "").slice(0, 160),
+          JSON.stringify(needs || []),
           pkg,
           (pk.title && pk.title.en) || pkg,
           pk.dur_h,
@@ -339,9 +369,74 @@ export async function onRequest(context) {
     if (route === "/admin/save" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
       const body = await request.json();
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms"];
       for (const k of keys) if (body[k] !== undefined) await putSetting(db, k, body[k]);
       return json({ ok: true });
+    }
+
+    /* ---------------- public: post a review ---------------- */
+    if (route === "/review" && request.method === "POST") {
+      const { name, text, rating, password } = await request.json();
+      if (!name || !text || !password) return json({ error: "missing fields" }, 400);
+      const pwHash = await sha256(password);
+      await db
+        .prepare("INSERT INTO reviews (name,rating,text,pw_hash,hidden,created_at,updated_at) VALUES (?,?,?,?,0,?,?)")
+        .bind(String(name).slice(0, 80), Math.min(5, Math.max(1, parseInt(rating) || 5)),
+              String(text).slice(0, 2000), pwHash, nowISO(), nowISO())
+        .run();
+      const row = await db.prepare("SELECT last_insert_rowid() AS id").first();
+      await audit(db, "review", row.id, "create", "guest", null, { name, rating, text });
+      return json({ ok: true });
+    }
+
+    /* ---------------- public: edit / delete own review ---------------- */
+    if (route === "/review/edit" && request.method === "POST") {
+      const { id, password, text, rating } = await request.json();
+      const row = await db.prepare("SELECT * FROM reviews WHERE id = ?").bind(id).first();
+      if (!row) return json({ error: "not found" }, 404);
+      if (row.pw_hash !== (await sha256(password))) return json({ error: "bad password" }, 401);
+      const before = { text: row.text, rating: row.rating };
+      await db.prepare("UPDATE reviews SET text=?, rating=?, updated_at=? WHERE id=?")
+        .bind(String(text).slice(0, 2000), Math.min(5, Math.max(1, parseInt(rating) || row.rating)), nowISO(), id).run();
+      await audit(db, "review", id, "edit", "guest", before, { text, rating });
+      return json({ ok: true });
+    }
+    if (route === "/review/delete" && request.method === "POST") {
+      const { id, password } = await request.json();
+      const row = await db.prepare("SELECT * FROM reviews WHERE id = ?").bind(id).first();
+      if (!row) return json({ error: "not found" }, 404);
+      if (row.pw_hash !== (await sha256(password))) return json({ error: "bad password" }, 401);
+      await audit(db, "review", id, "delete", "guest", { name: row.name, text: row.text, rating: row.rating }, null);
+      await db.prepare("DELETE FROM reviews WHERE id=?").bind(id).run();
+      return json({ ok: true });
+    }
+
+    /* ---------------- admin: reviews ---------------- */
+    if (route === "/admin/reviews" && request.method === "GET") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { results } = await db.prepare("SELECT id,name,rating,text,hidden,created_at,updated_at FROM reviews ORDER BY id DESC LIMIT 300").all();
+      return json({ reviews: results || [] });
+    }
+    if (route === "/admin/review/hide" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { id, hidden } = await request.json();
+      const row = await db.prepare("SELECT hidden FROM reviews WHERE id=?").bind(id).first();
+      await db.prepare("UPDATE reviews SET hidden=?, updated_at=? WHERE id=?").bind(hidden ? 1 : 0, nowISO(), id).run();
+      await audit(db, "review", id, hidden ? "hide" : "show", "admin", { hidden: row ? row.hidden : null }, { hidden: hidden ? 1 : 0 });
+      return json({ ok: true });
+    }
+    if (route === "/admin/review/del" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { id } = await request.json();
+      const row = await db.prepare("SELECT * FROM reviews WHERE id=?").bind(id).first();
+      if (row) await audit(db, "review", id, "delete", "admin", { name: row.name, text: row.text, rating: row.rating }, null);
+      await db.prepare("DELETE FROM reviews WHERE id=?").bind(id).run();
+      return json({ ok: true });
+    }
+    if (route === "/admin/audit" && request.method === "GET") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { results } = await db.prepare("SELECT * FROM audit_log ORDER BY id DESC LIMIT 200").all();
+      return json({ log: (results || []).map((r) => ({ ...r, before_data: safeParse(r.before_data), after_data: safeParse(r.after_data) })) });
     }
 
     return json({ error: "not found", route }, 404);
