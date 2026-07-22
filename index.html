@@ -398,14 +398,49 @@
   .nav-arrow{background:none;border:1px solid var(--line);border-radius:7px;width:26px;height:26px;cursor:pointer;color:var(--ink);font-size:.75rem}
   .nav-arrow:hover{border-color:var(--clay);color:var(--clay)}
 
-  /* ===== host popup ===== */
+  /* ===== host card + profile popup ===== */
   .host-card{cursor:pointer;transition:transform .2s,box-shadow .2s}
   .host-card:hover{transform:translateY(-3px);box-shadow:0 24px 56px -30px rgba(26,43,43,.35)}
   .host-more{display:inline-block;margin-top:12px;font-size:.82rem;color:var(--clay);font-weight:600;border-bottom:1px solid var(--clay);padding-bottom:2px}
-  .host-pop-top{display:flex;gap:18px;align-items:center;margin-bottom:18px}
-  .host-photo.sm{width:96px;height:96px;aspect-ratio:auto;border-radius:16px;flex-shrink:0;background-size:cover;background-position:center}
-  .host-photo.sm .host-ph{font-size:1.3rem}
-  .host-bio{font-size:.95rem;line-height:1.75;color:#3c4a48;max-height:50vh;overflow-y:auto}
+
+  .hp-modal{max-width:560px;padding-top:34px}
+  .hp-hero{display:flex;gap:18px;align-items:center;margin-bottom:20px}
+  .hp-photo{width:104px;height:104px;border-radius:22px;flex-shrink:0;background:linear-gradient(150deg,var(--ink),#2c4f4e);background-size:cover;background-position:center;display:grid;place-items:center}
+  .hp-photo span{font-family:'Fraunces',serif;font-size:1.4rem;color:var(--gold);letter-spacing:.1em}
+  .hp-tag{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:600;line-height:1.2;margin-bottom:6px}
+  body.lang-ko .hp-tag,body.lang-zh .hp-tag{font-family:'Noto Sans KR',sans-serif}
+  .hp-role{color:var(--clay);font-size:.68rem;display:block;margin-bottom:5px}
+  .hp-langs{font-size:.84rem;color:var(--sage)}
+  .hp-intro{font-size:.96rem;line-height:1.75;color:#3c4a48;margin-bottom:22px}
+
+  .hp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:26px}
+  .hp-stat{background:var(--ink);border-radius:14px;padding:16px 12px;text-align:center}
+  .hp-stat b{display:block;font-family:'Fraunces',serif;font-size:1.5rem;color:var(--gold);line-height:1}
+  .hp-stat span{display:block;font-size:.7rem;color:#9fb0ab;margin-top:6px;line-height:1.35}
+
+  .hp-sec-title{color:var(--sage);display:block;margin:0 0 12px;font-size:.66rem}
+  .hp-timeline{position:relative;padding-left:16px;margin-bottom:26px;border-left:2px solid var(--mist)}
+  .hp-tl-item{position:relative;padding:0 0 18px 14px}
+  .hp-tl-item::before{content:"";position:absolute;left:-23px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--clay);border:2px solid var(--paper)}
+  .hp-tl-year{font-family:'Space Mono',monospace;font-size:.64rem;color:var(--clay);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:3px}
+  .hp-tl-item b{font-size:.94rem;display:block;margin-bottom:3px}
+  .hp-tl-item p{font-size:.86rem;color:#54615f;line-height:1.6}
+
+  .hp-skills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:26px}
+  .hp-skill{background:var(--paper-2);border:1px solid var(--line);border-radius:30px;padding:7px 14px;font-size:.82rem;color:#3c4a48}
+
+  .hp-why{background:var(--paper-2);border-radius:16px;padding:20px;margin-bottom:22px;border-left:3px solid var(--clay)}
+  .hp-why-label{color:var(--clay);display:block;margin-bottom:9px;font-size:.64rem}
+  .hp-why p{font-size:.92rem;line-height:1.75;color:#3c4a48}
+  .hp-cta{background:var(--clay)}
+
+  @media (max-width:520px){
+    .hp-hero{flex-direction:column;text-align:center;gap:14px}
+    .hp-stats{grid-template-columns:1fr;gap:8px}
+    .hp-stat{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;text-align:left}
+    .hp-stat b{font-size:1.2rem}
+    .hp-stat span{margin-top:0;text-align:right}
+  }
 
   /* ===== instagram ===== */
   .ig-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
@@ -1006,10 +1041,29 @@ function renderLangMenu(){
 function zhOn(){ return langOn("zhHant")||langOn("zhHans"); }
 /* ============ FEATURE FLAGS (admin can turn sections on/off) ============ */
 const DEFAULT_FEATS={host:true,faq:true,watch:false,reviews:false,float:true,instagram:false,payments:false};
-const DEFAULT_HOST={photo:"",exp:{en:"10+ Years Care Expert",ko:"10년+ 케어 전문가"},
+const DEFAULT_HOST={photo:"",
+  exp:{en:"Seoul Skincare Insider",ko:"서울 스킨케어 인사이더"},
   langs:{en:"English · 한국어",ko:"English · 한국어"},
   phil:{en:"My job isn't to sell you more. It's to help you walk away with the few things that actually suit your skin — and skip the rest.",
-        ko:"제 일은 더 많이 팔아드리는 게 아니에요. 내 피부에 진짜 맞는 몇 가지만 챙기고 나머지는 과감히 건너뛰도록 돕는 거예요."}};
+        ko:"제 일은 더 많이 팔아드리는 게 아니에요. 내 피부에 진짜 맞는 몇 가지만 챙기고 나머지는 과감히 건너뛰도록 돕는 거예요."},
+  tagline:{en:"Hi, I'm Zen 👋",ko:"안녕하세요, Zen이에요 👋"},
+  intro:{en:"I work in skincare in Seoul, and my whole day is spent answering the same question: what actually works for this person's skin? I started Zeneverse because visitors kept asking me the same thing — and kept getting sold things they didn't need.",
+         ko:"저는 서울에서 스킨케어 분야에 일하고 있어요. 하루 종일 하는 일이 딱 하나예요 — 이 사람 피부엔 뭐가 진짜 맞을까? 한국에 온 분들이 계속 같은 걸 물어보시고, 계속 필요 없는 걸 사가시는 걸 보면서 Zeneverse를 시작했어요."},
+  stats:[
+    {n:"10+",l:{en:"Years in skincare",ko:"스킨케어 경력"}},
+    {n:"1,000+",l:{en:"Clients advised",ko:"상담한 고객"}},
+    {n:"2",l:{en:"Languages",ko:"사용 언어"}}
+  ],
+  timeline:[
+    {y:"Now",t:{en:"Skincare professional, Seoul",ko:"스킨케어 전문가, 서울"},
+     d:{en:"Daily consultations with clients on skin type, routines and what's worth buying.",ko:"피부 타입·루틴·구매 가치에 대해 매일 고객과 상담해요."}},
+    {y:"Also",t:{en:"Working with international visitors",ko:"외국인 고객 응대"},
+     d:{en:"Explaining Korean skincare in English to visitors who don't know where to start.",ko:"어디서 시작해야 할지 모르는 방문객에게 한국 스킨케어를 영어로 설명해요."}}
+  ],
+  skills:{en:["Skin type analysis","Ingredient reading","Routine building","Olive Young curation","Sensitive skin","English consultation"],
+          ko:["피부 타입 분석","성분 읽기","루틴 설계","올리브영 큐레이션","민감성 피부","영어 상담"]},
+  why:{en:"I've watched too many people fly home with a bag of products that were wrong for them — bought because a shop assistant pointed at a shelf. That's the gap I'm here to close. No commission targets, no upselling. Just an honest read on your skin and a short list you'll actually use.",
+       ko:"직원이 가리킨 선반에서 골라, 자기 피부에 안 맞는 제품을 잔뜩 사서 돌아가는 분들을 너무 많이 봤어요. 그 간극을 메우려고 이 일을 해요. 판매 목표도, 업셀링도 없어요. 정직한 피부 분석과 실제로 쓰게 될 짧은 리스트만 드려요."}};
 const DEFAULT_CONTACT={whatsapp:"",line:"",instagram:""};
 const DEFAULT_MEDIA={v1:"",v2:"",v3:""};
 const DEFAULT_FAQ=[
@@ -1361,34 +1415,84 @@ function toggleNav(i){
 /* ============ HOST BIO POPUP ============ */
 function openHostBio(){
   if(textEditMode)return;
-  const t=I18N[lang],h=STATE.host||DEFAULT_HOST;
-  const bio = tx(h.bio) || tx(h.phil);
+  const t=I18N[lang],h=STATE.host||DEFAULT_HOST,ko=lang==="ko";
+  const D=DEFAULT_HOST;
+  const stats=(h.stats&&h.stats.length?h.stats:D.stats)||[];
+  const tl=(h.timeline&&h.timeline.length?h.timeline:D.timeline)||[];
+  const skills=(h.skills&&tx(h.skills).length?tx(h.skills):tx(D.skills))||[];
   document.getElementById("modalRoot").innerHTML=`
     <div class="modal-bg" onclick="if(event.target===this)closeModal()">
-      <div class="modal" style="max-width:520px">
+      <div class="modal hp-modal">
         <button class="close" onclick="closeModal()">&times;</button>
-        <div class="host-pop-top">
-          <div class="host-photo sm" style="${h.photo?`background-image:url(${h.photo})`:""}">${h.photo?"":`<span class="host-ph">ZEN</span>`}</div>
-          <div>
-            <div class="host-role mono">${tx(h.exp)}</div>
-            <div class="host-badges" style="margin:8px 0 0">
-              <span class="host-badge alt">${tx(h.langs)}</span>
-            </div>
+
+        <div class="hp-hero">
+          <div class="hp-photo" style="${h.photo?`background-image:url(${h.photo})`:""}">${h.photo?"":`<span>ZEN</span>`}</div>
+          <div class="hp-hero-txt">
+            <div class="hp-tag">${esc(tx(h.tagline)||tx(D.tagline))}</div>
+            <div class="hp-role mono">${esc(tx(h.exp))}</div>
+            <div class="hp-langs">${esc(tx(h.langs))}</div>
           </div>
         </div>
-        <div class="host-bio">${bio.replace(/\n/g,"<br>")}</div>
-        ${adminMode?`<button class="submit" style="margin-top:16px" onclick="editHostBio()">${t.host_edit}</button>`:""}
+
+        <p class="hp-intro">${esc(tx(h.intro)||tx(D.intro))}</p>
+
+        <div class="hp-stats">
+          ${stats.map(st=>`<div class="hp-stat"><b>${esc(st.n)}</b><span>${esc(tx(st.l))}</span></div>`).join("")}
+        </div>
+
+        <div class="hp-sec-title mono">${ko?"경력":"Experience"}</div>
+        <div class="hp-timeline">
+          ${tl.map(item=>`
+            <div class="hp-tl-item">
+              <span class="hp-tl-year">${esc(item.y)}</span>
+              <div><b>${esc(tx(item.t))}</b><p>${esc(tx(item.d))}</p></div>
+            </div>`).join("")}
+        </div>
+
+        <div class="hp-sec-title mono">${ko?"전문 분야":"What I'm good at"}</div>
+        <div class="hp-skills">${skills.map(k=>`<span class="hp-skill">${esc(k)}</span>`).join("")}</div>
+
+        <div class="hp-why">
+          <div class="hp-why-label mono">${ko?"이 일을 하는 이유":"Why I do this"}</div>
+          <p>${esc(tx(h.why)||tx(D.why))}</p>
+        </div>
+
+        <button class="submit hp-cta" onclick="closeModal();setTimeout(openBooking,150)">${ko?"함께할 날 예약하기 →":"Book a day with me →"}</button>
+        ${adminMode?`<button class="submit" style="background:#fff;color:var(--ink);border:1px solid var(--line);margin-top:8px" onclick="editHostProfile()">${t.host_edit}</button>`:""}
       </div>
     </div>`;
 }
-function editHostBio(){
-  const h=STATE.host?structuredClone(STATE.host):structuredClone(DEFAULT_HOST);
-  const cur=tx(h.bio)||tx(h.phil);
-  const v=prompt(I18N[lang].host_bio+":",cur);
-  if(v===null)return;
-  h.bio=h.bio||{};h.bio[lang]=v;
+/* admin: edit the profile fields for the current language */
+function editHostProfile(){
+  const ko=lang==="ko",h=STATE.host?structuredClone(STATE.host):structuredClone(DEFAULT_HOST);
+  const D=DEFAULT_HOST;
+  const ask=(label,cur)=>{const v=prompt(label,cur||"");return v;};
+  const set=(obj,key,val)=>{if(val===null)return false;obj[key]=obj[key]||{};obj[key][lang]=val;return true;};
+
+  let v;
+  v=ask(ko?"인사말 (예: 안녕하세요, Zen이에요 👋)":"Greeting", tx(h.tagline)||tx(D.tagline)); if(v===null)return; set(h,"tagline",v);
+  v=ask(ko?"한 줄 직함":"Role / title", tx(h.exp)); if(v===null)return; set(h,"exp",v);
+  v=ask(ko?"자기소개 (2~3문장)":"Intro (2–3 sentences)", tx(h.intro)||tx(D.intro)); if(v===null)return; set(h,"intro",v);
+  v=ask(ko?"전문 분야 (쉼표로 구분)":"Skills (comma separated)", (tx(h.skills)||tx(D.skills)).join(", "));
+  if(v===null)return; h.skills=h.skills||{}; h.skills[lang]=v.split(",").map(x=>x.trim()).filter(Boolean);
+  v=ask(ko?"이 일을 하는 이유":"Why I do this", tx(h.why)||tx(D.why)); if(v===null)return; set(h,"why",v);
+
   STATE.host=h;saveAll();openHostBio();
 }
+function editHostStats(){
+  const ko=lang==="ko",h=STATE.host?structuredClone(STATE.host):structuredClone(DEFAULT_HOST);
+  const cur=(h.stats&&h.stats.length?h.stats:DEFAULT_HOST.stats);
+  const v=prompt(ko?"숫자 3개를 이렇게 입력: 10+|스킨케어 경력, 1000+|상담한 고객, 2|사용 언어":"Enter as: 10+|Years, 1000+|Clients, 2|Languages",
+    cur.map(s=>`${s.n}|${tx(s.l)}`).join(", "));
+  if(v===null)return;
+  const stats=v.split(",").map(part=>{
+    const [n,l]=part.split("|").map(x=>(x||"").trim());
+    return {n:n||"",l:{[lang]:l||""}};
+  }).filter(s=>s.n);
+  if(stats.length){h.stats=stats;STATE.host=h;saveAll();openHostBio();}
+}
+function editHostBio(){editHostProfile();}
+
 
 /* ---- guest: manage own review with password ---- */
 function openReviewManage(id){
@@ -2056,8 +2160,12 @@ function openSettings(){
           <input id="st_exp" type="text" value="${esc(tx(h.exp))}"></div>
         <div class="field"><label>${ko?"가능 언어":"Languages"}</label>
           <input id="st_langs" type="text" value="${esc(tx(h.langs))}"></div>
-        <div class="field"><label>${ko?"케어 철학":"Philosophy"}</label>
+        <div class="field"><label>${ko?"케어 철학 (카드에 표시)":"Philosophy (shown on card)"}</label>
           <textarea id="st_phil" rows="3">${esc(tx(h.phil))}</textarea></div>
+        <div class="field" style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="reset-btn" style="flex:1" onclick="closeModal();editHostProfile()">${ko?"프로필 내용 수정 →":"Edit profile content →"}</button>
+          <button class="reset-btn" style="flex:1" onclick="closeModal();editHostStats()">${ko?"숫자 3개 수정 →":"Edit the 3 stats →"}</button>
+        </div>
 
         <div class="set-label mono">${ko?"연락 채널":"Contact channels"}</div>
         <div class="field"><label>WhatsApp ${ko?"번호(국가코드 포함)":"number (with country code)"}</label>
