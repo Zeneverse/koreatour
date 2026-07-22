@@ -276,6 +276,101 @@
   .chg-line{background:#f6efe2;border-radius:8px;padding:7px 10px;margin-top:8px}
   .ab-badge{font-style:normal;background:var(--clay);color:#fff;font-size:.62rem;padding:1px 6px;border-radius:10px;margin-left:5px}
   .bk-item code{font-family:'Space Mono',monospace;font-size:.78rem;background:var(--paper-2);padding:2px 6px;border-radius:5px}
+  /* ===== language select ===== */
+  .lang-select{position:relative;flex-shrink:0}
+  .lang-cur{border:1px solid var(--line);background:transparent;border-radius:40px;padding:8px 14px;font-family:'Space Mono',monospace;font-size:.74rem;cursor:pointer;color:var(--ink);display:flex;align-items:center;gap:5px}
+  .lang-cur i{font-style:normal;font-size:.6rem;opacity:.6}
+  .lang-cur:hover{border-color:var(--ink)}
+  .lang-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:6px;display:none;flex-direction:column;min-width:150px;box-shadow:0 16px 40px -18px rgba(26,43,43,.4);z-index:60}
+  .lang-menu.open{display:flex}
+  .lang-menu button{background:none;border:none;text-align:left;padding:10px 14px;border-radius:9px;font-family:inherit;font-size:.9rem;cursor:pointer;color:var(--ink)}
+  .lang-menu button:hover{background:var(--paper-2)}
+  body.lang-zh{font-family:'Instrument Sans','Noto Sans KR',sans-serif}
+  body.lang-zh h1,body.lang-zh .sec-head h2,body.lang-zh .pack h3{letter-spacing:0}
+  body.lang-zh h1 em{font-style:normal;border-bottom:3px solid var(--clay);padding-bottom:2px}
+
+  /* ===== host ===== */
+  .host-card{display:grid;grid-template-columns:220px 1fr;gap:36px;align-items:center;border:1px solid var(--line);border-radius:24px;padding:36px;background:#fff}
+  .host-photo{width:100%;aspect-ratio:1;border-radius:20px;background:linear-gradient(150deg,var(--ink),#2c4f4e);background-size:cover;background-position:center;display:grid;place-items:center}
+  .host-photo.has-img .host-ph{display:none}
+  .host-ph{font-family:'Fraunces',serif;font-size:2.2rem;color:var(--gold);letter-spacing:.1em}
+  .host-role{color:var(--sage);margin-bottom:14px;display:block}
+  .host-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .host-badge{background:var(--ink);color:var(--paper);border-radius:30px;padding:7px 15px;font-size:.78rem;font-weight:500}
+  .host-badge.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .host-quote{font-family:'Fraunces',serif;font-size:1.3rem;line-height:1.45;font-style:italic;color:var(--ink);margin-bottom:14px}
+  body.lang-ko .host-quote,body.lang-zh .host-quote{font-family:'Noto Sans KR',sans-serif;font-style:normal;font-size:1.12rem;line-height:1.65}
+  .host-note{font-size:.86rem;color:#54615f}
+
+  /* ===== FAQ ===== */
+  .faq-list{display:flex;flex-direction:column;gap:10px;max-width:820px}
+  .faq-item{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+  .faq-q{width:100%;background:none;border:none;text-align:left;padding:20px 22px;font-family:inherit;font-size:1rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;color:var(--ink)}
+  .faq-ic{font-style:normal;color:var(--clay);font-size:1.3rem;transition:transform .25s;flex-shrink:0}
+  .faq-item.open .faq-ic{transform:rotate(45deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .faq-item.open .faq-a{max-height:400px}
+  .faq-a-in{padding:0 22px 20px;font-size:.94rem;color:#4a5654;line-height:1.65}
+  .faq-admin{display:flex;gap:6px;padding:0 22px 14px}
+
+  /* ===== reviews ===== */
+  .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .rev-card{border:1px solid var(--line);border-radius:18px;padding:24px;background:#fff}
+  .rev-stars{color:var(--gold);font-size:1rem;letter-spacing:.1em;margin-bottom:12px}
+  .rev-text{font-size:.94rem;color:#3c4a48;line-height:1.65}
+  .rev-by{margin-top:14px;font-size:.84rem;font-weight:600}
+  .rev-by span{font-weight:400;color:var(--sage);margin-left:6px;font-size:.78rem}
+  .rev-empty{grid-column:1/-1;text-align:center;color:var(--sage);padding:40px;font-size:.95rem}
+
+  /* ===== floating contact ===== */
+  .float-wrap{position:fixed;right:20px;bottom:20px;z-index:70;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+  .float-menu{display:flex;flex-direction:column;gap:9px;opacity:0;pointer-events:none;transform:translateY(10px);transition:.25s}
+  .float-menu.open{opacity:1;pointer-events:auto;transform:none}
+  .float-item{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:40px;padding:11px 18px;text-decoration:none;font-size:.88rem;font-weight:600;color:var(--ink);box-shadow:0 8px 24px -10px rgba(26,43,43,.3);min-height:44px}
+  .float-item:hover{transform:translateX(-3px)}
+  .float-item.wa{border-color:#25D366}.float-item.ln{border-color:#06C755}.float-item.ig{border-color:#E1306C}
+  .float-btn{width:58px;height:58px;border-radius:50%;border:none;background:var(--ink);color:#fff;font-size:1.4rem;cursor:pointer;box-shadow:0 10px 30px -8px rgba(26,43,43,.5);display:grid;place-items:center}
+  .float-btn:active{transform:scale(.94)}
+
+  /* ===== booking form extras ===== */
+  .needs-wrap{display:flex;flex-direction:column;gap:7px}
+  .need-check{display:flex;align-items:center;gap:9px;padding:10px 13px;border:1px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;font-size:.88rem;font-weight:400;min-height:44px}
+  .need-check:hover{border-color:var(--clay)}
+  .need-check input{width:auto;margin:0}
+  .form-tips{background:var(--paper-2);border-radius:12px;padding:12px 14px;margin:14px 0;display:flex;flex-direction:column;gap:6px}
+  .tip-line{font-size:.8rem;color:#4a5654;line-height:1.5}
+  .agree-check{display:flex;align-items:flex-start;gap:10px;font-size:.85rem;margin-bottom:14px;cursor:pointer;line-height:1.5}
+  .agree-check input{width:auto;margin:3px 0 0}
+  .agree-link{color:var(--clay);text-decoration:underline;cursor:pointer;margin-left:5px}
+
+  /* ===== footer legal ===== */
+  .foot-legal{margin-top:26px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+  .disclaimer{font-size:.78rem;color:#6b746f;line-height:1.6;max-width:62ch}
+  .foot-policy{display:flex;gap:18px;flex-shrink:0}
+  .foot-policy a{font-size:.82rem;opacity:.75;cursor:pointer;text-decoration:none}
+  .foot-policy a:hover{opacity:1;text-decoration:underline}
+  .policy-body{font-size:.9rem;line-height:1.7;color:#3c4a48;max-height:52vh;overflow-y:auto;padding-right:6px}
+  .policy-body p{margin-bottom:12px}
+
+  /* ===== admin settings ===== */
+  .set-label{color:var(--sage);display:block;margin:22px 0 12px;padding-top:14px;border-top:1px solid var(--line)}
+  .feat-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;font-size:.9rem}
+  .feat-row span i{font-style:normal;display:block;font-size:.74rem;color:var(--sage);margin-top:2px}
+  .tgl{width:44px;height:25px;border-radius:20px;border:none;background:var(--mist);position:relative;cursor:pointer;transition:.2s;flex-shrink:0}
+  .tgl::after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .tgl.on{background:#3d6b4d}
+  .tgl.on::after{left:22px}
+
+  @media (max-width:900px){
+    .host-card{grid-template-columns:1fr;gap:24px;padding:26px}
+    .host-photo{max-width:180px}
+    .rev-grid{grid-template-columns:1fr}
+  }
+  @media (max-width:520px){
+    .float-wrap{right:14px;bottom:14px}
+    .float-btn{width:54px;height:54px}
+    .foot-legal{flex-direction:column;gap:14px}
+  }
 
   @media (max-width:900px){
     .packs{grid-template-columns:1fr}.inc-grid{grid-template-columns:repeat(2,1fr)}
@@ -293,14 +388,20 @@
     <div class="logo"><span class="dot"></span>Zeneverse</div>
     <div class="nav-links">
       <a onclick="scrollToId('packages')" data-i18n="nav_packages">Packages</a>
-      <a onclick="scrollToId('included')" data-i18n="nav_included">What's included</a>
+      <a onclick="scrollToId('host')" data-i18n="nav_host" data-feat="host">Your host</a>
+      <a onclick="scrollToId('faq')" data-i18n="nav_faq" data-feat="faq">FAQ</a>
       <a onclick="scrollToId('watch')" data-i18n="nav_watch">Watch</a>
       <a onclick="openLookup()" data-i18n="my_link">Check my booking</a>
       <a onclick="openBooking()" class="nav-cta" data-i18n="nav_book">Book now</a>
     </div>
-    <div class="lang-toggle">
-      <button id="lang-en" class="on" onclick="setLang('en')">EN</button>
-      <button id="lang-ko" onclick="setLang('ko')">KO</button>
+    <div class="lang-select">
+      <button class="lang-cur" onclick="toggleLangMenu()"><span id="langCurLabel">EN</span> <i>▾</i></button>
+      <div class="lang-menu" id="langMenu">
+        <button onclick="setLang('en')">English</button>
+        <button onclick="setLang('ko')">한국어</button>
+        <button onclick="setLang('zhHant')">繁體中文</button>
+        <button onclick="setLang('zhHans')">简体中文</button>
+      </div>
     </div>
     <button class="burger" aria-label="menu" onclick="document.querySelector('.nav-links').style.display='flex'">&#9776;</button>
   </div>
@@ -310,7 +411,7 @@
   <div class="wrap">
     <div class="eyebrow mono" data-i18n="hero_eyebrow">Korean beauty tours &middot; guided in English</div>
     <h1 data-i18n="hero_title">Your own <em>skin-clinic insider</em> in Seoul.</h1>
-    <p class="lede" data-i18n="hero_lede">Private, English-guided beauty days led by a working dermatology-clinic manager. Personal skin advice, honest product picks, and curated K-beauty shopping &amp; salon visits &mdash; no markup games, no language barrier.</p>
+    <p class="lede" data-i18n="hero_lede">Private, English-guided beauty days led by a working dermatology-clinic manager. Personal skin consultation, honest product picks, and curated K-beauty shopping &amp; salon visits &mdash; no markup games, no language barrier.</p>
     <div class="hero-actions">
       <a onclick="openBooking()" class="btn btn-primary" data-i18n="hero_cta1">Book a day &rarr;</a>
       <a onclick="scrollToId('packages')" class="btn btn-ghost" data-i18n="hero_cta2">See the packages</a>
@@ -322,6 +423,29 @@
     </div>
   </div>
 </header>
+
+<!-- MEET YOUR HOST -->
+<section id="host" data-feat="host">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono" data-i18n="host_kicker">Meet your host</span>
+      <h2 data-i18n="host_title">The person who'll be with you all day.</h2>
+    </div>
+    <div class="host-card reveal">
+      <div class="host-photo" id="hostPhoto"><span class="host-ph">ZEN</span></div>
+      <div class="host-body">
+        <div class="host-role mono" data-i18n="host_role">Beauty &amp; skincare professional</div>
+        <div class="host-badges">
+          <span class="host-badge" id="hostExp" data-i18n="host_exp">10+ Years Care Expert</span>
+          <span class="host-badge alt" id="hostLangs" data-i18n="host_langs">English · 한국어</span>
+        </div>
+        <p class="host-quote" id="hostPhil" data-i18n="host_philosophy">My job isn't to sell you more.</p>
+        <div class="host-note" id="hostNote" data-i18n="host_note">Currently working in the skincare field in Seoul.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <section id="packages">
   <div class="wrap">
@@ -341,7 +465,7 @@
       <h2 data-i18n="inc_title">An insider on your side, start to finish.</h2>
     </div>
     <div class="inc-grid">
-      <div class="inc reveal"><div class="n">01</div><h4 data-i18n="inc1_t">Real diagnosis</h4><p data-i18n="inc1_d">A proper skin read from someone who works with patients every day &mdash; not a sales pitch.</p></div>
+      <div class="inc reveal"><div class="n">01</div><h4 data-i18n="inc1_t">Personal consultation</h4><p data-i18n="inc1_d">A careful, personal skin consultation from someone who works in the beauty field every day &mdash; not a sales pitch.</p></div>
       <div class="inc reveal"><div class="n">02</div><h4 data-i18n="inc2_t">Honest guidance</h4><p data-i18n="inc2_d">What's worth it, what to skip, and what products actually suit your skin.</p></div>
       <div class="inc reveal"><div class="n">03</div><h4 data-i18n="inc3_t">Vetted partners</h4><p data-i18n="inc3_d">Trusted brow &amp; lash, hair salons and stores &mdash; matched to you, no markup games.</p></div>
       <div class="inc reveal"><div class="n">04</div><h4 data-i18n="inc4_t">English, all day</h4><p data-i18n="inc4_d">No translation stress. Every step explained clearly, at your pace.</p></div>
@@ -349,7 +473,19 @@
   </div>
 </section>
 
-<section id="watch">
+
+<!-- FAQ -->
+<section id="faq" data-feat="faq" style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono" data-i18n="faq_kicker">Before you book</span>
+      <h2 data-i18n="faq_title">Questions I get a lot.</h2>
+    </div>
+    <div class="faq-list" id="faqList"></div>
+  </div>
+</section>
+
+<section id="watch" data-feat="watch">
   <div class="wrap">
     <div class="sec-head">
       <span class="mono" data-i18n="watch_kicker">See it for yourself</span>
@@ -363,6 +499,21 @@
         <!-- <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" allowfullscreen loading="lazy"></iframe> --></div>
       <div class="vid reveal"><div class="vid-ph"><div class="play"></div><small data-i18n="vid_soon3">Video 3 &middot; coming soon</small></div>
         <!-- <iframe src="https://www.youtube.com/embed/VIDEO_ID_3" allowfullscreen loading="lazy"></iframe> --></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- REVIEWS -->
+<section id="reviews" data-feat="reviews">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono" data-i18n="rev_kicker">Guests</span>
+      <h2 data-i18n="rev_title">What guests say.</h2>
+    </div>
+    <div class="rev-grid" id="revList"></div>
+    <div style="text-align:center;margin-top:28px">
+      <button class="btn btn-ghost" onclick="openReviewForm()" data-i18n="rev_write">Write a review</button>
     </div>
   </div>
 </section>
@@ -391,7 +542,27 @@
     </div>
     <div class="foot-copy">&copy; 2026 Zeneverse &middot; Seoul, Korea</div>
   </div>
+  <div class="wrap foot-legal">
+    <p class="disclaimer" data-i18n="disclaimer">Zeneverse is a personal beauty consulting &amp; shopping guide service.</p>
+    <div class="foot-policy">
+      <a onclick="openPolicy('privacy')" data-i18n="priv_link">Privacy Policy</a>
+      <a onclick="openPolicy('terms')" data-i18n="terms_link">Cancellation Policy</a>
+    </div>
+  </div>
 </footer>
+
+
+<!-- FLOATING CONTACT -->
+<div class="float-wrap" id="floatWrap" data-feat="float">
+  <div class="float-menu" id="floatMenu">
+    <a class="float-item wa" id="fcWa" href="#" target="_blank" rel="noopener"><span>WhatsApp</span></a>
+    <a class="float-item ln" id="fcLine" href="#" target="_blank" rel="noopener"><span>LINE</span></a>
+    <a class="float-item ig" id="fcIg" href="#" target="_blank" rel="noopener"><span>Instagram</span></a>
+  </div>
+  <button class="float-btn" onclick="toggleFloat()" aria-label="contact">
+    <span class="fb-icon">💬</span>
+  </button>
+</div>
 
 <div id="modalRoot"></div>
 <div id="adminBar"></div>
@@ -403,13 +574,13 @@ const I18N={
     nav_packages:"Packages",nav_included:"What's included",nav_watch:"Watch",nav_book:"Book now",
     hero_eyebrow:"Korean beauty tours &middot; guided in English",
     hero_title:"Your own <em>skin-clinic insider</em> in Seoul.",
-    hero_lede:"Private, English-guided beauty days led by a working dermatology-clinic manager. Personal skin advice, honest product picks, and curated K-beauty shopping &amp; salon visits &mdash; no markup games, no language barrier.",
+    hero_lede:"Private, English-guided beauty days led by a working dermatology-clinic manager. Personal skin consultation, honest product picks, and curated K-beauty shopping &amp; salon visits &mdash; no markup games, no language barrier.",
     hero_cta1:"Book a day &rarr;",hero_cta2:"See the packages",
     cred1:"Private &amp; small-group, never a rushed crowd",cred2:"Fluent English, built for overseas visitors",cred3:"&#32321;&#39636;&#20013;&#25991; support for Taiwan &amp; Hong Kong guests",
     pkg_kicker:"The packages",pkg_title:"Pick the day that fits your trip.",
     pkg_sub:"Whether you're on a short layover or staying a while, each day is private and paced around you &mdash; not a fixed bus route.",
     inc_kicker:"What every day includes",inc_title:"An insider on your side, start to finish.",
-    inc1_t:"Real diagnosis",inc1_d:"A proper skin read from someone who works with patients every day &mdash; not a sales pitch.",
+    inc1_t:"Personal consultation",inc1_d:"A careful, personal skin consultation from someone who works in the beauty field every day &mdash; not a sales pitch.",
     inc2_t:"Honest guidance",inc2_d:"What's worth it, what to skip, and what products actually suit your skin.",
     inc3_t:"Vetted partners",inc3_d:"Trusted brow &amp; lash, hair salons and stores &mdash; matched to you, no markup games.",
     inc4_t:"English, all day",inc4_d:"No translation stress. Every step explained clearly, at your pace.",inc4_d_zh:"No translation stress. Every step explained clearly, with &#32321;&#39636;&#20013;&#25991; on request.",
@@ -427,7 +598,26 @@ const I18N={
     my_reason:"Reason",my_auto_taken:"Another guest was confirmed for this time.",my_pending_note:"I'll review and confirm by email.",my_link:"Check my booking",
     ab_new:"new",bk_pending:"Pending",bk_all:"All",
     bk_approve:"Approve",bk_decline:"Decline",bk_decline_q:"Reason for declining (the guest will see this):",bk_approved:"Approved",bk_auto:"auto-declined {n} overlapping request(s)",
-    bk_changereq:"Change requested",bk_accept_change:"Move to this time",bk_code:"Code",slot_loading:"Loading times…",slot_err:"Couldn't load times.",admin_checking:"Checking…",bk_loading:"Loading…",bk_err:"Couldn't load bookings.",
+    bk_changereq:"Change requested",bk_accept_change:"Move to this time",bk_code:"Code",
+    nav_host:"Your host",nav_faq:"FAQ",nav_reviews:"Reviews",
+    host_kicker:"Meet your host",host_title:"The person who'll be with you all day.",
+    host_role:"Beauty & skincare professional",host_exp:"10+ Years Care Expert",
+    host_langs:"English · 한국어",host_philosophy:"My job isn't to sell you more. It's to help you walk away with the few things that actually suit your skin — and skip the rest.",
+    host_note:"Currently working in the skincare field in Seoul.",
+    faq_kicker:"Before you book",faq_title:"Questions I get a lot.",
+    rev_kicker:"Guests",rev_title:"What guests say.",rev_write:"Write a review",rev_none:"No reviews yet — yours could be the first.",
+    rev_name:"Your name",rev_rating:"Rating",rev_text:"Your review",rev_pw:"Password (to edit or delete later)",rev_submit:"Post review",rev_ok:"Thanks! Your review is posted.",
+    rev_edit:"Edit",rev_del:"Delete",rev_pw_ask:"Enter the password you set:",rev_pw_wrong:"Wrong password.",rev_hidden:"Hidden",
+    disclaimer:"Zeneverse is a personal beauty consulting & shopping guide service. We do not provide medical services, and we do not arrange, broker or book medical treatments or clinic appointments.",
+    priv_link:"Privacy Policy",terms_link:"Cancellation Policy",
+    f_contact:"WhatsApp / LINE / KakaoTalk ID",f_contact_ph:"e.g. +886 912 345 678  or  LINE: myid",
+    f_needs:"What are you most interested in?",
+    need1:"Olive Young ingredient-smart shopping",need2:"Korean pharmacy beauty picks",need3:"Brow / lash / hair salon matching",need4:"Personal styling",
+    f_agree:"I've read and agree to the cancellation policy and disclaimer.",f_agree_err:"Please agree to continue.",
+    f_contact_err:"Please add a messenger ID or number so I can reach you.",
+    kst_note:"All times are Korea Standard Time (KST, GMT+9).",
+    trip_tip:"Tip: day 2–3 of your trip works best — you'll have time to use what we find.",
+    float_label:"Chat with me",slot_loading:"Loading times…",slot_err:"Couldn't load times.",admin_checking:"Checking…",bk_loading:"Loading…",bk_err:"Couldn't load bookings.",
     admin_title:"Admin login",admin_sub:"Enter the password to edit packages and view bookings.",admin_pw:"Password",admin_enter:"Enter",admin_wrong:"Wrong password.",
     ab_badge:"Admin mode",ab_edit:"Edit packages",ab_done:"Save changes",ab_view:"View bookings",ab_exit:"Exit admin",ab_hint:"Click any package title, text or price to edit.",ab_zh:"繁中",ab_editing:"Editing",ab_switch:"switch language above to edit the other version",
     bk_title:"Bookings",bk_none:"No bookings yet.",bk_del:"delete",bk_clear:"Clear all",
@@ -442,13 +632,13 @@ const I18N={
     nav_packages:"패키지",nav_included:"포함 사항",nav_watch:"영상",nav_book:"예약하기",
     hero_eyebrow:"한국 뷰티 투어 &middot; 영어 가이드",
     hero_title:"서울에서 만나는 <em>피부과 실장 인사이더</em>.",
-    hero_lede:"현직 피부과 실장이 직접 안내하는 프라이빗 영어 뷰티 데이. 피부 진단, 솔직한 제품 추천, 엄선된 K-뷰티 쇼핑과 눈썹·헤어샵 동행까지 &mdash; 바가지 없이, 언어 장벽 없이.",
+    hero_lede:"현직 피부과 실장이 직접 안내하는 프라이빗 영어 뷰티 데이. 맞춤 피부 분석, 솔직한 제품 추천, 엄선된 K-뷰티 쇼핑과 눈썹·헤어샵 동행까지 &mdash; 바가지 없이, 언어 장벽 없이.",
     hero_cta1:"예약하기 &rarr;",hero_cta2:"패키지 보기",
     cred1:"1:1 프라이빗 &middot; 소규모, 붐비는 단체 없음",cred2:"유창한 영어, 외국인 방문객 맞춤",cred3:"대만 &middot; 홍콩 게스트를 위한 繁體中文 지원",
     pkg_kicker:"패키지",pkg_title:"내 일정에 맞는 하루를 고르세요.",
     pkg_sub:"짧은 경유든 긴 체류든, 모든 하루는 프라이빗하게 당신에게 맞춰 진행됩니다 &mdash; 정해진 단체 코스가 아니에요.",
     inc_kicker:"모든 데이에 포함",inc_title:"처음부터 끝까지, 당신 편의 인사이더.",
-    inc1_t:"진짜 진단",inc1_d:"매일 환자를 보는 사람의 제대로 된 피부 진단 &mdash; 판매용 멘트가 아닙니다.",
+    inc1_t:"맞춤 피부 분석",inc1_d:"뷰티 현장에서 매일 일하는 사람의 꼼꼼한 맞춤 피부 분석 &mdash; 판매용 멘트가 아닙니다.",
     inc2_t:"솔직한 안내",inc2_d:"할 가치가 있는 것, 건너뛸 것, 내 피부에 맞는 제품을 알려드려요.",
     inc3_t:"검증된 파트너",inc3_d:"믿을 수 있는 눈썹 &middot; 속눈썹 &middot; 헤어샵 &middot; 매장을 당신에게 맞춰 매칭, 바가지 없이.",
     inc4_t:"하루 종일 영어",inc4_d:"번역 스트레스 없이 모든 단계를 당신 속도에 맞춰 명확히 설명해드려요.",inc4_d_zh:"번역 스트레스 없이 모든 단계를 명확히 설명, 요청 시 繁體中文 지원.",
@@ -466,7 +656,26 @@ const I18N={
     my_reason:"사유",my_auto_taken:"다른 분이 먼저 확정되었습니다.",my_pending_note:"확인 후 이메일로 알려드릴게요.",my_link:"내 예약 조회",
     ab_new:"신규",bk_pending:"대기",bk_all:"전체",
     bk_approve:"승인",bk_decline:"거절",bk_decline_q:"거절 사유를 입력하세요 (고객에게 보여집니다):",bk_approved:"승인됨",bk_auto:"겹치는 신청 {n}건 자동 거절됨",
-    bk_changereq:"변경 요청",bk_accept_change:"이 시간으로 변경",bk_code:"코드",slot_loading:"시간 불러오는 중…",slot_err:"시간을 불러오지 못했어요.",admin_checking:"확인 중…",bk_loading:"불러오는 중…",bk_err:"예약을 불러오지 못했어요.",
+    bk_changereq:"변경 요청",bk_accept_change:"이 시간으로 변경",bk_code:"코드",
+    nav_host:"호스트 소개",nav_faq:"FAQ",nav_reviews:"후기",
+    host_kicker:"호스트 소개",host_title:"하루 종일 함께할 사람이에요.",
+    host_role:"뷰티 · 스킨케어 전문가",host_exp:"10년+ 케어 전문가",
+    host_langs:"English · 한국어",host_philosophy:"제 일은 더 많이 팔아드리는 게 아니에요. 내 피부에 진짜 맞는 몇 가지만 챙기고 나머지는 과감히 건너뛰도록 돕는 거예요.",
+    host_note:"현재 서울에서 스킨케어 분야에 종사하고 있어요.",
+    faq_kicker:"예약 전에",faq_title:"자주 받는 질문이에요.",
+    rev_kicker:"게스트",rev_title:"다녀간 분들의 이야기.",rev_write:"후기 쓰기",rev_none:"아직 후기가 없어요 — 첫 번째 후기의 주인공이 되어주세요.",
+    rev_name:"이름",rev_rating:"별점",rev_text:"후기 내용",rev_pw:"비밀번호 (나중에 수정·삭제할 때 필요)",rev_submit:"후기 등록",rev_ok:"감사합니다! 후기가 등록됐어요.",
+    rev_edit:"수정",rev_del:"삭제",rev_pw_ask:"설정하신 비밀번호를 입력하세요:",rev_pw_wrong:"비밀번호가 틀렸어요.",rev_hidden:"숨김",
+    disclaimer:"Zeneverse는 의료 행위 및 의료기관 알선·예약을 제공하지 않는 퍼스널 뷰티 컨설팅 & 쇼핑 가이드 서비스입니다.",
+    priv_link:"개인정보 처리방침",terms_link:"취소 규정",
+    f_contact:"WhatsApp / LINE / 카카오톡 ID",f_contact_ph:"예: +886 912 345 678  또는  LINE: myid",
+    f_needs:"어떤 게 가장 궁금하세요?",
+    need1:"올리브영 성분 분석 쇼핑",need2:"한국 약국 뷰티 꿀조합",need3:"눈썹/속눈썹/헤어샵 매칭",need4:"퍼스널 스타일링",
+    f_agree:"취소 규정과 면책 조항을 읽고 동의합니다.",f_agree_err:"동의해주셔야 진행할 수 있어요.",
+    f_contact_err:"연락 가능한 메신저 ID나 번호를 입력해주세요.",
+    kst_note:"모든 시간은 한국 표준시(KST, GMT+9) 기준이에요.",
+    trip_tip:"팁: 여행 2~3일차가 가장 좋아요 — 찾은 제품을 써볼 시간이 생기거든요.",
+    float_label:"문의하기",slot_loading:"시간 불러오는 중…",slot_err:"시간을 불러오지 못했어요.",admin_checking:"확인 중…",bk_loading:"불러오는 중…",bk_err:"예약을 불러오지 못했어요.",
     admin_title:"관리자 로그인",admin_sub:"패키지 수정 및 예약 확인을 위해 비밀번호를 입력하세요.",admin_pw:"비밀번호",admin_enter:"입력",admin_wrong:"비밀번호가 틀렸어요.",
     ab_badge:"관리자 모드",ab_edit:"패키지 수정",ab_done:"변경 저장",ab_view:"예약 보기",ab_exit:"관리자 종료",ab_hint:"패키지 제목 &middot; 내용 &middot; 가격을 클릭해 수정하세요.",ab_zh:"繁中",ab_editing:"수정 중:",ab_switch:"다른 언어는 위 EN/KO 버튼으로 전환 후 수정",
     bk_title:"예약 목록",bk_none:"아직 예약이 없어요.",bk_del:"삭제",bk_clear:"전체 삭제",
@@ -478,6 +687,83 @@ const I18N={
     av_prompt:"{d} 날짜만 영업시간을 다르게 할까요? 시작-종료로 입력 (예: 12-20):"
   }
 };
+/* ---- 繁體中文 (Taiwan / Hong Kong) ---- */
+I18N.zhHant = Object.assign({}, I18N.en, {
+  nav_packages:"方案",nav_included:"包含內容",nav_watch:"影片",nav_book:"立即預約",nav_host:"關於主理人",nav_faq:"常見問題",nav_reviews:"評價",
+  hero_eyebrow:"韓國美妝導覽 · 英語隨行",
+  hero_title:"你在首爾的<em>美妝內行人</em>。",
+  hero_lede:"由現職美妝保養從業者帶領的私人導覽。個人膚質諮詢、誠實的產品建議，以及嚴選的韓妝採買與沙龍陪同 — 不哄抬價格，沒有語言隔閡。",
+  hero_cta1:"立即預約 &rarr;",hero_cta2:"查看方案",
+  cred1:"一對一私人服務，不趕行程",cred2:"流利英語，為海外旅客設計",cred3:"為台灣・香港旅客提供繁體中文支援",
+  pkg_kicker:"服務方案",pkg_title:"選擇最適合你行程的一天。",
+  pkg_sub:"無論是短暫轉機還是長期停留，每一天都是私人專屬、依你的步調安排 — 不是固定的團體行程。",
+  inc_kicker:"每次服務都包含",inc_title:"從頭到尾，站在你這邊的內行人。",
+  inc1_t:"個人諮詢",inc1_d:"由每天身處美妝現場的人，為你做仔細的個人膚質諮詢 — 不是推銷話術。",
+  inc2_t:"誠實建議",inc2_d:"哪些值得買、哪些可以跳過、哪些產品真正適合你的膚質。",
+  inc3_t:"嚴選合作店家",inc3_d:"值得信賴的美睫、美甲、髮廊與店家 — 為你配對，不哄抬價格。",
+  inc4_t:"全程英語",inc4_d:"沒有翻譯壓力，每個步驟都清楚說明，依你的步調進行。",
+  inc4_d_zh:"沒有翻譯壓力，每個步驟都清楚說明，可應要求提供繁體中文支援。",
+  watch_kicker:"親眼看看",watch_title:"用影片認識這一天。",watch_sub:"預約前最快了解 Zeneverse 一日行程的方式。",
+  join_title:"告訴我你的日期 — 我來保留位置。",join_sub:"私人服務名額有限，很快就會額滿。送出申請，我會盡快確認可預約時間。",join_cta:"送出預約申請 &rarr;",
+  book_title:"預約申請",book_sub:"填寫資料後，我會以電子郵件確認可預約時間。",
+  f_name:"姓名",f_email:"電子郵件",f_pkg:"方案",f_addons:"加購項目（選填）",f_date:"希望日期",f_people:"人數",f_note:"有什麼想先讓我知道的嗎？（選填）",
+  f_time:"時段",f_contact:"WhatsApp / LINE / KakaoTalk ID",f_contact_ph:"例如：+886 912 345 678 或 LINE: myid",
+  f_needs:"你最感興趣的是？",need1:"Olive Young 成分解析採買",need2:"韓國藥妝店必買組合",need3:"美睫／美眉／髮廊配對",need4:"個人穿搭造型",
+  f_agree:"我已閱讀並同意取消規定與免責聲明。",f_agree_err:"請先同意才能繼續。",f_contact_err:"請留下可聯絡的通訊軟體 ID 或號碼。",
+  kst_note:"所有時間皆為韓國標準時間（KST, GMT+9）。",
+  trip_tip:"小提醒：安排在行程第 2～3 天最理想 — 才有時間試用我們挑的產品。",
+  book_submit:"送出申請",book_ok:"已收到你的申請，我會盡快聯絡你！",book_err:"請填寫姓名、電子郵件與日期。",book_sending:"傳送中…",book_fail:"發生錯誤，請再試一次。",
+  slot_pick:"請先選擇日期",slot_none:"此日期無法預約",slot_choose:"請選擇時段",slot_full:"此日期已額滿 — 請選擇其他日期。",slot_taken:"該時段剛被預約 — 請選擇其他時段。",slot_loading:"載入時段中…",slot_err:"無法載入時段。",
+  st_pending:"等待確認",st_confirmed:"已確認",st_declined:"未能安排",st_cancelled:"已取消",
+  queue_none:"目前排在第一位",queue_ahead:"前面有 {n} 位申請中",queue_note:"同一時段可能有多位客人申請，我會確認其中一位並通知其他人。",
+  code_title:"你的預約代碼",code_sub:"請保存 — 查詢、變更或取消預約時需要用到。",code_copied:"已複製",
+  my_title:"查詢我的預約",my_sub:"請輸入申請時取得的代碼。",my_code:"預約代碼",my_find:"查詢",my_none:"找不到此代碼的預約。",my_link:"查詢預約",
+  my_cancel:"取消這筆預約",my_change:"申請更改時段",my_cancel_q:"確定要取消嗎？此動作無法復原。",my_cancel_ok:"你的預約已取消。",
+  my_chg_date:"希望的新日期",my_chg_time:"希望的新時段",my_chg_msg:"訊息（選填）",my_chg_send:"送出變更申請",my_chg_ok:"已送出變更申請，我會盡快回覆。",
+  my_reason:"原因",my_auto_taken:"該時段已由其他客人確認。",my_pending_note:"我確認後會以電子郵件通知你。",
+  host_kicker:"關於主理人",host_title:"陪你走完這一天的人。",host_role:"美妝・保養專業人員",host_exp:"10 年以上護膚經驗",host_langs:"English · 한국어",
+  host_philosophy:"我的工作不是讓你買更多，而是幫你帶走真正適合你膚質的那幾樣，其餘的果斷跳過。",host_note:"目前在首爾從事保養相關工作。",
+  faq_kicker:"預約前",faq_title:"常被問到的問題。",
+  rev_kicker:"客人",rev_title:"客人怎麼說。",rev_write:"撰寫評價",rev_none:"還沒有評價 — 你可以是第一位。",
+  rev_name:"你的名字",rev_rating:"評分",rev_text:"評價內容",rev_pw:"密碼（之後修改或刪除時使用）",rev_submit:"發表評價",rev_ok:"感謝你！評價已發表。",
+  rev_edit:"修改",rev_del:"刪除",rev_pw_ask:"請輸入你設定的密碼：",rev_pw_wrong:"密碼錯誤。",
+  disclaimer:"Zeneverse 是個人美妝諮詢與購物導覽服務，不提供醫療行為，亦不安排、仲介或代訂任何醫療療程與診所預約。",
+  priv_link:"隱私權政策",terms_link:"取消規定",float_label:"聯絡我",
+  vid_soon:"影片 1 · 即將推出",vid_soon2:"影片 2 · 即將推出",vid_soon3:"影片 3 · 即將推出"
+});
+
+/* ---- 简体中文 ---- */
+I18N.zhHans = Object.assign({}, I18N.zhHant, {
+  nav_packages:"方案",nav_included:"包含内容",nav_watch:"视频",nav_book:"立即预约",nav_host:"关于主理人",nav_faq:"常见问题",nav_reviews:"评价",
+  hero_eyebrow:"韩国美妆导览 · 英语随行",
+  hero_title:"你在首尔的<em>美妆内行人</em>。",
+  hero_lede:"由现职美妆护肤从业者带领的私人导览。个人肤质咨询、诚实的产品建议，以及严选的韩妆采买与沙龙陪同 — 不哄抬价格，没有语言隔阂。",
+  hero_cta1:"立即预约 &rarr;",hero_cta2:"查看方案",
+  cred1:"一对一私人服务，不赶行程",cred2:"流利英语，为海外旅客设计",cred3:"为中文旅客提供中文支持",
+  pkg_kicker:"服务方案",pkg_title:"选择最适合你行程的一天。",
+  pkg_sub:"无论是短暂转机还是长期停留，每一天都是私人专属、依你的节奏安排 — 不是固定的团体行程。",
+  inc_kicker:"每次服务都包含",inc_title:"从头到尾，站在你这边的内行人。",
+  inc1_t:"个人咨询",inc1_d:"由每天身处美妆现场的人，为你做仔细的个人肤质咨询 — 不是推销话术。",
+  inc2_t:"诚实建议",inc2_d:"哪些值得买、哪些可以跳过、哪些产品真正适合你的肤质。",
+  inc3_t:"严选合作店家",inc3_d:"值得信赖的美睫、美甲、发廊与店家 — 为你配对，不哄抬价格。",
+  inc4_t:"全程英语",inc4_d:"没有翻译压力，每个步骤都清楚说明，依你的节奏进行。",
+  watch_title:"用视频认识这一天。",watch_sub:"预约前最快了解 Zeneverse 一日行程的方式。",
+  join_title:"告诉我你的日期 — 我来保留位置。",join_sub:"私人服务名额有限，很快就会满。提交申请，我会尽快确认可预约时间。",join_cta:"提交预约申请 &rarr;",
+  book_title:"预约申请",book_sub:"填写资料后，我会通过电子邮件确认可预约时间。",
+  f_name:"姓名",f_email:"电子邮箱",f_pkg:"方案",f_addons:"加购项目（选填）",f_date:"希望日期",f_people:"人数",f_note:"有什么想先让我知道的吗？（选填）",
+  f_needs:"你最感兴趣的是？",need1:"Olive Young 成分解析采买",need2:"韩国药妆店必买组合",need3:"美睫／美眉／发廊配对",need4:"个人穿搭造型",
+  f_agree:"我已阅读并同意取消规定与免责声明。",f_agree_err:"请先同意才能继续。",f_contact_err:"请留下可联系的通讯软件 ID 或号码。",
+  kst_note:"所有时间均为韩国标准时间（KST, GMT+9）。",
+  trip_tip:"小提醒：安排在行程第 2～3 天最理想 — 才有时间试用我们挑的产品。",
+  book_submit:"提交申请",book_ok:"已收到你的申请，我会尽快联系你！",book_err:"请填写姓名、电子邮箱与日期。",
+  my_title:"查询我的预约",my_code:"预约代码",my_find:"查询",my_link:"查询预约",
+  host_title:"陪你走完这一天的人。",host_role:"美妆・护肤专业人员",host_exp:"10 年以上护肤经验",
+  host_philosophy:"我的工作不是让你买更多，而是帮你带走真正适合你肤质的那几样，其余的果断跳过。",host_note:"目前在首尔从事护肤相关工作。",
+  faq_title:"常被问到的问题。",rev_title:"客人怎么说。",rev_write:"撰写评价",
+  disclaimer:"Zeneverse 是个人美妆咨询与购物导览服务，不提供医疗行为，也不安排、中介或代订任何医疗疗程与诊所预约。",
+  priv_link:"隐私政策",terms_link:"取消规定",float_label:"联系我"
+});
+
 
 /* ------------- default package data (editable) ------------- */
 const DEFAULT_PACKS=[
@@ -485,9 +771,9 @@ const DEFAULT_PACKS=[
    kicker:{en:"Most popular",ko:"가장 인기"},
    title:{en:"All-in Beauty Makeover",ko:"올인원 뷰티 메이크오버"},
    dur:{en:"1 day · beauty focus",ko:"1일 · 뷰티 집중"},
-   desc:{en:"The full insider day — from a proper skin read to walking out with the right products in your bag.",ko:"제대로 된 피부 진단부터 딱 맞는 제품을 손에 들고 나올 때까지, 인사이더의 하루 풀코스."},
-   items:{en:["1:1 skin diagnosis & honest advice","Olive Young & store shopping, guided","Vetted brow / lash / hair salon matching","Personal outfit & styling picks"],
-          ko:["1:1 피부 진단 & 솔직한 조언","올리브영 & 매장 쇼핑 가이드","검증된 눈썹/속눈썹/헤어샵 매칭","퍼스널 의류 & 스타일링 추천"]},
+   desc:{en:"The full insider day — from a personal skin consultation to walking out with the right products in your bag.",ko:"맞춤 피부 분석부터 딱 맞는 제품을 손에 들고 나올 때까지, 인사이더의 하루 풀코스."},
+   items:{en:["1:1 personal skin consultation & honest advice","Olive Young & store shopping, guided","Vetted brow / lash / hair salon matching","Personal outfit & styling picks"],
+          ko:["1:1 맞춤 피부 분석 &amp; 솔직한 조언","올리브영 & 매장 쇼핑 가이드","검증된 눈썹/속눈썹/헤어샵 매칭","퍼스널 의류 & 스타일링 추천"]},
    addons:[{name:{en:"Brow tattoo consult & booking",ko:"눈썹 문신 상담 & 예약"},price:50000},
            {name:{en:"Hair salon accompaniment",ko:"헤어샵 동행"},price:50000}],
    pricing:{regular:500000,launch:400000}},
@@ -496,8 +782,8 @@ const DEFAULT_PACKS=[
    title:{en:"Layover Glow",ko:"레이오버 글로우"},
    dur:{en:"Half day · express",ko:"반나절 · 익스프레스"},
    desc:{en:"A tight, high-impact half-day for travellers passing through — the essentials, done right.",ko:"경유하는 여행객을 위한 짧고 강력한 반나절 — 핵심만 제대로."},
-   items:{en:["Quick skin read & priorities","One curated shopping stop","Brow / lash / styling match","Product shortlist to take home"],
-          ko:["빠른 피부 진단 & 우선순위","엄선된 쇼핑 한 곳","눈썹/속눈썹/스타일링 매칭","집에 가져갈 제품 리스트"]},
+   items:{en:["Quick skin consultation & priorities","One curated shopping stop","Brow / lash / styling match","Product shortlist to take home"],
+          ko:["빠른 피부 분석 &amp; 우선순위","엄선된 쇼핑 한 곳","눈썹/속눈썹/스타일링 매칭","집에 가져갈 제품 리스트"]},
    addons:[{name:{en:"Extra shopping stop (+1h)",ko:"쇼핑 한 곳 추가 (+1시간)"},price:60000}],
    pricing:{regular:250000,launch:200000}},
   {id:"reset",feature:false,tag:"",dur_h:4,last_start:17,max_per_day:2,
@@ -524,7 +810,8 @@ const API = {
 function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
 
 let adminToken = sessionStorage.getItem("zv_token") || "";
-const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false, loaded:false };
+const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false,
+  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, loaded:false };
 
 async function loadConfig(){
   try{
@@ -535,6 +822,14 @@ async function loadConfig(){
     STATE.closed = c.closed || [];
     STATE.blocked = c.blocked || {};
     STATE.zh = !!c.zh;
+    STATE.feats = c.feats || null;
+    STATE.host = c.host || null;
+    STATE.contact = c.contact || null;
+    STATE.faq = c.faq || null;
+    STATE.media = c.media || null;
+    STATE.reviews = c.reviews || [];
+    STATE.privacy = c.privacy || null;
+    STATE.terms = c.terms || null;
     STATE.loaded = true;
     // first run: push the defaults up so the DB has something
     if(!c.packages) { /* saved on first admin save */ }
@@ -559,7 +854,9 @@ async function saveAll(){
   try{
     await API.post("/api/admin/save",{
       packages:PACKS, hours:STATE.hours, dayhours:STATE.dayhours,
-      closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh
+      closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh,
+      feats:loadFeats(), host:STATE.host||DEFAULT_HOST, contact:STATE.contact||DEFAULT_CONTACT,
+      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms
     });
   }catch(e){ alert("저장 실패 / Save failed: "+e.message); }
 }
@@ -576,6 +873,164 @@ function loadBlocked(){ return STATE.blocked; }
 function saveBlocked(b){ STATE.blocked=b; saveAll(); }
 function zhOn(){ return STATE.zh; }
 function setZh(on){ STATE.zh=!!on; saveAll(); applyZh(); }
+/* ============ FEATURE FLAGS (admin can turn sections on/off) ============ */
+const DEFAULT_FEATS={host:true,faq:true,watch:false,reviews:false,float:true,instagram:false,payments:false};
+const DEFAULT_HOST={photo:"",exp:{en:"10+ Years Care Expert",ko:"10년+ 케어 전문가"},
+  langs:{en:"English · 한국어",ko:"English · 한국어"},
+  phil:{en:"My job isn't to sell you more. It's to help you walk away with the few things that actually suit your skin — and skip the rest.",
+        ko:"제 일은 더 많이 팔아드리는 게 아니에요. 내 피부에 진짜 맞는 몇 가지만 챙기고 나머지는 과감히 건너뛰도록 돕는 거예요."}};
+const DEFAULT_CONTACT={whatsapp:"",line:"",instagram:""};
+const DEFAULT_MEDIA={v1:"",v2:"",v3:""};
+const DEFAULT_FAQ=[
+ {q:{en:"What's included — and what isn't?",ko:"무엇이 포함되고, 무엇이 포함되지 않나요?"},
+  a:{en:"Your fee covers my time: personal skin consultation, guidance, shopping curation and interpretation for the day. Products you buy, and any salon services (brow, lash, hair), are paid separately on site.",
+     ko:"요금에는 제 동행 시간이 포함돼요 — 맞춤 피부 분석, 안내, 쇼핑 큐레이션, 통역이요. 구매하시는 제품과 살롱 서비스(눈썹·속눈썹·헤어) 비용은 현장에서 별도로 결제하세요."}},
+ {q:{en:"Do you take me to a dermatology clinic or arrange treatments?",ko:"피부과 시술이나 병원 예약도 해주시나요?"},
+  a:{en:"No. Zeneverse is a beauty consulting and shopping guide service only. I don't provide medical services and I don't arrange or book clinic appointments or medical treatments.",
+     ko:"아니요. Zeneverse는 뷰티 컨설팅과 쇼핑 가이드 서비스입니다. 의료 행위를 제공하지 않으며, 병원 예약이나 의료 시술 알선도 하지 않습니다."}},
+ {q:{en:"How do I pay?",ko:"결제는 어떻게 하나요?"},
+  a:{en:"After I confirm your request by email, I'll send payment details. Products and salon services are paid directly on the day.",
+     ko:"신청을 확인한 뒤 이메일로 결제 안내를 보내드려요. 제품과 살롱 서비스는 당일 현장에서 직접 결제하세요."}},
+ {q:{en:"What if I need to cancel or change my date?",ko:"취소하거나 날짜를 바꿔야 하면요?"},
+  a:{en:"You can cancel or request a new time anytime using your booking code under \"Check my booking\". Please give as much notice as you can so I can offer the slot to someone else.",
+     ko:"'내 예약 조회'에서 예약 코드로 언제든 취소하거나 다른 시간을 요청할 수 있어요. 다른 분께 자리를 드릴 수 있도록 가능한 한 미리 알려주시면 감사하겠습니다."}},
+ {q:{en:"When in my trip should I book this?",ko:"여행 중 언제 예약하는 게 좋나요?"},
+  a:{en:"Day 2–3 works best. You'll still have days left to actually use what we find, and you won't be jet-lagged on day one.",
+     ko:"여행 2~3일차가 가장 좋아요. 찾은 제품을 써볼 날이 남아있고, 첫날의 시차 피로도 피할 수 있거든요."}}
+];
+
+function loadFeats(){return STATE.feats||DEFAULT_FEATS;}
+function featOn(k){const f=loadFeats();return f[k]!==undefined?f[k]:!!DEFAULT_FEATS[k];}
+function setFeat(k,v){STATE.feats=Object.assign({},loadFeats());STATE.feats[k]=!!v;saveAll();applyFeats();}
+function applyFeats(){
+  document.querySelectorAll("[data-feat]").forEach(el=>{
+    el.hidden = !featOn(el.getAttribute("data-feat"));
+  });
+  applyContact();
+  applyHost();
+}
+function tx(obj){ // pick localized text with fallbacks
+  if(!obj)return "";
+  return obj[lang]||obj.en||obj.ko||"";
+}
+function applyHost(){
+  const h=STATE.host||DEFAULT_HOST;
+  const ph=document.getElementById("hostPhoto");
+  if(ph){ if(h.photo){ph.style.backgroundImage=`url(${h.photo})`;ph.classList.add("has-img");}else{ph.style.backgroundImage="";ph.classList.remove("has-img");} }
+  const set=(id,val)=>{const e=document.getElementById(id);if(e&&val)e.textContent=val;};
+  set("hostExp",tx(h.exp)); set("hostLangs",tx(h.langs)); set("hostPhil",tx(h.phil));
+}
+function applyContact(){
+  const c=STATE.contact||DEFAULT_CONTACT;
+  const mk=(id,url,val)=>{const e=document.getElementById(id);if(!e)return;
+    if(val){e.href=url;e.style.display="";}else{e.style.display="none";}};
+  mk("fcWa", `https://wa.me/${(c.whatsapp||"").replace(/[^0-9]/g,"")}`, c.whatsapp);
+  mk("fcLine", c.line&&c.line.startsWith("http")?c.line:`https://line.me/ti/p/~${c.line||""}`, c.line);
+  mk("fcIg", c.instagram&&c.instagram.startsWith("http")?c.instagram:`https://instagram.com/${(c.instagram||"").replace("@","")}`, c.instagram);
+}
+function toggleFloat(){document.getElementById("floatMenu").classList.toggle("open");}
+
+/* ============ FAQ ============ */
+function loadFaq(){return (STATE.faq&&STATE.faq.length)?STATE.faq:DEFAULT_FAQ;}
+function renderFaq(){
+  const root=document.getElementById("faqList");if(!root)return;
+  const list=loadFaq();
+  root.innerHTML=list.map((f,i)=>`
+    <div class="faq-item" id="faq${i}">
+      <button class="faq-q" onclick="toggleFaq(${i})">
+        <span>${tx(f.q)}</span><i class="faq-ic">+</i>
+      </button>
+      <div class="faq-a"><div class="faq-a-in">${tx(f.a)}</div></div>
+      ${editMode?`<div class="faq-admin">
+        <button class="bk-act no" onclick="delFaq(${i})">&times;</button>
+        <button class="bk-act" onclick="moveFaq(${i},-1)">↑</button>
+        <button class="bk-act" onclick="moveFaq(${i},1)">↓</button>
+        <button class="bk-act ok" onclick="editFaq(${i})">${lang==="ko"?"수정":"Edit"}</button></div>`:""}
+    </div>`).join("")+(editMode?`<button class="li-add" onclick="addFaq()">+ ${lang==="ko"?"FAQ 추가":"Add FAQ"}</button>`:"");
+}
+function toggleFaq(i){document.getElementById("faq"+i)?.classList.toggle("open");}
+
+/* ============ REVIEWS (front-end; server routes added in v3) ============ */
+function renderReviews(){
+  const root=document.getElementById("revList");if(!root)return;
+  const list=(STATE.reviews||[]).filter(r=>!r.hidden);
+  if(!list.length){root.innerHTML=`<div class="rev-empty">${I18N[lang].rev_none}</div>`;return;}
+  root.innerHTML=list.map(r=>`
+    <div class="rev-card">
+      <div class="rev-stars">${"★".repeat(r.rating||5)}${"☆".repeat(5-(r.rating||5))}</div>
+      <p class="rev-text">${esc(r.text||"")}</p>
+      <div class="rev-by">${esc(r.name||"")} <span>${esc((r.created_at||"").slice(0,10))}</span></div>
+    </div>`).join("");
+}
+function openReviewForm(){
+  const t=I18N[lang];
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:460px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.rev_write}</h3>
+        <div class="field"><label>${t.rev_name}</label><input id="rv_name" type="text"></div>
+        <div class="field"><label>${t.rev_rating}</label>
+          <select id="rv_rating"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option><option value="2">★★☆☆☆</option><option value="1">★☆☆☆☆</option></select></div>
+        <div class="field"><label>${t.rev_text}</label><textarea id="rv_text" rows="4"></textarea></div>
+        <div class="field"><label>${t.rev_pw}</label><input id="rv_pw" type="password"></div>
+        <button class="submit" onclick="submitReview()">${t.rev_submit}</button>
+        <div class="msg" id="rv_msg"></div>
+      </div>
+    </div>`;
+}
+async function submitReview(){
+  const t=I18N[lang],msg=document.getElementById("rv_msg");
+  const name=document.getElementById("rv_name").value.trim();
+  const text=document.getElementById("rv_text").value.trim();
+  const pw=document.getElementById("rv_pw").value;
+  if(!name||!text||!pw){msg.style.color="#c96f52";msg.textContent=t.book_err;return;}
+  msg.style.color="#7d9488";msg.textContent=t.book_sending;
+  try{
+    await API.post("/api/review",{name,text,password:pw,rating:parseInt(document.getElementById("rv_rating").value)});
+    msg.textContent=t.rev_ok;
+    setTimeout(async()=>{await loadConfig();renderReviews();closeModal();},1200);
+  }catch(e){msg.style.color="#c96f52";msg.textContent=t.book_fail;}
+}
+
+/* ============ POLICY MODAL ============ */
+function openPolicy(kind){
+  const t=I18N[lang];
+  const isPriv = kind==="privacy";
+  const body = isPriv ? (STATE.privacy?tx(STATE.privacy):defaultPrivacy()) : (STATE.terms?tx(STATE.terms):defaultTerms());
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:600px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${isPriv?t.priv_link:t.terms_link}</h3>
+        <div class="policy-body">${body}</div>
+        <button class="submit" onclick="closeModal()">${lang==="ko"?"확인":"Close"}</button>
+      </div>
+    </div>`;
+}
+function defaultPrivacy(){
+  return lang==="ko"
+   ? `<p>Zeneverse는 예약 처리를 위해 이름, 이메일, 메신저 ID, 예약 정보를 수집합니다.</p>
+      <p>수집한 정보는 예약 확인 및 연락 목적으로만 사용하며, 제3자에게 판매하지 않습니다.</p>
+      <p>데이터는 Cloudflare 서버에 저장되며, 요청 시 삭제해 드립니다.</p>
+      <p>문의: 하단 연락 채널로 연락해 주세요.</p>`
+   : `<p>Zeneverse collects your name, email, messenger ID and booking details solely to process your booking.</p>
+      <p>This information is used only to confirm and contact you about your booking. We never sell your data to third parties.</p>
+      <p>Data is stored on Cloudflare servers and can be deleted on request.</p>
+      <p>Questions? Reach out via the contact channels below.</p>`;
+}
+function defaultTerms(){
+  return lang==="ko"
+   ? `<p><b>예약 확정</b> — 신청은 대기 상태로 접수되며, 확인 후 이메일로 확정 안내를 드립니다.</p>
+      <p><b>취소</b> — '내 예약 조회'에서 예약 코드로 언제든 취소할 수 있습니다. 가능한 한 미리 알려주세요.</p>
+      <p><b>환불</b> — 선결제한 경우 방문 7일 전까지 전액, 3일 전까지 50% 환불됩니다. 이후에는 환불이 어렵습니다.</p>
+      <p><b>면책</b> — Zeneverse는 의료 행위 및 의료기관 알선·예약을 제공하지 않는 퍼스널 뷰티 컨설팅 & 쇼핑 가이드 서비스입니다. 제품 및 살롱 서비스 비용은 별도이며 현장에서 결제합니다.</p>`
+   : `<p><b>Confirmation</b> — Requests are received as pending. I'll confirm by email once reviewed.</p>
+      <p><b>Cancellation</b> — You may cancel anytime with your booking code under "Check my booking". Please give as much notice as possible.</p>
+      <p><b>Refunds</b> — If prepaid: full refund up to 7 days before, 50% up to 3 days before. No refund after that.</p>
+      <p><b>Disclaimer</b> — Zeneverse is a personal beauty consulting & shopping guide service. We do not provide medical services or arrange clinic appointments. Products and salon services are paid separately on site.</p>`;
+}
+
 function applyZh(){
   const on=zhOn(),el=document.getElementById("credZh");
   if(el)el.hidden=!on;
@@ -614,17 +1069,43 @@ let PACKS=structuredClone(DEFAULT_PACKS);
 let DAY_BOOKINGS=[]; // bookings for the date currently shown in the form
 
 /* ------------- i18n apply ------------- */
+const LANG_LABEL={en:"EN",ko:"KO",zhHant:"繁中",zhHans:"简中"};
+function toggleLangMenu(){document.getElementById("langMenu").classList.toggle("open");}
 function setLang(l){
-  lang=l;document.body.classList.toggle("lang-ko",l==="ko");document.body.classList.toggle("lang-en",l==="en");
-  document.getElementById("lang-en").classList.toggle("on",l==="en");
-  document.getElementById("lang-ko").classList.toggle("on",l==="ko");
-  document.documentElement.lang=l;
+  if(!I18N[l])l="en";
+  lang=l;
+  document.body.classList.toggle("lang-ko",l==="ko");
+  document.body.classList.toggle("lang-zh",l==="zhHant"||l==="zhHans");
+  document.body.classList.toggle("lang-en",l==="en");
+  const lbl=document.getElementById("langCurLabel");if(lbl)lbl.textContent=LANG_LABEL[l]||"EN";
+  document.getElementById("langMenu")?.classList.remove("open");
+  document.documentElement.lang = l==="ko"?"ko":l==="zhHant"?"zh-Hant":l==="zhHans"?"zh-Hans":"en";
   document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.getAttribute("data-i18n");if(I18N[l][k]!==undefined)el.innerHTML=I18N[l][k];});
   applyZh();
   renderPacks();
+  renderFaq();
+  renderReviews();
   if(adminMode)renderAdminBar();
   try{localStorage.setItem("zv_lang",l);}catch(e){}
 }
+/* pick a sensible default language from browser/IP on first visit */
+async function autoLang(){
+  let saved=null;try{saved=localStorage.getItem("zv_lang");}catch(e){}
+  if(saved)return saved;
+  const nav=(navigator.language||"en").toLowerCase();
+  if(nav.startsWith("ko"))return "ko";
+  if(nav.includes("tw")||nav.includes("hk")||nav.includes("hant"))return "zhHant";
+  if(nav.startsWith("zh"))return "zhHans";
+  try{
+    const r=await fetch("https://ipapi.co/country/",{signal:AbortSignal.timeout(2500)});
+    const c=(await r.text()).trim().toUpperCase();
+    if(c==="KR")return "ko";
+    if(c==="TW"||c==="HK"||c==="MO")return "zhHant";
+    if(c==="CN"||c==="SG")return "zhHans";
+  }catch(e){}
+  return "en";
+}
+
 
 /* ------------- render packages ------------- */
 function renderPacks(){
@@ -740,7 +1221,18 @@ function openBooking(preselect){
         <div class="field"><label>${t.f_date}</label><input id="bk_date" type="date" min="${todayStr()}" onchange="refreshSlots()"></div>
         <div class="field"><label>${t.f_time} <span id="bk_durhint" class="dur-hint"></span></label><div id="bk_slots" class="slot-wrap"><span class="slot-hint">${t.slot_pick}</span></div></div>
         <div class="field"><label>${t.f_people}</label><input id="bk_people" type="number" min="1" value="1"></div>
+        <div class="field"><label>${t.f_contact} *</label><input id="bk_contact" type="text" placeholder="${t.f_contact_ph}"></div>
+        <div class="field"><label>${t.f_needs}</label>
+          <div class="needs-wrap">
+            ${[1,2,3,4].map(n=>`<label class="need-check"><input type="checkbox" data-need="${t["need"+n]}"> <span>${t["need"+n]}</span></label>`).join("")}
+          </div></div>
         <div class="field"><label>${t.f_note}</label><textarea id="bk_note" rows="2"></textarea></div>
+        <div class="form-tips">
+          <div class="tip-line">🕘 ${t.kst_note}</div>
+          <div class="tip-line">💡 ${t.trip_tip}</div>
+        </div>
+        <label class="agree-check"><input type="checkbox" id="bk_agree"> <span>${t.f_agree}
+          <a onclick="event.stopPropagation();openPolicy('terms')" class="agree-link">${t.terms_link}</a></span></label>
         <button class="submit" onclick="submitBooking()">${t.book_submit}</button>
         <div class="msg" id="bk_msg"></div>
       </div>
@@ -796,14 +1288,19 @@ async function submitBooking(){
   const name=document.getElementById("bk_name").value.trim();
   const email=document.getElementById("bk_email").value.trim();
   const date=document.getElementById("bk_date").value;
+  const contact=document.getElementById("bk_contact").value.trim();
   if(!name||!email||!date){msg.style.color="#c96f52";msg.textContent=t.book_err;return;}
+  if(!contact){msg.style.color="#c96f52";msg.textContent=t.f_contact_err;return;}
   if(!selectedSlot){msg.style.color="#c96f52";msg.textContent=t.slot_choose;return;}
+  if(!document.getElementById("bk_agree").checked){msg.style.color="#c96f52";msg.textContent=t.f_agree_err;return;}
+  const needs=[...document.querySelectorAll("[data-need]")].filter(c=>c.checked).map(c=>c.getAttribute("data-need"));
   const pk=currentPack();
   msg.style.color="#7d9488";msg.textContent=t.book_sending;
   try{
     const r=await API.post("/api/book",{
       name,email,pkg:pk.id,date,time:selectedSlot,
       people:document.getElementById("bk_people").value,
+      contact, needs,
       note:document.getElementById("bk_note").value.trim(),
       addons:selectedAddons()
     });
@@ -949,6 +1446,99 @@ async function refreshNewCount(){
   if(!adminToken)return;
   try{const r=await API.get("/api/admin/bookings");newCount=r.newCount||0;renderAdminBar();}catch(e){}
 }
+/* ============ ADMIN: site settings panel ============ */
+function openSettings(){
+  const t=I18N[lang],f=loadFeats(),h=STATE.host||DEFAULT_HOST,c=STATE.contact||DEFAULT_CONTACT,m=STATE.media||DEFAULT_MEDIA;
+  const ko=lang==="ko";
+  const row=(k,label,note)=>`<label class="feat-row">
+      <span><b>${label}</b>${note?`<i>${note}</i>`:""}</span>
+      <button class="tgl${f[k]!==undefined?(f[k]?" on":""):(DEFAULT_FEATS[k]?" on":"")}" onclick="setFeat('${k}',!featOn('${k}'));openSettings()"></button>
+    </label>`;
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:560px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${ko?"사이트 설정":"Site settings"}</h3>
+        <div class="sub">${ko?"섹션을 켜고 끄고, 호스트 정보와 연락 채널을 관리하세요.":"Turn sections on/off and manage host info and contact channels."}</div>
+
+        <div class="set-label mono">${ko?"섹션 표시":"Sections"}</div>
+        ${row("host",ko?"호스트 소개":"Meet your host")}
+        ${row("faq","FAQ")}
+        ${row("watch",ko?"영상 섹션":"Video section",ko?"영상 준비되면 켜기":"turn on when videos are ready")}
+        ${row("reviews",ko?"고객 후기":"Reviews",ko?"후기 쌓이면 켜기":"turn on once you have reviews")}
+        ${row("float",ko?"플로팅 문의 버튼":"Floating contact button")}
+        ${row("instagram",ko?"인스타그램 피드":"Instagram feed",ko?"준비 중":"coming later")}
+        ${row("payments",ko?"결제 연동":"Payments",ko?"준비 중":"coming later")}
+
+        <div class="set-label mono">${ko?"호스트 정보":"Host info"}</div>
+        <div class="field"><label>${ko?"프로필 사진 URL":"Photo URL"}</label>
+          <input id="st_photo" type="text" value="${(h.photo||"").replace(/"/g,'&quot;')}" placeholder="https://..."></div>
+        <div class="field"><label>${ko?"경력 뱃지":"Experience badge"}</label>
+          <input id="st_exp" type="text" value="${esc(tx(h.exp))}"></div>
+        <div class="field"><label>${ko?"가능 언어":"Languages"}</label>
+          <input id="st_langs" type="text" value="${esc(tx(h.langs))}"></div>
+        <div class="field"><label>${ko?"케어 철학":"Philosophy"}</label>
+          <textarea id="st_phil" rows="3">${esc(tx(h.phil))}</textarea></div>
+
+        <div class="set-label mono">${ko?"연락 채널":"Contact channels"}</div>
+        <div class="field"><label>WhatsApp ${ko?"번호(국가코드 포함)":"number (with country code)"}</label>
+          <input id="st_wa" type="text" value="${esc(c.whatsapp||"")}" placeholder="+8210..."></div>
+        <div class="field"><label>LINE ID ${ko?"또는 링크":"or link"}</label>
+          <input id="st_line" type="text" value="${esc(c.line||"")}"></div>
+        <div class="field"><label>Instagram ${ko?"아이디":"handle"}</label>
+          <input id="st_ig" type="text" value="${esc(c.instagram||"")}" placeholder="@myaccount"></div>
+
+        <div class="set-label mono">${ko?"유튜브 영상 (ID 또는 링크)":"YouTube videos (ID or link)"}</div>
+        <div class="field"><input id="st_v1" type="text" value="${esc(m.v1||"")}" placeholder="Video 1"></div>
+        <div class="field"><input id="st_v2" type="text" value="${esc(m.v2||"")}" placeholder="Video 2"></div>
+        <div class="field"><input id="st_v3" type="text" value="${esc(m.v3||"")}" placeholder="Video 3"></div>
+
+        <button class="submit" onclick="saveSettings()">${ko?"저장":"Save"}</button>
+        <div class="msg" id="st_msg"></div>
+      </div>
+    </div>`;
+}
+function saveSettings(){
+  const g=id=>document.getElementById(id).value.trim();
+  const h=STATE.host?structuredClone(STATE.host):structuredClone(DEFAULT_HOST);
+  h.photo=g("st_photo");
+  h.exp=h.exp||{};h.exp[lang]=g("st_exp");
+  h.langs=h.langs||{};h.langs[lang]=g("st_langs");
+  h.phil=h.phil||{};h.phil[lang]=g("st_phil");
+  STATE.host=h;
+  STATE.contact={whatsapp:g("st_wa"),line:g("st_line"),instagram:g("st_ig")};
+  STATE.media={v1:g("st_v1"),v2:g("st_v2"),v3:g("st_v3")};
+  saveAll();applyFeats();renderMedia();
+  const m=document.getElementById("st_msg");m.style.color="#7d9488";m.textContent=lang==="ko"?"저장됐어요":"Saved";
+}
+/* YouTube embeds */
+function ytId(v){
+  if(!v)return "";
+  const m=v.match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([A-Za-z0-9_-]{6,})/);
+  return m?m[1]:v.trim();
+}
+function renderMedia(){
+  const m=STATE.media||DEFAULT_MEDIA;
+  ["v1","v2","v3"].forEach((k,i)=>{
+    const box=document.querySelectorAll(".vid")[i];if(!box)return;
+    const id=ytId(m[k]);
+    box.innerHTML = id
+      ? `<iframe src="https://www.youtube.com/embed/${id}" title="video ${i+1}" allowfullscreen loading="lazy"></iframe>`
+      : `<div class="vid-ph"><div class="play"></div><small>${I18N[lang]["vid_soon"+(i?i+1:"")]||"coming soon"}</small></div>`;
+  });
+}
+/* FAQ editing */
+function addFaq(){const f=structuredClone(loadFaq());f.push({q:{en:"New question",ko:"새 질문"},a:{en:"Answer",ko:"답변"}});STATE.faq=f;saveAll();renderFaq();}
+function delFaq(i){const f=structuredClone(loadFaq());f.splice(i,1);STATE.faq=f;saveAll();renderFaq();}
+function moveFaq(i,d){const f=structuredClone(loadFaq());const j=i+d;if(j<0||j>=f.length)return;[f[i],f[j]]=[f[j],f[i]];STATE.faq=f;saveAll();renderFaq();}
+function editFaq(i){
+  const f=structuredClone(loadFaq());
+  const q=prompt(lang==="ko"?"질문:":"Question:",tx(f[i].q));if(q===null)return;
+  const a=prompt(lang==="ko"?"답변:":"Answer:",tx(f[i].a));if(a===null)return;
+  f[i].q=f[i].q||{};f[i].q[lang]=q;
+  f[i].a=f[i].a||{};f[i].a[lang]=a;
+  STATE.faq=f;saveAll();renderFaq();
+}
 function renderAdminBar(){
   const t=I18N[lang];
   document.getElementById("adminBar").innerHTML=`
@@ -956,6 +1546,7 @@ function renderAdminBar(){
       <span class="badge">${t.ab_badge}</span>
       <button onclick="toggleEdit()">${editMode?t.ab_done:t.ab_edit}</button>
       <button onclick="manageAvail()">${t.ab_slots}</button>
+      <button onclick="openSettings()">${lang==="ko"?"사이트 설정":"Settings"}</button>
       <button onclick="viewBookings('pending')">${t.ab_view}${newCount?` <i class="ab-badge">${newCount}</i>`:""}</button>
       <button onclick="setZh(!zhOn());renderAdminBar()" class="${zhOn()?"on":""}">${t.ab_zh} ${zhOn()?"ON":"OFF"}</button>
       ${editMode?`<span class="edit-lang">${t.ab_editing} <b>${lang==="ko"?"한국어":"English"}</b> — ${t.ab_switch}</span>`:`<span class="hint"></span>`}
@@ -967,7 +1558,7 @@ function renderAdminBar(){
 function toggleEdit(){
   editMode=!editMode;
   if(!editMode)savePacks(PACKS);
-  renderPacks();renderAdminBar();
+  renderPacks();renderFaq();renderAdminBar();
 }
 function exitAdmin(){adminMode=false;editMode=false;savePacks(PACKS);document.getElementById("adminBar").innerHTML="";document.body.style.paddingBottom="0";renderPacks();}
 async function manageAvail(){
@@ -1081,7 +1672,8 @@ async function viewBookings(filter){
         <span class="st-pill st-${x.status}">${statusLabel(x.status)}</span>
       </div>
       <div class="meta">${esc(x.pkg_name||x.pkg_id)} &middot; ${esc(x.date)} &middot; <b style="color:var(--clay)">${esc(x.time||"")}${end?"–"+end:""}</b> &middot; ${esc(String(x.people))} ${lang==="ko"?"명":"guest(s)"}</div>
-      <div class="meta">${esc(x.email)} &middot; ${t.bk_code}: <code>${esc(x.code||"")}</code></div>
+      <div class="meta">${esc(x.email)}${x.contact?` &middot; 💬 <b>${esc(x.contact)}</b>`:""} &middot; ${t.bk_code}: <code>${esc(x.code||"")}</code></div>
+      ${(()=>{const n=safeNeeds(x.needs);return n.length?`<div class="meta">🎯 ${n.map(esc).join(" · ")}</div>`:"";})()}
       ${x.addons&&x.addons.length?`<div class="meta">+ ${x.addons.map(a=>esc(lang==="ko"&&a.name_ko?a.name_ko:a.name)+" ("+wonFmt(a.price||0)+")").join(", ")}</div>`:""}
       ${x.note?`<div class="meta">📝 ${esc(x.note)}</div>`:""}
       ${reason?`<div class="meta reason-line"><b>${t.my_reason}:</b> ${esc(reason)}</div>`:""}
@@ -1118,15 +1710,18 @@ async function delBooking(id){
   try{ await API.post("/api/admin/bookings/del",{id}); viewBookings(); }
   catch(e){ alert("삭제 실패 / Delete failed"); }
 }
+function safeNeeds(v){try{return typeof v==="string"?JSON.parse(v):(v||[]);}catch(e){return [];}}
 function esc(s){return(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 
 /* ------------- init ------------- */
 const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
 function observeReveals(){document.querySelectorAll(".reveal:not(.in)").forEach(el=>io.observe(el));}
 (async function init(){
-  let saved="en";try{saved=localStorage.getItem("zv_lang")||"en";}catch(e){}
   await loadConfig();
-  setLang(saved);
+  const l=await autoLang();
+  setLang(l);
+  applyFeats();
+  renderMedia();
   observeReveals();
   if(adminToken){ adminMode=true; renderAdminBar(); refreshNewCount(); }
 })();
