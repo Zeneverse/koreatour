@@ -2105,12 +2105,12 @@ async function submitBooking(){
   if(!contactId){msg.style.color="#c96f52";msg.textContent=t.f_contact_err;return;}
   if(!selectedSlot){msg.style.color="#c96f52";msg.textContent=t.slot_choose;return;}
   if(!document.getElementById("bk_agree").checked){msg.style.color="#c96f52";msg.textContent=t.f_agree_err;return;}
+  const pk=currentPack();
   const ppl=parseInt(document.getElementById("bk_people").value)||1;
   if(ppl>(pk.max_people||4)){msg.style.color="#c96f52";msg.textContent=t.f_people_err.replace("{n}",pk.max_people||4);return;}
   const needs=[...document.querySelectorAll("[data-need]")].filter(c=>c.checked).map(c=>c.getAttribute("data-need"));
   const otherCb=document.getElementById("need_other_cb"),otherTx=document.getElementById("need_other_tx");
   if(otherCb&&otherCb.checked&&otherTx.value.trim())needs.push(otherTx.value.trim());
-  const pk=currentPack();
   msg.style.color="#7d9488";msg.textContent=t.book_sending;
   try{
     const r=await API.post("/api/book",{
@@ -2123,8 +2123,10 @@ async function submitBooking(){
     showCode(r.code,r.queueAhead||0,pickedChannel);
     return;
   }catch(e){
+    console.error("booking failed:",e);
     msg.style.color="#c96f52";
-    msg.textContent = e.code==="full" ? t.slot_full : e.code==="taken" ? t.slot_taken : e.code==="closed" ? t.slot_none : t.book_fail;
+    msg.textContent = e.code==="full" ? t.slot_full : e.code==="taken" ? t.slot_taken
+      : e.code==="closed" ? t.slot_none : (t.book_fail+" ("+(e.message||e.code||"error")+")");
     refreshSlots();
   }
 }
