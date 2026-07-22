@@ -59,6 +59,46 @@ function checkAdmin(request, env) {
   return token && token === env.ADMIN_PASSWORD;
 }
 
+
+/* ============ EMAIL (Resend) ============
+   Optional. Set these in Cloudflare > Settings > Variables:
+     RESEND_API_KEY  - from resend.com
+     MAIL_FROM       - e.g. "Zeneverse <booking@yourdomain.com>"
+     ADMIN_EMAIL     - where you want to receive alerts
+   If they're not set, everything still works — emails are just skipped. */
+async function sendMail(env, to, subject, html) {
+  if (!env.RESEND_API_KEY || !env.MAIL_FROM || !to) return false;
+  try {
+    const r = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
+      body: JSON.stringify({ from: env.MAIL_FROM, to: [to], subject, html }),
+    });
+    return r.ok;
+  } catch (e) { return false; }
+}
+const mailShell = (title, body) => `
+  <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#f6f4ef;padding:28px">
+    <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:16px;padding:30px">
+      <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#c96f52">Zeneverse</div>
+      <h2 style="margin:10px 0 18px;color:#1a2b2b;font-size:20px">${title}</h2>
+      ${body}
+      <p style="margin-top:26px;font-size:12px;color:#8a938f;line-height:1.6">
+        Zeneverse is a personal beauty consulting &amp; shopping guide service.
+        We do not provide medical services or arrange clinic appointments.</p>
+    </div>
+  </div>`;
+const row2 = (k, v) => `<tr><td style="padding:6px 0;color:#6b746f;font-size:13px">${k}</td><td style="padding:6px 0;color:#1a2b2b;font-size:13px;font-weight:600">${v}</td></tr>`;
+
+/* ============ PAYMENTS (structure only — not active yet) ============
+   When you're ready, set PAYMENT_PROVIDER=stripe and STRIPE_SECRET_KEY,
+   then fill in createCheckout(). The front-end already sends booking data. */
+async function createCheckout(env, booking) {
+  if (!env.PAYMENT_PROVIDER) return null;
+  // TODO: implement Stripe / PayPal session creation and return { url }
+  return null;
+}
+
 async function sha256(str) {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(str)));
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
@@ -91,7 +131,7 @@ export async function onRequest(context) {
   try {
     /* ---------------- public: config ---------------- */
     if (route === "/config" && request.method === "GET") {
-      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms] = await Promise.all([
+      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav] = await Promise.all([
         getSetting(db, "packages", null),
         getSetting(db, "hours", { open: 10, close: 21 }),
         getSetting(db, "dayhours", {}),
@@ -105,6 +145,9 @@ export async function onRequest(context) {
         getSetting(db, "media", null),
         getSetting(db, "privacy", null),
         getSetting(db, "terms", null),
+        getSetting(db, "igPosts", []),
+        getSetting(db, "copy", null),
+        getSetting(db, "nav", null),
       ]);
       let reviews = [];
       try {
@@ -113,7 +156,7 @@ export async function onRequest(context) {
           .all();
         reviews = results || [];
       } catch (e) { /* reviews table may not exist yet */ }
-      return json({ packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, reviews });
+      return json({ packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, reviews });
     }
 
     /* ---------------- public: slots (+ queue counts) ---------------- */
@@ -216,6 +259,39 @@ export async function onRequest(context) {
         )
         .run();
 
+      /* notify — never block the booking if email fails */
+      const addonTxt = (addons || []).map((a) => a.name).join(", ");
+      const needTxt = (needs || []).join(", ");
+      const guestBody = `
+        <p style="color:#3c4a48;font-size:14px;line-height:1.7">Thank you — I've received your request.
+        I'll review it and confirm by email shortly.</p>
+        <table style="width:100%;border-collapse:collapse;margin-top:12px">
+          ${row2("Booking code", code)}
+          ${row2("Package", (pk.title && pk.title.en) || pkg)}
+          ${row2("Date", date)}
+          ${row2("Time (KST)", time)}
+          ${row2("Guests", String(parseInt(people) || 1))}
+          ${addonTxt ? row2("Add-ons", addonTxt) : ""}
+        </table>
+        <p style="margin-top:18px;font-size:13px;color:#6b746f">
+          Keep your booking code — you can check, change or cancel your booking with it on the site.</p>`;
+      await sendMail(env, email, `Zeneverse — request received (${code})`, mailShell("Request received", guestBody));
+
+      const adminBody = `
+        <table style="width:100%;border-collapse:collapse">
+          ${row2("Name", String(name))}
+          ${row2("Email", String(email))}
+          ${row2("Messenger", String(contact || "-"))}
+          ${row2("Package", (pk.title && pk.title.en) || pkg)}
+          ${row2("Date / Time", `${date} ${time}`)}
+          ${row2("Guests", String(parseInt(people) || 1))}
+          ${needTxt ? row2("Interests", needTxt) : ""}
+          ${addonTxt ? row2("Add-ons", addonTxt) : ""}
+          ${note ? row2("Note", String(note)) : ""}
+          ${row2("Code", code)}
+        </table>`;
+      await sendMail(env, env.ADMIN_EMAIL, `New booking request — ${name} (${date} ${time})`, mailShell("New booking request", adminBody));
+
       return json({ ok: true, code, queueAhead });
     }
 
@@ -256,6 +332,12 @@ export async function onRequest(context) {
         .prepare("UPDATE bookings SET status='cancelled', reason=?, seen=0, updated_at=? WHERE code=?")
         .bind(String(reason || "").slice(0, 500), nowISO(), row.code)
         .run();
+      await sendMail(env, env.ADMIN_EMAIL, `Booking cancelled — ${row.name} (${row.date} ${row.time})`,
+        mailShell("A guest cancelled", `
+          <table style="width:100%;border-collapse:collapse">
+            ${row2("Name", row.name)}${row2("Date / Time", row.date + " " + row.time)}
+            ${row2("Code", row.code)}${reason ? row2("Reason", String(reason)) : ""}
+          </table>`));
       return json({ ok: true });
     }
 
@@ -272,6 +354,13 @@ export async function onRequest(context) {
         .prepare("UPDATE bookings SET change_req=?, seen=0, updated_at=? WHERE code=?")
         .bind(req, nowISO(), row.code)
         .run();
+      await sendMail(env, env.ADMIN_EMAIL, `Change requested — ${row.name} (${row.code})`,
+        mailShell("A guest requested a different time", `
+          <table style="width:100%;border-collapse:collapse">
+            ${row2("Name", row.name)}${row2("Current", row.date + " " + row.time)}
+            ${row2("Requested", (newDate || "-") + " " + (newTime || ""))}
+            ${message ? row2("Message", String(message)) : ""}
+          </table>`));
       return json({ ok: true });
     }
 
@@ -322,6 +411,22 @@ export async function onRequest(context) {
           .bind("AUTO_TAKEN", nowISO(), c.id)
           .run();
       }
+      await sendMail(env, row.email, `Zeneverse — booking confirmed (${row.code})`,
+        mailShell("Your booking is confirmed", `
+          <table style="width:100%;border-collapse:collapse">
+            ${row2("Package", row.pkg_name || row.pkg_id)}
+            ${row2("Date", row.date)}
+            ${row2("Time (KST)", row.time)}
+            ${row2("Code", row.code)}
+          </table>
+          <p style="margin-top:16px;font-size:13px;color:#6b746f">See you in Seoul! Reply to this email if anything changes.</p>`));
+      for (const c of clash) {
+        const cr = await db.prepare("SELECT email, code FROM bookings WHERE id=?").bind(c.id).first();
+        if (cr) await sendMail(env, cr.email, `Zeneverse — that time was taken (${cr.code})`,
+          mailShell("That time is no longer available", `
+            <p style="color:#3c4a48;font-size:14px;line-height:1.7">Another guest was confirmed for the time you requested.
+            I'm sorry to miss you — please pick another time on the site and I'll do my best to make it work.</p>`));
+      }
       return json({ ok: true, autoDeclined: clash.length });
     }
 
@@ -329,10 +434,16 @@ export async function onRequest(context) {
     if (route === "/admin/decline" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
       const { id, reason } = await request.json();
+      const dr = await db.prepare("SELECT email, code FROM bookings WHERE id=?").bind(id).first();
       await db
         .prepare("UPDATE bookings SET status='declined', reason=?, seen=1, updated_at=? WHERE id=?")
         .bind(String(reason || "").slice(0, 500), nowISO(), id)
         .run();
+      if (dr) await sendMail(env, dr.email, `Zeneverse — about your request (${dr.code})`,
+        mailShell("About your booking request", `
+          <p style="color:#3c4a48;font-size:14px;line-height:1.7">Unfortunately I can't take this booking.</p>
+          ${reason ? `<p style="background:#f6f4ef;border-radius:10px;padding:12px;font-size:13px;color:#3c4a48"><b>Reason:</b> ${String(reason)}</p>` : ""}
+          <p style="font-size:13px;color:#6b746f">You're very welcome to request another date on the site.</p>`));
       return json({ ok: true });
     }
 
@@ -369,7 +480,7 @@ export async function onRequest(context) {
     if (route === "/admin/save" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
       const body = await request.json();
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav"];
       for (const k of keys) if (body[k] !== undefined) await putSetting(db, k, body[k]);
       return json({ ok: true });
     }

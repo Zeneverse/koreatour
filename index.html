@@ -108,10 +108,10 @@
   .sep-note{margin-top:14px;font-size:.76rem;line-height:1.5;color:var(--sage);background:var(--paper-2);border-radius:10px;padding:9px 12px}
   .pack.feature .sep-note{background:#22403f;color:#9fb0ab}
   /* addon checkboxes in booking form */
-  .addon-check{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:7px;cursor:pointer;font-size:.9rem;font-weight:400}
+  .addon-check{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:7px;cursor:pointer;font-size:.9rem;font-weight:400;min-height:46px}
   .addon-check:hover{border-color:var(--clay)}
-  .addon-check input{width:auto;margin:0}
-  .addon-check span{flex:1}
+  .addon-check input[type="checkbox"]{width:18px !important;min-width:18px;height:18px;margin:0;flex:0 0 18px;accent-color:var(--clay);cursor:pointer}
+  .addon-check span{flex:1;text-align:left}
   .addon-check b{font-family:'Space Mono',monospace;font-size:.78rem;color:var(--clay);font-weight:400}
   .pack .book-btn{margin-top:14px;width:100%;padding:12px;border-radius:40px;border:1px solid var(--clay);background:var(--clay);color:#fff;font-family:inherit;font-weight:600;cursor:pointer;transition:.2s;font-size:.92rem}
   .pack.feature .book-btn{background:var(--gold);border-color:var(--gold)}
@@ -334,13 +334,16 @@
 
   /* ===== booking form extras ===== */
   .needs-wrap{display:flex;flex-direction:column;gap:7px}
-  .need-check{display:flex;align-items:center;gap:9px;padding:10px 13px;border:1px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;font-size:.88rem;font-weight:400;min-height:44px}
+  .need-check{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;font-size:.88rem;font-weight:400;min-height:46px}
   .need-check:hover{border-color:var(--clay)}
-  .need-check input{width:auto;margin:0}
+  .need-check input[type="checkbox"]{width:18px !important;min-width:18px;height:18px;margin:0;flex:0 0 18px;accent-color:var(--clay);cursor:pointer}
+  .need-check span{flex:1;text-align:left}
+  .need-other-input{margin-top:2px;padding:11px 14px;border-radius:11px;border:1px solid var(--clay);background:#fff;font-family:inherit;font-size:.88rem;width:100%;color:var(--ink)}
   .form-tips{background:var(--paper-2);border-radius:12px;padding:12px 14px;margin:14px 0;display:flex;flex-direction:column;gap:6px}
   .tip-line{font-size:.8rem;color:#4a5654;line-height:1.5}
   .agree-check{display:flex;align-items:flex-start;gap:10px;font-size:.85rem;margin-bottom:14px;cursor:pointer;line-height:1.5}
-  .agree-check input{width:auto;margin:3px 0 0}
+  .agree-check input[type="checkbox"]{width:18px !important;min-width:18px;height:18px;margin:2px 0 0;flex:0 0 18px;accent-color:var(--clay);cursor:pointer}
+  .agree-check span{flex:1;text-align:left}
   .agree-link{color:var(--clay);text-decoration:underline;cursor:pointer;margin-left:5px}
 
   /* ===== footer legal ===== */
@@ -351,6 +354,46 @@
   .foot-policy a:hover{opacity:1;text-decoration:underline}
   .policy-body{font-size:.9rem;line-height:1.7;color:#3c4a48;max-height:52vh;overflow-y:auto;padding-right:6px}
   .policy-body p{margin-bottom:12px}
+
+  /* ===== text editing mode ===== */
+  body.text-edit .editable-text{outline:1px dashed var(--clay);outline-offset:3px;border-radius:3px;cursor:pointer;transition:background .15s}
+  body.text-edit .editable-text:hover{background:rgba(201,111,82,.1)}
+  .te-backdrop{position:fixed;inset:0;background:rgba(26,43,43,.25);z-index:100}
+  .te-pop{position:fixed;left:50%;transform:translateX(-50%);width:min(460px,92vw);background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px;z-index:101;box-shadow:0 24px 60px -20px rgba(26,43,43,.45)}
+  .te-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .te-head .mono{color:var(--sage);font-size:.66rem}
+  .te-key{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--sage);background:var(--paper-2);padding:3px 8px;border-radius:20px}
+  .te-pop textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-family:inherit;font-size:.95rem;line-height:1.6;color:var(--ink);resize:vertical}
+  .te-pop textarea:focus{outline:2px solid var(--clay);border-color:transparent}
+  .te-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+  .te-btn{border-radius:30px;padding:9px 18px;font-family:inherit;font-size:.86rem;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  .te-btn.ok{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+  .te-btn:hover{filter:brightness(1.06)}
+
+  /* ===== nav order ===== */
+  .nav-order{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+  .nav-row{display:flex;align-items:center;gap:8px;padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:#fff;cursor:grab}
+  .nav-row.dragging{opacity:.45}
+  .drag-h{color:var(--sage);cursor:grab;font-size:.95rem}
+  .nav-name{flex:1;font-size:.9rem}
+  .nav-arrow{background:none;border:1px solid var(--line);border-radius:7px;width:26px;height:26px;cursor:pointer;color:var(--ink);font-size:.75rem}
+  .nav-arrow:hover{border-color:var(--clay);color:var(--clay)}
+
+  /* ===== host popup ===== */
+  .host-card{cursor:pointer;transition:transform .2s,box-shadow .2s}
+  .host-card:hover{transform:translateY(-3px);box-shadow:0 24px 56px -30px rgba(26,43,43,.35)}
+  .host-more{display:inline-block;margin-top:12px;font-size:.82rem;color:var(--clay);font-weight:600;border-bottom:1px solid var(--clay);padding-bottom:2px}
+  .host-pop-top{display:flex;gap:18px;align-items:center;margin-bottom:18px}
+  .host-photo.sm{width:96px;height:96px;aspect-ratio:auto;border-radius:16px;flex-shrink:0;background-size:cover;background-position:center}
+  .host-photo.sm .host-ph{font-size:1.3rem}
+  .host-bio{font-size:.95rem;line-height:1.75;color:#3c4a48;max-height:50vh;overflow-y:auto}
+
+  /* ===== instagram ===== */
+  .ig-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+  .ig-tile{aspect-ratio:1;border-radius:12px;background-size:cover;background-position:center;background-color:var(--paper-2);display:block;transition:transform .2s}
+  .ig-tile:hover{transform:scale(1.03)}
+  .ig-tile.ph{background:linear-gradient(140deg,var(--paper-2),var(--mist))}
+  @media (max-width:900px){.ig-grid{grid-template-columns:repeat(3,1fr)}}
 
   /* ===== admin settings ===== */
   .set-label{color:var(--sage);display:block;margin:22px 0 12px;padding-top:14px;border-top:1px solid var(--line)}
@@ -386,7 +429,7 @@
 <nav id="nav">
   <div class="wrap nav-in">
     <div class="logo"><span class="dot"></span>Zeneverse</div>
-    <div class="nav-links">
+    <div class="nav-links" id="navLinks">
       <a onclick="scrollToId('packages')" data-i18n="nav_packages">Packages</a>
       <a onclick="scrollToId('host')" data-i18n="nav_host" data-feat="host">Your host</a>
       <a onclick="scrollToId('faq')" data-i18n="nav_faq" data-feat="faq">FAQ</a>
@@ -431,7 +474,7 @@
       <span class="mono" data-i18n="host_kicker">Meet your host</span>
       <h2 data-i18n="host_title">The person who'll be with you all day.</h2>
     </div>
-    <div class="host-card reveal">
+    <div class="host-card reveal" onclick="openHostBio()" role="button" tabindex="0">
       <div class="host-photo" id="hostPhoto"><span class="host-ph">ZEN</span></div>
       <div class="host-body">
         <div class="host-role mono" data-i18n="host_role">Beauty &amp; skincare professional</div>
@@ -441,6 +484,7 @@
         </div>
         <p class="host-quote" id="hostPhil" data-i18n="host_philosophy">My job isn't to sell you more.</p>
         <div class="host-note" id="hostNote" data-i18n="host_note">Currently working in the skincare field in Seoul.</div>
+        <span class="host-more" data-i18n="host_more">Read more</span>
       </div>
     </div>
   </div>
@@ -530,6 +574,21 @@
   </div>
 </section>
 
+
+<!-- INSTAGRAM -->
+<section id="instagram" data-feat="instagram" style="padding-bottom:40px">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:32px">
+      <span class="mono" data-i18n="ig_kicker">Follow along</span>
+      <h2 data-i18n="ig_title">On Instagram.</h2>
+    </div>
+    <div class="ig-grid" id="igGrid"></div>
+    <div style="text-align:center;margin-top:24px">
+      <a class="btn btn-ghost" id="igLink" href="#" target="_blank" rel="noopener" data-i18n="ig_cta">View on Instagram</a>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap foot-in">
     <div class="logo"><span class="dot"></span>Zeneverse</div>
@@ -607,12 +666,19 @@ const I18N={
     faq_kicker:"Before you book",faq_title:"Questions I get a lot.",
     rev_kicker:"Guests",rev_title:"What guests say.",rev_write:"Write a review",rev_none:"No reviews yet — yours could be the first.",
     rev_name:"Your name",rev_rating:"Rating",rev_text:"Your review",rev_pw:"Password (to edit or delete later)",rev_submit:"Post review",rev_ok:"Thanks! Your review is posted.",
-    rev_edit:"Edit",rev_del:"Delete",rev_pw_ask:"Enter the password you set:",rev_pw_wrong:"Wrong password.",rev_hidden:"Hidden",
+    rev_edit:"Edit",rev_del:"Delete",rev_pw_ask:"Enter the password you set:",rev_pw_wrong:"Wrong password.",rev_hidden:"Hidden",rev_mine:"This is my review",rev_manage:"Manage my review",rev_saved:"Review updated.",rev_deleted:"Review deleted.",
+    ad_reviews:"Reviews",ad_audit:"Activity log",ad_hide:"Hide",ad_show:"Show",ad_no_reviews:"No reviews yet.",ad_no_log:"No activity yet.",
+    ad_log_create:"created",ad_log_edit:"edited",ad_log_delete:"deleted",ad_log_hide:"hid",ad_log_show:"unhid",ad_by_guest:"guest",ad_by_admin:"admin",
+    ig_kicker:"Follow along",ig_title:"On Instagram.",ig_cta:"View on Instagram",
     disclaimer:"Zeneverse is a personal beauty consulting & shopping guide service. We do not provide medical services, and we do not arrange, broker or book medical treatments or clinic appointments.",
     priv_link:"Privacy Policy",terms_link:"Cancellation Policy",
     f_contact:"WhatsApp / LINE / KakaoTalk ID",f_contact_ph:"e.g. +886 912 345 678  or  LINE: myid",
     f_needs:"What are you most interested in?",
-    need1:"Olive Young ingredient-smart shopping",need2:"Korean pharmacy beauty picks",need3:"Brow / lash / hair salon matching",need4:"Personal styling",
+    need1:"Olive Young ingredient-smart shopping",need2:"Korean pharmacy beauty picks",need3:"Brow / lash / hair salon matching",need4:"Personal styling",need_other:"Something else",need_other_ph:"Tell me what you're looking for…",
+    f_people_err:"Max {n} guests for this package.",
+    ed_title:"Edit text",ed_save:"Save",ed_cancel:"Cancel",ed_hint:"Click any text on the page to edit it.",
+    ab_text:"Edit texts",ab_nav:"Menu order",nav_order_title:"Menu order",nav_order_sub:"Drag to reorder, or use the arrows. Toggle to show/hide.",
+    host_edit:"Edit host info",host_more:"Read more",host_bio:"About me",
     f_agree:"I've read and agree to the cancellation policy and disclaimer.",f_agree_err:"Please agree to continue.",
     f_contact_err:"Please add a messenger ID or number so I can reach you.",
     kst_note:"All times are Korea Standard Time (KST, GMT+9).",
@@ -665,12 +731,19 @@ const I18N={
     faq_kicker:"예약 전에",faq_title:"자주 받는 질문이에요.",
     rev_kicker:"게스트",rev_title:"다녀간 분들의 이야기.",rev_write:"후기 쓰기",rev_none:"아직 후기가 없어요 — 첫 번째 후기의 주인공이 되어주세요.",
     rev_name:"이름",rev_rating:"별점",rev_text:"후기 내용",rev_pw:"비밀번호 (나중에 수정·삭제할 때 필요)",rev_submit:"후기 등록",rev_ok:"감사합니다! 후기가 등록됐어요.",
-    rev_edit:"수정",rev_del:"삭제",rev_pw_ask:"설정하신 비밀번호를 입력하세요:",rev_pw_wrong:"비밀번호가 틀렸어요.",rev_hidden:"숨김",
+    rev_edit:"수정",rev_del:"삭제",rev_pw_ask:"설정하신 비밀번호를 입력하세요:",rev_pw_wrong:"비밀번호가 틀렸어요.",rev_hidden:"숨김",rev_mine:"내가 쓴 후기예요",rev_manage:"내 후기 관리",rev_saved:"후기가 수정됐어요.",rev_deleted:"후기가 삭제됐어요.",
+    ad_reviews:"후기 관리",ad_audit:"활동 기록",ad_hide:"숨기기",ad_show:"노출",ad_no_reviews:"아직 후기가 없어요.",ad_no_log:"아직 활동 기록이 없어요.",
+    ad_log_create:"작성",ad_log_edit:"수정",ad_log_delete:"삭제",ad_log_hide:"숨김",ad_log_show:"노출",ad_by_guest:"고객",ad_by_admin:"관리자",
+    ig_kicker:"팔로우하기",ig_title:"인스타그램에서 만나요.",ig_cta:"인스타그램에서 보기",
     disclaimer:"Zeneverse는 의료 행위 및 의료기관 알선·예약을 제공하지 않는 퍼스널 뷰티 컨설팅 & 쇼핑 가이드 서비스입니다.",
     priv_link:"개인정보 처리방침",terms_link:"취소 규정",
     f_contact:"WhatsApp / LINE / 카카오톡 ID",f_contact_ph:"예: +886 912 345 678  또는  LINE: myid",
     f_needs:"어떤 게 가장 궁금하세요?",
-    need1:"올리브영 성분 분석 쇼핑",need2:"한국 약국 뷰티 꿀조합",need3:"눈썹/속눈썹/헤어샵 매칭",need4:"퍼스널 스타일링",
+    need1:"올리브영 성분 분석 쇼핑",need2:"한국 약국 뷰티 꿀조합",need3:"눈썹/속눈썹/헤어샵 매칭",need4:"퍼스널 스타일링",need_other:"기타 (직접 입력)",need_other_ph:"어떤 게 궁금하신지 적어주세요…",
+    f_people_err:"이 패키지는 최대 {n}명까지 가능해요.",
+    ed_title:"텍스트 수정",ed_save:"저장",ed_cancel:"취소",ed_hint:"페이지의 아무 글자나 클릭하면 수정할 수 있어요.",
+    ab_text:"글자 수정",ab_nav:"메뉴 순서",nav_order_title:"메뉴 순서",nav_order_sub:"드래그하거나 화살표로 순서를 바꾸고, 토글로 표시 여부를 정하세요.",
+    host_edit:"호스트 정보 수정",host_more:"더 보기",host_bio:"소개",
     f_agree:"취소 규정과 면책 조항을 읽고 동의합니다.",f_agree_err:"동의해주셔야 진행할 수 있어요.",
     f_contact_err:"연락 가능한 메신저 ID나 번호를 입력해주세요.",
     kst_note:"모든 시간은 한국 표준시(KST, GMT+9) 기준이에요.",
@@ -729,6 +802,8 @@ I18N.zhHant = Object.assign({}, I18N.en, {
   rev_edit:"修改",rev_del:"刪除",rev_pw_ask:"請輸入你設定的密碼：",rev_pw_wrong:"密碼錯誤。",
   disclaimer:"Zeneverse 是個人美妝諮詢與購物導覽服務，不提供醫療行為，亦不安排、仲介或代訂任何醫療療程與診所預約。",
   priv_link:"隱私權政策",terms_link:"取消規定",float_label:"聯絡我",
+  need_other:"其他（自行填寫）",need_other_ph:"請告訴我你想了解什麼…",f_people_err:"此方案最多 {n} 位。",
+  host_more:"更多介紹",host_bio:"關於我",
   vid_soon:"影片 1 · 即將推出",vid_soon2:"影片 2 · 即將推出",vid_soon3:"影片 3 · 即將推出"
 });
 
@@ -761,13 +836,15 @@ I18N.zhHans = Object.assign({}, I18N.zhHant, {
   host_philosophy:"我的工作不是让你买更多，而是帮你带走真正适合你肤质的那几样，其余的果断跳过。",host_note:"目前在首尔从事护肤相关工作。",
   faq_title:"常被问到的问题。",rev_title:"客人怎么说。",rev_write:"撰写评价",
   disclaimer:"Zeneverse 是个人美妆咨询与购物导览服务，不提供医疗行为，也不安排、中介或代订任何医疗疗程与诊所预约。",
+  need_other:"其他（自行填写）",need_other_ph:"请告诉我你想了解什么…",f_people_err:"此方案最多 {n} 位。",
+  host_more:"更多介绍",host_bio:"关于我",
   priv_link:"隐私政策",terms_link:"取消规定",float_label:"联系我"
 });
 
 
 /* ------------- default package data (editable) ------------- */
 const DEFAULT_PACKS=[
-  {id:"makeover",feature:true,tag:"Signature",dur_h:4,last_start:17,max_per_day:2,
+  {id:"makeover",max_people:4,feature:true,tag:"Signature",dur_h:4,last_start:17,max_per_day:2,
    kicker:{en:"Most popular",ko:"가장 인기"},
    title:{en:"All-in Beauty Makeover",ko:"올인원 뷰티 메이크오버"},
    dur:{en:"1 day · beauty focus",ko:"1일 · 뷰티 집중"},
@@ -777,7 +854,7 @@ const DEFAULT_PACKS=[
    addons:[{name:{en:"Brow tattoo consult & booking",ko:"눈썹 문신 상담 & 예약"},price:50000},
            {name:{en:"Hair salon accompaniment",ko:"헤어샵 동행"},price:50000}],
    pricing:{regular:500000,launch:400000}},
-  {id:"layover",feature:false,tag:"",dur_h:2,last_start:19,max_per_day:3,
+  {id:"layover",max_people:4,feature:false,tag:"",dur_h:2,last_start:19,max_per_day:3,
    kicker:{en:"Short & sharp",ko:"짧고 굵게"},
    title:{en:"Layover Glow",ko:"레이오버 글로우"},
    dur:{en:"Half day · express",ko:"반나절 · 익스프레스"},
@@ -786,7 +863,7 @@ const DEFAULT_PACKS=[
           ko:["빠른 피부 분석 &amp; 우선순위","엄선된 쇼핑 한 곳","눈썹/속눈썹/스타일링 매칭","집에 가져갈 제품 리스트"]},
    addons:[{name:{en:"Extra shopping stop (+1h)",ko:"쇼핑 한 곳 추가 (+1시간)"},price:60000}],
    pricing:{regular:250000,launch:200000}},
-  {id:"reset",feature:false,tag:"",dur_h:4,last_start:17,max_per_day:2,
+  {id:"reset",max_people:4,feature:false,tag:"",dur_h:4,last_start:17,max_per_day:2,
    kicker:{en:"Stay longer",ko:"길게 머물기"},
    title:{en:"Skin Reset",ko:"스킨 리셋"},
    dur:{en:"1 day + follow-up",ko:"1일 + 후속 케어"},
@@ -811,7 +888,7 @@ function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
 
 let adminToken = sessionStorage.getItem("zv_token") || "";
 const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false,
-  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, loaded:false };
+  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, loaded:false };
 
 async function loadConfig(){
   try{
@@ -830,6 +907,9 @@ async function loadConfig(){
     STATE.reviews = c.reviews || [];
     STATE.privacy = c.privacy || null;
     STATE.terms = c.terms || null;
+    STATE.igPosts = c.igPosts || [];
+    STATE.copy = c.copy || null;
+    STATE.nav = c.nav || null;
     STATE.loaded = true;
     // first run: push the defaults up so the DB has something
     if(!c.packages) { /* saved on first admin save */ }
@@ -846,7 +926,7 @@ function backfillPacks(p){
     if(pk.last_start==null)pk.last_start=d.last_start;
     if(pk.pricing==null)pk.pricing=structuredClone(d.pricing);
     if(pk.max_per_day==null)pk.max_per_day=d.max_per_day;
-    if(pk.addons==null)pk.addons=structuredClone(d.addons||[]);
+    if(pk.addons==null)pk.addons=structuredClone(d.addons||[]);if(pk.max_people==null)pk.max_people=d.max_people||4;
   }});
 }
 async function saveAll(){
@@ -856,7 +936,7 @@ async function saveAll(){
       packages:PACKS, hours:STATE.hours, dayhours:STATE.dayhours,
       closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh,
       feats:loadFeats(), host:STATE.host||DEFAULT_HOST, contact:STATE.contact||DEFAULT_CONTACT,
-      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms
+      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav()
     });
   }catch(e){ alert("저장 실패 / Save failed: "+e.message); }
 }
@@ -882,21 +962,31 @@ const DEFAULT_HOST={photo:"",exp:{en:"10+ Years Care Expert",ko:"10년+ 케어 �
 const DEFAULT_CONTACT={whatsapp:"",line:"",instagram:""};
 const DEFAULT_MEDIA={v1:"",v2:"",v3:""};
 const DEFAULT_FAQ=[
- {q:{en:"What's included — and what isn't?",ko:"무엇이 포함되고, 무엇이 포함되지 않나요?"},
+ {q:{en:"What's included — and what isn't?",ko:"무엇이 포함되고, 무엇이 포함되지 않나요?",zhHant:"包含哪些？不包含哪些？",zhHans:"包含哪些？不包含哪些？"},
   a:{en:"Your fee covers my time: personal skin consultation, guidance, shopping curation and interpretation for the day. Products you buy, and any salon services (brow, lash, hair), are paid separately on site.",
-     ko:"요금에는 제 동행 시간이 포함돼요 — 맞춤 피부 분석, 안내, 쇼핑 큐레이션, 통역이요. 구매하시는 제품과 살롱 서비스(눈썹·속눈썹·헤어) 비용은 현장에서 별도로 결제하세요."}},
- {q:{en:"Do you take me to a dermatology clinic or arrange treatments?",ko:"피부과 시술이나 병원 예약도 해주시나요?"},
+     ko:"요금에는 제 동행 시간이 포함돼요 — 맞춤 피부 분석, 안내, 쇼핑 큐레이션, 통역이요. 구매하시는 제품과 살롱 서비스(눈썹·속눈썹·헤어) 비용은 현장에서 별도로 결제하세요.",
+     zhHant:"費用包含我當天的陪同時間：個人膚質諮詢、建議、選購導覽與翻譯。你購買的產品，以及任何沙龍服務（美眉、美睫、髮型）費用需在現場另行支付。",
+     zhHans:"费用包含我当天的陪同时间：个人肤质咨询、建议、选购导览与翻译。你购买的产品，以及任何沙龙服务（美眉、美睫、发型）费用需在现场另行支付。"}},
+ {q:{en:"Do you take me to a dermatology clinic or arrange treatments?",ko:"피부과 시술이나 병원 예약도 해주시나요?",zhHant:"你會帶我去皮膚科診所或安排療程嗎？",zhHans:"你会带我去皮肤科诊所或安排疗程吗？"},
   a:{en:"No. Zeneverse is a beauty consulting and shopping guide service only. I don't provide medical services and I don't arrange or book clinic appointments or medical treatments.",
-     ko:"아니요. Zeneverse는 뷰티 컨설팅과 쇼핑 가이드 서비스입니다. 의료 행위를 제공하지 않으며, 병원 예약이나 의료 시술 알선도 하지 않습니다."}},
- {q:{en:"How do I pay?",ko:"결제는 어떻게 하나요?"},
+     ko:"아니요. Zeneverse는 뷰티 컨설팅과 쇼핑 가이드 서비스입니다. 의료 행위를 제공하지 않으며, 병원 예약이나 의료 시술 알선도 하지 않습니다.",
+     zhHant:"不會。Zeneverse 僅提供美妝諮詢與購物導覽服務。我不提供醫療行為，也不安排或代訂任何診所預約與醫療療程。",
+     zhHans:"不会。Zeneverse 仅提供美妆咨询与购物导览服务。我不提供医疗行为，也不安排或代订任何诊所预约与医疗疗程。"}},
+ {q:{en:"How do I pay?",ko:"결제는 어떻게 하나요?",zhHant:"如何付款？",zhHans:"如何付款？"},
   a:{en:"After I confirm your request by email, I'll send payment details. Products and salon services are paid directly on the day.",
-     ko:"신청을 확인한 뒤 이메일로 결제 안내를 보내드려요. 제품과 살롱 서비스는 당일 현장에서 직접 결제하세요."}},
- {q:{en:"What if I need to cancel or change my date?",ko:"취소하거나 날짜를 바꿔야 하면요?"},
+     ko:"신청을 확인한 뒤 이메일로 결제 안내를 보내드려요. 제품과 살롱 서비스는 당일 현장에서 직접 결제하세요.",
+     zhHant:"我以電子郵件確認你的申請後，會寄送付款方式。產品與沙龍服務則於當天現場直接支付。",
+     zhHans:"我通过电子邮件确认你的申请后，会发送付款方式。产品与沙龙服务则于当天现场直接支付。"}},
+ {q:{en:"What if I need to cancel or change my date?",ko:"취소하거나 날짜를 바꿔야 하면요?",zhHant:"如果需要取消或更改日期怎麼辦？",zhHans:"如果需要取消或更改日期怎么办？"},
   a:{en:"You can cancel or request a new time anytime using your booking code under \"Check my booking\". Please give as much notice as you can so I can offer the slot to someone else.",
-     ko:"'내 예약 조회'에서 예약 코드로 언제든 취소하거나 다른 시간을 요청할 수 있어요. 다른 분께 자리를 드릴 수 있도록 가능한 한 미리 알려주시면 감사하겠습니다."}},
- {q:{en:"When in my trip should I book this?",ko:"여행 중 언제 예약하는 게 좋나요?"},
+     ko:"'내 예약 조회'에서 예약 코드로 언제든 취소하거나 다른 시간을 요청할 수 있어요. 다른 분께 자리를 드릴 수 있도록 가능한 한 미리 알려주시면 감사하겠습니다.",
+     zhHant:"你可以在「查詢我的預約」中使用預約代碼隨時取消或申請更改時段。請盡早告知，讓我能把名額留給其他客人。",
+     zhHans:"你可以在\"查询我的预约\"中使用预约代码随时取消或申请更改时段。请尽早告知，让我能把名额留给其他客人。"}},
+ {q:{en:"When in my trip should I book this?",ko:"여행 중 언제 예약하는 게 좋나요?",zhHant:"行程中哪一天預約最合適？",zhHans:"行程中哪一天预约最合适？"},
   a:{en:"Day 2–3 works best. You'll still have days left to actually use what we find, and you won't be jet-lagged on day one.",
-     ko:"여행 2~3일차가 가장 좋아요. 찾은 제품을 써볼 날이 남아있고, 첫날의 시차 피로도 피할 수 있거든요."}}
+     ko:"여행 2~3일차가 가장 좋아요. 찾은 제품을 써볼 날이 남아있고, 첫날의 시차 피로도 피할 수 있거든요.",
+     zhHant:"第 2～3 天最理想。你還有時間試用我們挑到的產品，也能避開第一天的時差疲勞。",
+     zhHans:"第 2～3 天最理想。你还有时间试用我们挑到的产品，也能避开第一天的时差疲劳。"}}
 ];
 
 function loadFeats(){return STATE.feats||DEFAULT_FEATS;}
@@ -908,10 +998,14 @@ function applyFeats(){
   });
   applyContact();
   applyHost();
+  renderNav();
 }
-function tx(obj){ // pick localized text with fallbacks
+function tx(obj){ // pick localized text with sensible fallbacks
   if(!obj)return "";
-  return obj[lang]||obj.en||obj.ko||"";
+  if(obj[lang])return obj[lang];
+  if(lang==="zhHans"&&obj.zhHant)return obj.zhHant;   // simplified falls back to traditional
+  if(lang==="zhHant"&&obj.zhHans)return obj.zhHans;
+  return obj.en||obj.ko||"";
 }
 function applyHost(){
   const h=STATE.host||DEFAULT_HOST;
@@ -927,6 +1021,17 @@ function applyContact(){
   mk("fcWa", `https://wa.me/${(c.whatsapp||"").replace(/[^0-9]/g,"")}`, c.whatsapp);
   mk("fcLine", c.line&&c.line.startsWith("http")?c.line:`https://line.me/ti/p/~${c.line||""}`, c.line);
   mk("fcIg", c.instagram&&c.instagram.startsWith("http")?c.instagram:`https://instagram.com/${(c.instagram||"").replace("@","")}`, c.instagram);
+}
+function renderInstagram(){
+  const grid=document.getElementById("igGrid");if(!grid)return;
+  const c=STATE.contact||DEFAULT_CONTACT;
+  const handle=(c.instagram||"").replace("@","").replace(/^https?:\/\/(www\.)?instagram\.com\//,"").replace(/\/$/,"");
+  const link=document.getElementById("igLink");
+  if(link)link.href=handle?`https://instagram.com/${handle}`:"#";
+  const posts=(STATE.igPosts||[]).slice(0,6);
+  grid.innerHTML = posts.length
+    ? posts.map(p=>`<a class="ig-tile" href="${esc(p.link||"#")}" target="_blank" rel="noopener" style="background-image:url(${esc(p.image||"")})"></a>`).join("")
+    : Array.from({length:6}).map(()=>`<div class="ig-tile ph"></div>`).join("");
 }
 function toggleFloat(){document.getElementById("floatMenu").classList.toggle("open");}
 
@@ -959,7 +1064,8 @@ function renderReviews(){
     <div class="rev-card">
       <div class="rev-stars">${"★".repeat(r.rating||5)}${"☆".repeat(5-(r.rating||5))}</div>
       <p class="rev-text">${esc(r.text||"")}</p>
-      <div class="rev-by">${esc(r.name||"")} <span>${esc((r.created_at||"").slice(0,10))}</span></div>
+      <div class="rev-by">${esc(r.name||"")} <span>${esc((r.created_at||"").slice(0,10))}</span>
+        <button class="rev-manage" onclick="openReviewManage(${r.id})">${I18N[lang].rev_manage}</button></div>
     </div>`).join("");
 }
 function openReviewForm(){
@@ -991,6 +1097,248 @@ async function submitReview(){
     msg.textContent=t.rev_ok;
     setTimeout(async()=>{await loadConfig();renderReviews();closeModal();},1200);
   }catch(e){msg.style.color="#c96f52";msg.textContent=t.book_fail;}
+}
+
+/* ============ GLOBAL TEXT EDITING (any [data-i18n] on the page) ============
+   Admin turns on "Edit texts", clicks any text, edits in a small popup.
+   Overrides are stored per language in STATE.copy and merged over I18N. */
+let textEditMode=false;
+function loadCopy(){return STATE.copy||{};}
+function copyFor(lang_,key){const c=loadCopy();return (c[lang_]&&c[lang_][key]!==undefined)?c[lang_][key]:undefined;}
+function applyCopy(){
+  const c=loadCopy()[lang]||{};
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k=el.getAttribute("data-i18n");
+    if(c[k]!==undefined)el.innerHTML=c[k];
+  });
+}
+function toggleTextEdit(){
+  textEditMode=!textEditMode;
+  document.body.classList.toggle("text-edit",textEditMode);
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    el.classList.toggle("editable-text",textEditMode);
+    if(textEditMode)el.onclick=(e)=>{e.preventDefault();e.stopPropagation();openTextEditor(el);};
+    else el.onclick=null;
+  });
+  renderAdminBar();
+}
+function openTextEditor(el){
+  const t=I18N[lang],key=el.getAttribute("data-i18n");
+  const cur = copyFor(lang,key) !== undefined ? copyFor(lang,key) : (I18N[lang][key]||el.innerHTML);
+  const rect=el.getBoundingClientRect();
+  const top=Math.min(window.innerHeight-260, Math.max(70, rect.bottom+8));
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="te-backdrop" onclick="closeModal()"></div>
+    <div class="te-pop" style="top:${top}px">
+      <div class="te-head"><span class="mono">${t.ed_title}</span>
+        <span class="te-key">${key}</span></div>
+      <textarea id="te_val" rows="4">${cur.replace(/</g,"&lt;")}</textarea>
+      <div class="te-actions">
+        <button class="te-btn ghost" onclick="closeModal()">${t.ed_cancel}</button>
+        <button class="te-btn ok" onclick="saveText('${key}')">${t.ed_save}</button>
+      </div>
+    </div>`;
+  setTimeout(()=>document.getElementById("te_val")?.focus(),50);
+}
+function saveText(key){
+  const val=document.getElementById("te_val").value;
+  const c=structuredClone(loadCopy());
+  if(!c[lang])c[lang]={};
+  c[lang][key]=val;
+  STATE.copy=c;
+  saveAll();
+  document.querySelectorAll(`[data-i18n="${key}"]`).forEach(e=>e.innerHTML=val);
+  closeModal();
+}
+
+/* ============ NAV ORDER (drag / arrows / show-hide) ============ */
+const DEFAULT_NAV=[
+ {key:"nav_packages",target:"packages",on:true},
+ {key:"nav_host",target:"host",on:true},
+ {key:"nav_faq",target:"faq",on:true},
+ {key:"nav_watch",target:"watch",on:true},
+ {key:"my_link",target:"__lookup",on:true}
+];
+function loadNav(){return (STATE.nav&&STATE.nav.length)?STATE.nav:DEFAULT_NAV;}
+function renderNav(){
+  const box=document.getElementById("navLinks");if(!box)return;
+  const items=loadNav().filter(n=>n.on).filter(n=>n.target==="__lookup"||featOn(n.target)!==false);
+  box.innerHTML=items.map(n=>{
+    const label=(loadCopy()[lang]&&loadCopy()[lang][n.key])||I18N[lang][n.key]||n.key;
+    const act = n.target==="__lookup" ? "openLookup()" : `scrollToId('${n.target}')`;
+    return `<a onclick="${act}" data-i18n="${n.key}">${label}</a>`;
+  }).join("")+`<a onclick="openBooking()" class="nav-cta" data-i18n="nav_book">${(loadCopy()[lang]&&loadCopy()[lang].nav_book)||I18N[lang].nav_book}</a>`;
+  if(textEditMode){
+    box.querySelectorAll("[data-i18n]").forEach(el=>{el.classList.add("editable-text");el.onclick=(e)=>{e.preventDefault();e.stopPropagation();openTextEditor(el);};});
+  }
+}
+function openNavOrder(){
+  const t=I18N[lang],nav=loadNav();
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:440px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.nav_order_title}</h3><div class="sub">${t.nav_order_sub}</div>
+        <div class="nav-order" id="navOrder">
+          ${nav.map((n,i)=>`
+            <div class="nav-row" draggable="true" data-i="${i}">
+              <span class="drag-h">⠿</span>
+              <span class="nav-name">${I18N[lang][n.key]||n.key}</span>
+              <button class="nav-arrow" onclick="moveNav(${i},-1)">↑</button>
+              <button class="nav-arrow" onclick="moveNav(${i},1)">↓</button>
+              <button class="tgl${n.on?" on":""}" onclick="toggleNav(${i})"></button>
+            </div>`).join("")}
+        </div>
+        <button class="submit" onclick="closeModal()">${lang==="ko"?"완료":"Done"}</button>
+      </div>
+    </div>`;
+  wireNavDrag();
+}
+function wireNavDrag(){
+  const box=document.getElementById("navOrder");if(!box)return;
+  let dragI=null;
+  box.querySelectorAll(".nav-row").forEach(row=>{
+    row.addEventListener("dragstart",e=>{dragI=+row.dataset.i;row.classList.add("dragging");});
+    row.addEventListener("dragend",()=>row.classList.remove("dragging"));
+    row.addEventListener("dragover",e=>e.preventDefault());
+    row.addEventListener("drop",e=>{
+      e.preventDefault();
+      const to=+row.dataset.i;
+      if(dragI===null||dragI===to)return;
+      const n=structuredClone(loadNav());
+      const [m]=n.splice(dragI,1);n.splice(to,0,m);
+      STATE.nav=n;saveAll();renderNav();openNavOrder();
+    });
+  });
+}
+function moveNav(i,d){
+  const n=structuredClone(loadNav());const j=i+d;if(j<0||j>=n.length)return;
+  [n[i],n[j]]=[n[j],n[i]];STATE.nav=n;saveAll();renderNav();openNavOrder();
+}
+function toggleNav(i){
+  const n=structuredClone(loadNav());n[i].on=!n[i].on;STATE.nav=n;saveAll();renderNav();openNavOrder();
+}
+
+/* ============ HOST BIO POPUP ============ */
+function openHostBio(){
+  const t=I18N[lang],h=STATE.host||DEFAULT_HOST;
+  const bio = tx(h.bio) || tx(h.phil);
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:520px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <div class="host-pop-top">
+          <div class="host-photo sm" style="${h.photo?`background-image:url(${h.photo})`:""}">${h.photo?"":`<span class="host-ph">ZEN</span>`}</div>
+          <div>
+            <div class="host-role mono">${tx(h.exp)}</div>
+            <div class="host-badges" style="margin:8px 0 0">
+              <span class="host-badge alt">${tx(h.langs)}</span>
+            </div>
+          </div>
+        </div>
+        <div class="host-bio">${bio.replace(/\n/g,"<br>")}</div>
+        ${adminMode?`<button class="submit" style="margin-top:16px" onclick="editHostBio()">${t.host_edit}</button>`:""}
+      </div>
+    </div>`;
+}
+function editHostBio(){
+  const h=STATE.host?structuredClone(STATE.host):structuredClone(DEFAULT_HOST);
+  const cur=tx(h.bio)||tx(h.phil);
+  const v=prompt(I18N[lang].host_bio+":",cur);
+  if(v===null)return;
+  h.bio=h.bio||{};h.bio[lang]=v;
+  STATE.host=h;saveAll();openHostBio();
+}
+
+/* ---- guest: manage own review with password ---- */
+function openReviewManage(id){
+  const t=I18N[lang];
+  const r=(STATE.reviews||[]).find(x=>x.id===id);if(!r)return;
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:460px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.rev_manage}</h3><div class="sub">${t.rev_pw_ask}</div>
+        <div class="field"><label>${t.rev_pw}</label><input id="rm_pw" type="password"></div>
+        <div class="field"><label>${t.rev_rating}</label>
+          <select id="rm_rating">${[5,4,3,2,1].map(n=>`<option value="${n}"${n===(r.rating||5)?" selected":""}>${"★".repeat(n)}${"☆".repeat(5-n)}</option>`).join("")}</select></div>
+        <div class="field"><label>${t.rev_text}</label><textarea id="rm_text" rows="4">${esc(r.text||"")}</textarea></div>
+        <button class="submit" onclick="saveMyReview(${id})">${t.rev_edit}</button>
+        <button class="submit" style="background:#fff;color:var(--clay);border:1px solid var(--clay);margin-top:8px" onclick="deleteMyReview(${id})">${t.rev_del}</button>
+        <div class="msg" id="rm_msg"></div>
+      </div>
+    </div>`;
+}
+async function saveMyReview(id){
+  const t=I18N[lang],m=document.getElementById("rm_msg");
+  try{
+    await API.post("/api/review/edit",{id,password:document.getElementById("rm_pw").value,
+      text:document.getElementById("rm_text").value.trim(),rating:parseInt(document.getElementById("rm_rating").value)});
+    m.style.color="#7d9488";m.textContent=t.rev_saved;
+    setTimeout(async()=>{await loadConfig();renderReviews();closeModal();},1000);
+  }catch(e){m.style.color="#c96f52";m.textContent=t.rev_pw_wrong;}
+}
+async function deleteMyReview(id){
+  const t=I18N[lang],m=document.getElementById("rm_msg");
+  if(!confirm(t.my_cancel_q))return;
+  try{
+    await API.post("/api/review/delete",{id,password:document.getElementById("rm_pw").value});
+    m.style.color="#7d9488";m.textContent=t.rev_deleted;
+    setTimeout(async()=>{await loadConfig();renderReviews();closeModal();},1000);
+  }catch(e){m.style.color="#c96f52";m.textContent=t.rev_pw_wrong;}
+}
+
+/* ---- admin: review management ---- */
+async function adminReviews(){
+  const t=I18N[lang];
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal"><button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.ad_reviews}</h3><div class="bk-list"><div class="bk-empty">${t.bk_loading}</div></div></div></div>`;
+  let list=[];
+  try{const r=await API.get("/api/admin/reviews");list=r.reviews||[];}
+  catch(e){document.querySelector(".bk-list").innerHTML=`<div class="bk-empty">${t.bk_err}</div>`;return;}
+  document.querySelector(".bk-list").innerHTML = list.length?list.map(r=>`
+    <div class="bk-item${r.hidden?" is-hidden":""}">
+      <div class="top"><span class="name">${esc(r.name)} <span class="rev-stars" style="font-size:.8rem">${"★".repeat(r.rating||5)}</span></span>
+        ${r.hidden?`<span class="st-pill st-cancelled">${t.rev_hidden}</span>`:""}</div>
+      <div class="meta">${esc(r.text||"")}</div>
+      <div class="meta" style="opacity:.7">${esc((r.created_at||"").slice(0,10))}</div>
+      <div class="bk-actions">
+        <button class="bk-act ${r.hidden?"ok":"no"}" onclick="toggleReview(${r.id},${r.hidden?0:1})">${r.hidden?t.ad_show:t.ad_hide}</button>
+        <button class="bk-del" onclick="adminDelReview(${r.id})">${t.bk_del}</button>
+      </div>
+    </div>`).join(""):`<div class="bk-empty">${t.ad_no_reviews}</div>`;
+}
+async function toggleReview(id,hidden){
+  try{await API.post("/api/admin/review/hide",{id,hidden});await loadConfig();renderReviews();adminReviews();}catch(e){alert(I18N[lang].book_fail);}
+}
+async function adminDelReview(id){
+  if(!confirm(I18N[lang].my_cancel_q))return;
+  try{await API.post("/api/admin/review/del",{id});await loadConfig();renderReviews();adminReviews();}catch(e){alert(I18N[lang].book_fail);}
+}
+
+/* ---- admin: audit log ---- */
+async function adminAudit(){
+  const t=I18N[lang];
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal"><button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.ad_audit}</h3><div class="bk-list"><div class="bk-empty">${t.bk_loading}</div></div></div></div>`;
+  let log=[];
+  try{const r=await API.get("/api/admin/audit");log=r.log||[];}
+  catch(e){document.querySelector(".bk-list").innerHTML=`<div class="bk-empty">${t.bk_err}</div>`;return;}
+  const actLabel=a=>({create:t.ad_log_create,edit:t.ad_log_edit,delete:t.ad_log_delete,hide:t.ad_log_hide,show:t.ad_log_show}[a]||a);
+  document.querySelector(".bk-list").innerHTML = log.length?log.map(l=>`
+    <div class="bk-item">
+      <div class="top">
+        <span class="name">${esc(l.entity)} #${esc(String(l.entity_id))} · ${actLabel(l.action)}</span>
+        <span class="st-pill ${l.actor==="admin"?"st-confirmed":"st-pending"}">${l.actor==="admin"?t.ad_by_admin:t.ad_by_guest}</span>
+      </div>
+      <div class="meta" style="opacity:.7">${esc((l.created_at||"").slice(0,16).replace("T"," "))}</div>
+      ${l.before_data?`<div class="meta reason-line"><b>before:</b> ${esc(JSON.stringify(l.before_data).slice(0,200))}</div>`:""}
+      ${l.after_data?`<div class="meta chg-line"><b>after:</b> ${esc(JSON.stringify(l.after_data).slice(0,200))}</div>`:""}
+    </div>`).join(""):`<div class="bk-empty">${t.ad_no_log}</div>`;
 }
 
 /* ============ POLICY MODAL ============ */
@@ -1082,6 +1430,8 @@ function setLang(l){
   document.documentElement.lang = l==="ko"?"ko":l==="zhHant"?"zh-Hant":l==="zhHans"?"zh-Hans":"en";
   document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.getAttribute("data-i18n");if(I18N[l][k]!==undefined)el.innerHTML=I18N[l][k];});
   applyZh();
+  applyCopy();
+  renderNav();
   renderPacks();
   renderFaq();
   renderReviews();
@@ -1140,6 +1490,7 @@ function renderPacks(){
             <label>${lang==="ko"?"소요":"Duration"}: <input type="number" min="1" max="12" value="${p.dur_h}" onchange="setPackNum(${i},'dur_h',this.value)"> ${lang==="ko"?"시간":"h"}</label>
             <label>${lang==="ko"?"마지막 시작":"Last start"}: <input type="number" min="0" max="23" value="${p.last_start}" onchange="setPackNum(${i},'last_start',this.value)"> :00</label>
             <label>${lang==="ko"?"하루 최대 팀":"Max teams/day"}: <input type="number" min="1" max="10" value="${p.max_per_day}" onchange="setPackNum(${i},'max_per_day',this.value)"> ${lang==="ko"?"팀":"teams"}</label>
+            <label>${lang==="ko"?"최대 인원":"Max guests"}: <input type="number" min="1" max="20" value="${p.max_people||4}" onchange="setPackNum(${i},'max_people',this.value)"> ${lang==="ko"?"명":"ppl"}</label>
           </div>`:`<button class="book-btn" onclick="openBooking('${p.id}')">${lang==="ko"?"이 패키지 예약":"Book this"}</button>`}
       </div>`;
     root.appendChild(card);
@@ -1220,11 +1571,14 @@ function openBooking(preselect){
         <div class="field" id="bk_addons_wrap"><label>${t.f_addons}</label><div id="bk_addons"></div></div>
         <div class="field"><label>${t.f_date}</label><input id="bk_date" type="date" min="${todayStr()}" onchange="refreshSlots()"></div>
         <div class="field"><label>${t.f_time} <span id="bk_durhint" class="dur-hint"></span></label><div id="bk_slots" class="slot-wrap"><span class="slot-hint">${t.slot_pick}</span></div></div>
-        <div class="field"><label>${t.f_people}</label><input id="bk_people" type="number" min="1" value="1"></div>
+        <div class="field"><label>${t.f_people} <span class="dur-hint" id="bk_maxhint"></span></label>
+          <input id="bk_people" type="number" min="1" value="1" onchange="clampPeople()"></div>
         <div class="field"><label>${t.f_contact} *</label><input id="bk_contact" type="text" placeholder="${t.f_contact_ph}"></div>
         <div class="field"><label>${t.f_needs}</label>
           <div class="needs-wrap">
             ${[1,2,3,4].map(n=>`<label class="need-check"><input type="checkbox" data-need="${t["need"+n]}"> <span>${t["need"+n]}</span></label>`).join("")}
+            <label class="need-check"><input type="checkbox" id="need_other_cb" onchange="document.getElementById('need_other_tx').style.display=this.checked?'block':'none';if(this.checked)document.getElementById('need_other_tx').focus()"> <span>${t.need_other}</span></label>
+            <input type="text" id="need_other_tx" class="need-other-input" placeholder="${t.need_other_ph}" style="display:none">
           </div></div>
         <div class="field"><label>${t.f_note}</label><textarea id="bk_note" rows="2"></textarea></div>
         <div class="form-tips">
@@ -1238,6 +1592,16 @@ function openBooking(preselect){
       </div>
     </div>`;
   refreshAddons();
+  clampPeople();
+}
+function clampPeople(){
+  const pk=currentPack(),el=document.getElementById("bk_people");if(!el)return;
+  const mx=pk.max_people||4;
+  el.max=mx;
+  if(parseInt(el.value)>mx)el.value=mx;
+  if(parseInt(el.value)<1||!el.value)el.value=1;
+  const h=document.getElementById("bk_maxhint");
+  if(h)h.textContent=`(${lang==="ko"?"최대":"max"} ${mx})`;
 }
 function currentPack(){const id=document.getElementById("bk_pkg").value;return PACKS.find(p=>p.id===id)||PACKS[0];}
 function refreshAddons(){
@@ -1261,6 +1625,7 @@ async function refreshSlots(){
   const t=I18N[lang],date=document.getElementById("bk_date").value,wrap=document.getElementById("bk_slots");
   const pk=currentPack();
   document.getElementById("bk_durhint").textContent=`(${pk.dur_h}${lang==="ko"?"시간 소요":"h"})`;
+  clampPeople();
   selectedSlot="";
   if(!date){wrap.innerHTML=`<span class="slot-hint">${t.slot_pick}</span>`;return;}
   wrap.innerHTML=`<span class="slot-hint">${t.slot_loading}</span>`;
@@ -1293,7 +1658,11 @@ async function submitBooking(){
   if(!contact){msg.style.color="#c96f52";msg.textContent=t.f_contact_err;return;}
   if(!selectedSlot){msg.style.color="#c96f52";msg.textContent=t.slot_choose;return;}
   if(!document.getElementById("bk_agree").checked){msg.style.color="#c96f52";msg.textContent=t.f_agree_err;return;}
+  const ppl=parseInt(document.getElementById("bk_people").value)||1;
+  if(ppl>(pk.max_people||4)){msg.style.color="#c96f52";msg.textContent=t.f_people_err.replace("{n}",pk.max_people||4);return;}
   const needs=[...document.querySelectorAll("[data-need]")].filter(c=>c.checked).map(c=>c.getAttribute("data-need"));
+  const otherCb=document.getElementById("need_other_cb"),otherTx=document.getElementById("need_other_tx");
+  if(otherCb&&otherCb.checked&&otherTx.value.trim())needs.push(otherTx.value.trim());
   const pk=currentPack();
   msg.style.color="#7d9488";msg.textContent=t.book_sending;
   try{
@@ -1508,7 +1877,7 @@ function saveSettings(){
   STATE.host=h;
   STATE.contact={whatsapp:g("st_wa"),line:g("st_line"),instagram:g("st_ig")};
   STATE.media={v1:g("st_v1"),v2:g("st_v2"),v3:g("st_v3")};
-  saveAll();applyFeats();renderMedia();
+  saveAll();applyFeats();renderMedia();renderInstagram();
   const m=document.getElementById("st_msg");m.style.color="#7d9488";m.textContent=lang==="ko"?"저장됐어요":"Saved";
 }
 /* YouTube embeds */
@@ -1547,6 +1916,10 @@ function renderAdminBar(){
       <button onclick="toggleEdit()">${editMode?t.ab_done:t.ab_edit}</button>
       <button onclick="manageAvail()">${t.ab_slots}</button>
       <button onclick="openSettings()">${lang==="ko"?"사이트 설정":"Settings"}</button>
+      <button onclick="adminReviews()">${t.ad_reviews}</button>
+      <button onclick="adminAudit()">${t.ad_audit}</button>
+      <button onclick="toggleTextEdit()" class="${textEditMode?"on":""}">${t.ab_text}${textEditMode?" ✓":""}</button>
+      <button onclick="openNavOrder()">${t.ab_nav}</button>
       <button onclick="viewBookings('pending')">${t.ab_view}${newCount?` <i class="ab-badge">${newCount}</i>`:""}</button>
       <button onclick="setZh(!zhOn());renderAdminBar()" class="${zhOn()?"on":""}">${t.ab_zh} ${zhOn()?"ON":"OFF"}</button>
       ${editMode?`<span class="edit-lang">${t.ab_editing} <b>${lang==="ko"?"한국어":"English"}</b> — ${t.ab_switch}</span>`:`<span class="hint"></span>`}
@@ -1721,7 +2094,10 @@ function observeReveals(){document.querySelectorAll(".reveal:not(.in)").forEach(
   const l=await autoLang();
   setLang(l);
   applyFeats();
+  renderNav();
+  applyCopy();
   renderMedia();
+  renderInstagram();
   observeReveals();
   if(adminToken){ adminMode=true; renderAdminBar(); refreshNewCount(); }
 })();
