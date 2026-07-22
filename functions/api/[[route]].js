@@ -117,13 +117,57 @@ const mailShell = (title, body) => `
   </div>`;
 const row2 = (k, v) => `<tr><td style="padding:6px 0;color:#6b746f;font-size:13px">${k}</td><td style="padding:6px 0;color:#1a2b2b;font-size:13px;font-weight:600">${v}</td></tr>`;
 
-/* ============ PAYMENTS (structure only — not active yet) ============
-   When you're ready, set PAYMENT_PROVIDER=stripe and STRIPE_SECRET_KEY,
-   then fill in createCheckout(). The front-end already sends booking data. */
-async function createCheckout(env, booking) {
-  if (!env.PAYMENT_PROVIDER) return null;
-  // TODO: implement Stripe / PayPal session creation and return { url }
-  return null;
+/* ============ PAYMENTS ============
+   Deposit is a % of the package price. Guests pay via PayPal or bank transfer,
+   then the owner marks it received. Stripe can be added later. */
+const DEFAULT_PAY = {
+  depositPct: 30,
+  currency: "KRW",
+  paypalMe: "",          // e.g. "zeneverse"  ->  paypal.me/zeneverse/120000
+  paypalEmail: "",
+  bank: "",              // e.g. "우리은행 1002-123-456789 홍길동"
+  usdRate: 1350,         // rough KRW -> USD for PayPal links
+  refund: { fullDays: 7, halfDays: 3 }
+};
+function payLinks(pay, wonAmount) {
+  const usd = Math.max(1, Math.round(wonAmount / (pay.usdRate || 1350)));
+  const links = {};
+  if (pay.paypalMe) links.paypal = `https://paypal.me/${pay.paypalMe}/${usd}`;
+  else if (pay.paypalEmail)
+    links.paypal = `https://www.paypal.com/paypalme/${encodeURIComponent(pay.paypalEmail)}`;
+  links.usd = usd;
+  links.bank = pay.bank || "";
+  return links;
+}
+function depositFor(pay, pk, people) {
+  const price = (pk.pricing && (pk.pricing.launch || pk.pricing.regular)) || 0;
+  const total = price; // per booking, not per person
+  const dep = Math.round((total * (pay.depositPct || 30)) / 100 / 1000) * 1000;
+  return { total, deposit: dep };
+}
+
+/* ---- waitlist: tell everyone waiting that a spot opened ---- */
+async function notifyWaitlist(env, db, date, reasonLabel) {
+  try {
+    const { results } = await db
+      .prepare("SELECT * FROM waitlist WHERE date = ? AND notified = 0")
+      .bind(date).all();
+    const rows = results || [];
+    if (!rows.length) return 0;
+    const site = env.SITE_URL || "";
+    for (const w of rows) {
+      await sendMail(env, w.email, `Zeneverse — a spot opened on ${date}`,
+        mailShell("A spot just opened up", `
+          <p style="color:#3c4a48;font-size:14px;line-height:1.7">
+            Good news — a spot has opened on <b>${date}</b>, the date you asked to be notified about.</p>
+          <p style="color:#3c4a48;font-size:14px;line-height:1.7">
+            Spots are limited and go quickly, so book as soon as you can.</p>
+          ${site ? `<p style="margin-top:16px"><a href="${site}" style="display:inline-block;background:#c96f52;color:#fff;text-decoration:none;padding:12px 24px;border-radius:30px;font-weight:600">Book this date →</a></p>` : ""}`));
+    }
+    await db.prepare("UPDATE waitlist SET notified = 1 WHERE date = ? AND notified = 0").bind(date).run();
+    await sendTelegram(env, `📢 <b>대기자 알림 발송</b>\n\n📅 ${date}\n👥 ${rows.length}명에게 자리 알림을 보냈어요\n(${reasonLabel})`);
+    return rows.length;
+  } catch (e) { return 0; }
 }
 
 async function sha256(str) {
@@ -161,7 +205,7 @@ export async function onRequest(context) {
   try {
     /* ---------------- public: config ---------------- */
     if (route === "/config" && request.method === "GET") {
-      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs] = await Promise.all([
+      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, pay] = await Promise.all([
         getSetting(db, "packages", null),
         getSetting(db, "hours", { open: 10, close: 21 }),
         getSetting(db, "dayhours", {}),
@@ -179,6 +223,7 @@ export async function onRequest(context) {
         getSetting(db, "copy", null),
         getSetting(db, "nav", null),
         getSetting(db, "langs", null),
+        getSetting(db, "pay", null),
       ]);
       let reviews = [];
       try {
@@ -187,7 +232,9 @@ export async function onRequest(context) {
           .all();
         reviews = results || [];
       } catch (e) { /* reviews table may not exist yet */ }
-      return json({ packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, reviews });
+      return json({ packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, reviews,
+        pay: { depositPct: (pay && pay.depositPct) || DEFAULT_PAY.depositPct,
+               refund: (pay && pay.refund) || DEFAULT_PAY.refund } });
     }
 
     /* ---------------- public: slots (+ queue counts) ---------------- */
@@ -261,6 +308,8 @@ export async function onRequest(context) {
       const ok = bookableStarts(date, pk.dur_h, pk.last_start, hours, dayhours, blocked, confirmed);
       if (!ok.includes(time)) return json({ error: "taken" }, 409);
 
+      const pay = (await getSetting(db, "pay", null)) || DEFAULT_PAY;
+      const amounts = depositFor(pay, pk, parseInt(people) || 1);
       const code = makeCode();
       const queueAhead = live.filter(
         (b) => b.status === "pending" && overlaps(time, pk.dur_h, b.time, b.dur_h || 1)
@@ -268,8 +317,8 @@ export async function onRequest(context) {
 
       await db
         .prepare(
-          `INSERT INTO bookings (code,name,email,contact,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?)`
+          `INSERT INTO bookings (code,name,email,contact,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at,deposit_amount,total_amount)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?,?,?)`
         )
         .bind(
           code,
@@ -286,7 +335,9 @@ export async function onRequest(context) {
           String(note || "").slice(0, 1000),
           JSON.stringify(addons || []),
           nowISO(),
-          nowISO()
+          nowISO(),
+          amounts.deposit,
+          amounts.total
         )
         .run();
 
@@ -338,7 +389,7 @@ export async function onRequest(context) {
         `➡️ 사이트에서 승인/거절하세요`;
       await notifyOwner(env, `New booking request — ${name} (${date} ${time})`, adminBody, tgNew);
 
-      return json({ ok: true, code, queueAhead });
+      return json({ ok: true, code, queueAhead, deposit: amounts.deposit, total: amounts.total });
     }
 
     /* ---------------- public: look up my booking ---------------- */
@@ -378,6 +429,7 @@ export async function onRequest(context) {
         .prepare("UPDATE bookings SET status='cancelled', reason=?, seen=0, updated_at=? WHERE code=?")
         .bind(String(reason || "").slice(0, 500), nowISO(), row.code)
         .run();
+      if (row.status === "confirmed") await notifyWaitlist(env, db, row.date, "취소로 자리 발생");
       await notifyOwner(env, `Booking cancelled — ${row.name} (${row.date} ${row.time})`,
         `<table style="width:100%;border-collapse:collapse">
             ${row2("Name", row.name)}${row2("Date / Time", row.date + " " + row.time)}
@@ -412,6 +464,40 @@ export async function onRequest(context) {
         `희망: ${newDate || "-"} ${newTime || ""}\n` +
         (message ? `💬 ${message}\n` : "") + `\n🔑 <code>${row.code}</code>`);
       return json({ ok: true });
+    }
+
+    /* ---------------- public: join the waitlist ---------------- */
+    if (route === "/waitlist" && request.method === "POST") {
+      const { name, email, contact, date, pkg } = await request.json();
+      if (!email || !date) return json({ error: "missing fields" }, 400);
+      const dup = await db.prepare("SELECT id FROM waitlist WHERE email = ? AND date = ? AND notified = 0")
+        .bind(String(email), date).first();
+      if (dup) return json({ ok: true, already: true });
+      await db.prepare("INSERT INTO waitlist (name,email,contact,pkg_id,date,notified,created_at) VALUES (?,?,?,?,?,0,?)")
+        .bind(String(name || "").slice(0, 120), String(email).slice(0, 160),
+              String(contact || "").slice(0, 160), String(pkg || ""), date, nowISO()).run();
+      await sendTelegram(env, `👀 <b>자리 알림 신청</b>\n\n📅 ${date}\n👤 ${name || "-"}\n📧 ${email}`);
+      return json({ ok: true });
+    }
+
+    /* ---------------- admin: waitlist list ---------------- */
+    if (route === "/admin/waitlist" && request.method === "GET") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { results } = await db.prepare("SELECT * FROM waitlist ORDER BY date ASC, id DESC LIMIT 300").all();
+      return json({ waitlist: results || [] });
+    }
+    if (route === "/admin/waitlist/del" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { id } = await request.json();
+      await db.prepare("DELETE FROM waitlist WHERE id = ?").bind(id).run();
+      return json({ ok: true });
+    }
+    /* manually push the alert for a date */
+    if (route === "/admin/waitlist/notify" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { date } = await request.json();
+      const n = await notifyWaitlist(env, db, date, "manual");
+      return json({ ok: true, notified: n });
     }
 
     /* ---------------- admin: login ---------------- */
@@ -461,6 +547,17 @@ export async function onRequest(context) {
           .bind("AUTO_TAKEN", nowISO(), c.id)
           .run();
       }
+      const payCfg = (await getSetting(db, "pay", null)) || DEFAULT_PAY;
+      const L = payLinks(payCfg, row.deposit_amount || 0);
+      const won = (n) => "₩" + Number(n || 0).toLocaleString("en-US");
+      const payBlock = (row.deposit_amount > 0 && row.deposit_status !== "paid") ? `
+          <div style="background:#f6f4ef;border-radius:12px;padding:16px;margin-top:16px">
+            <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#c96f52;margin-bottom:8px">Deposit to secure your spot</div>
+            <div style="font-size:22px;font-weight:700;color:#1a2b2b">${won(row.deposit_amount)} <span style="font-size:13px;font-weight:400;color:#6b746f">≈ $${L.usd} · ${payCfg.depositPct}% of ${won(row.total_amount)}</span></div>
+            ${L.paypal ? `<p style="margin-top:12px"><a href="${L.paypal}" style="display:inline-block;background:#c96f52;color:#fff;text-decoration:none;padding:11px 22px;border-radius:30px;font-weight:600">Pay deposit with PayPal →</a></p>` : ""}
+            ${L.bank ? `<p style="margin-top:10px;font-size:13px;color:#3c4a48"><b>Bank transfer:</b><br>${L.bank}</p>` : ""}
+            <p style="margin-top:10px;font-size:12px;color:#6b746f">The balance is paid on the day. Your spot is held once the deposit arrives.</p>
+          </div>` : "";
       await sendMail(env, row.email, `Zeneverse — booking confirmed (${row.code})`,
         mailShell("Your booking is confirmed", `
           <table style="width:100%;border-collapse:collapse">
@@ -469,6 +566,7 @@ export async function onRequest(context) {
             ${row2("Time (KST)", row.time)}
             ${row2("Code", row.code)}
           </table>
+          ${payBlock}
           <p style="margin-top:16px;font-size:13px;color:#6b746f">See you in Seoul! Reply to this email if anything changes.</p>`));
       for (const c of clash) {
         const cr = await db.prepare("SELECT email, code FROM bookings WHERE id=?").bind(c.id).first();
@@ -478,6 +576,21 @@ export async function onRequest(context) {
             I'm sorry to miss you — please pick another time on the site and I'll do my best to make it work.</p>`));
       }
       return json({ ok: true, autoDeclined: clash.length });
+    }
+
+    /* ---------------- admin: mark deposit paid / unpaid ---------------- */
+    if (route === "/admin/deposit" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { id, status, method } = await request.json();
+      const st = status === "paid" ? "paid" : status === "refunded" ? "refunded" : "unpaid";
+      await db.prepare("UPDATE bookings SET deposit_status=?, deposit_method=?, deposit_paid_at=?, updated_at=? WHERE id=?")
+        .bind(st, String(method || ""), st === "paid" ? nowISO() : null, nowISO(), id).run();
+      const b = await db.prepare("SELECT email, code, name, deposit_amount FROM bookings WHERE id=?").bind(id).first();
+      if (b && st === "paid") {
+        await sendMail(env, b.email, `Zeneverse — deposit received (${b.code})`,
+          mailShell("Deposit received", `<p style="color:#3c4a48;font-size:14px;line-height:1.7">Thank you! Your deposit is confirmed and your spot is secured. See you in Seoul.</p>`));
+      }
+      return json({ ok: true });
     }
 
     /* ---------------- admin: decline with reason ---------------- */
@@ -530,7 +643,7 @@ export async function onRequest(context) {
     if (route === "/admin/save" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
       const body = await request.json();
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay"];
 
       /* keep a snapshot of the current state before overwriting it */
       const label = body.__label || "";
@@ -579,7 +692,7 @@ export async function onRequest(context) {
       const snap = await db.prepare("SELECT * FROM snapshots WHERE id = ?").bind(id).first();
       if (!snap) return json({ error: "not found" }, 404);
       const data = safeParseObj(snap.data);
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay"];
 
       /* snapshot the current state too, so a restore is itself undoable */
       try {

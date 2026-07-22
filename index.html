@@ -329,10 +329,37 @@
   .float-item{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:40px;padding:11px 18px;text-decoration:none;font-size:.88rem;font-weight:600;color:var(--ink);box-shadow:0 8px 24px -10px rgba(26,43,43,.3);min-height:44px}
   .float-item:hover{transform:translateX(-3px)}
   .float-item.wa{border-color:#25D366}.float-item.ln{border-color:#06C755}.float-item.ig{border-color:#E1306C}
+  .float-item.ka{border-color:#FEE500}.float-item.wc{border-color:#07C160}
+  button.float-item{font-family:inherit;cursor:pointer}
+  .ch-toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(12px);background:var(--ink);color:var(--paper);padding:12px 22px;border-radius:30px;font-size:.84rem;z-index:220;opacity:0;pointer-events:none;transition:.25s;max-width:88vw;text-align:center;line-height:1.4}
+  .ch-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .float-btn{width:58px;height:58px;border-radius:50%;border:none;background:var(--ink);color:#fff;font-size:1.4rem;cursor:pointer;box-shadow:0 10px 30px -8px rgba(26,43,43,.5);display:grid;place-items:center}
   .float-btn:active{transform:scale(.94)}
 
   /* ===== booking form extras ===== */
+  /* ===== post-booking channel step ===== */
+  .ch-step{border-radius:14px;padding:16px;margin:16px 0;text-align:left}
+  .ch-step.ok{background:#eaf3ec;border:1px solid #cfe2d5}
+  .ch-step.todo{background:#fdf3ee;border:1px solid var(--clay)}
+  .ch-step b{display:block;font-size:.95rem;margin-bottom:6px}
+  .ch-step p{font-size:.85rem;color:#4a5654;line-height:1.6}
+  .ch-add-btn{display:block;text-align:center;margin-top:12px;background:var(--clay);color:#fff;text-decoration:none;padding:12px;border-radius:30px;font-weight:600;font-size:.92rem}
+  .ch-add-btn:hover{filter:brightness(1.07)}
+  .ch-id-box{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 14px;margin-top:12px;flex-wrap:wrap}
+  .ch-id-box .mono{font-size:.62rem;color:var(--sage)}
+  .ch-id-box b{flex:1;margin:0;font-family:'Space Mono',monospace;font-size:.92rem}
+  .ch-id-box .code-copy{color:var(--clay);border-color:var(--clay)}
+  .ch-warn{color:var(--clay);margin-top:8px;font-size:.8rem}
+
+  /* ===== contact channel picker ===== */
+  .ch-picker{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:9px}
+  .ch-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:12px 10px;border:1px solid var(--line);border-radius:11px;background:#fff;font-family:inherit;font-size:.86rem;cursor:pointer;color:var(--ink);transition:.15s;min-height:46px}
+  .ch-btn span{font-size:1rem}
+  .ch-btn:hover{border-color:var(--clay)}
+  .ch-btn.on{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:600}
+  .ch-hint{font-size:.76rem;color:var(--sage);margin-top:6px;line-height:1.5}
+  #bk_contact:disabled{background:var(--paper-2);color:var(--sage);cursor:not-allowed}
+
   .needs-wrap{display:flex;flex-direction:column;gap:7px}
   .need-check{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;font-size:.88rem;font-weight:400;min-height:46px}
   .need-check:hover{border-color:var(--clay)}
@@ -376,6 +403,22 @@
   /* saved toast */
   .saved-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:30px;font-size:.82rem;z-index:210;opacity:0;pointer-events:none;transition:.25s;font-family:'Space Mono',monospace;letter-spacing:.06em}
   .saved-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ===== waitlist + deposit ===== */
+  .wl-cta{width:100%;margin-top:12px;padding:13px;border-radius:30px;border:1px solid var(--gold);background:#fff;color:var(--ink);font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;transition:.2s}
+  .wl-cta:hover{background:var(--gold);color:#fff}
+  .wl-date{background:var(--paper-2);border-radius:10px;padding:11px 14px;font-family:'Space Mono',monospace;font-size:.88rem;margin-bottom:16px;text-align:center}
+  .ch-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .ch-act{display:inline-flex;align-items:center;border-radius:20px;padding:5px 12px;font-size:.74rem;text-decoration:none;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;font-family:inherit}
+  .ch-act.wa{border-color:#25D366;color:#128C3E}
+  .ch-act.ln{border-color:#06C755;color:#048A3C}
+  .ch-act.ka{border-color:#FEE500;background:#FEF9DB}
+  .ch-act.wc{border-color:#07C160;color:#06843F}
+  .ch-act.copy{border-style:dashed;color:var(--sage)}
+  .ch-act.warn{border-color:#e0a58f;background:#fdf3ee;color:#a24f34}
+  .ch-act:hover{filter:brightness(.97);border-color:var(--clay)}
+  .dep-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--paper-2);border-radius:9px;padding:8px 11px;margin-top:8px;font-family:'Space Mono',monospace;font-size:.8rem}
+  .dep-line .bk-del{margin-left:auto}
 
   /* ===== history / restore ===== */
   .hist-list{display:flex;flex-direction:column;gap:8px;margin-bottom:6px;max-height:38vh;overflow-y:auto}
@@ -681,6 +724,8 @@
     <a class="float-item wa" id="fcWa" href="#" target="_blank" rel="noopener"><span data-i18n="fc_wa">WhatsApp</span></a>
     <a class="float-item ln" id="fcLine" href="#" target="_blank" rel="noopener"><span data-i18n="fc_line">LINE</span></a>
     <a class="float-item ig" id="fcIg" href="#" target="_blank" rel="noopener"><span data-i18n="fc_ig">Instagram</span></a>
+    <button class="float-item ka" id="fcKakao" onclick="copyChannelId('kakao')" type="button"><span data-i18n="fc_kakao">KakaoTalk</span></button>
+    <button class="float-item wc" id="fcWechat" onclick="copyChannelId('wechat')" type="button"><span data-i18n="fc_wechat">WeChat</span></button>
   </div>
   <button class="float-btn" onclick="toggleFloat()" aria-label="contact">
     <span class="fb-icon">💬</span>
@@ -699,7 +744,7 @@ const I18N={
     hero_title:"Your own <em>skin-clinic insider</em> in Seoul.",
     hero_lede:"Private, English-guided beauty days led by a working dermatology-clinic manager. Personal skin consultation, honest product picks, and curated K-beauty shopping &amp; salon visits &mdash; no markup games, no language barrier.",
     hero_cta1:"Book a day &rarr;",hero_cta2:"See the packages",
-    credk1:"1:1",credk2:"EN",credk3:"&#33274;&#28207;",brand:"Zeneverse",fc_wa:"WhatsApp",fc_line:"LINE",fc_ig:"Instagram",
+    credk1:"1:1",credk2:"EN",credk3:"&#33274;&#28207;",brand:"Zeneverse",fc_wa:"WhatsApp",fc_line:"LINE",fc_ig:"Instagram",fc_kakao:"KakaoTalk",fc_wechat:"WeChat",
     incn01:"01",incn02:"02",incn03:"03",incn04:"04",host_initials:"ZEN",
     foot_copy:"&copy; 2026 Zeneverse &middot; Seoul, Korea",
     cred1:"Private &amp; small-group, never a rushed crowd",cred2:"Fluent English, built for overseas visitors",cred3:"&#32321;&#39636;&#20013;&#25991; support for Taiwan &amp; Hong Kong guests",
@@ -739,7 +784,12 @@ const I18N={
     ig_kicker:"Follow along",ig_title:"On Instagram.",ig_cta:"View on Instagram",
     disclaimer:"Zeneverse is a personal beauty consulting & shopping guide service. We do not provide medical services, and we do not arrange, broker or book medical treatments or clinic appointments.",
     priv_link:"Privacy Policy",terms_link:"Cancellation Policy",
-    f_contact:"WhatsApp / LINE / KakaoTalk ID",f_contact_ph:"e.g. +886 912 345 678  or  LINE: myid",
+    f_contact:"How can I reach you?",f_contact_ph:"",ch_pick_first:"Choose a messenger above first",ch_err:"Please choose how I should contact you.",
+    ch_wa_t:"I'll message you on WhatsApp",ch_wa_d:"No action needed — I'll reach out at the number you gave once I've reviewed your request.",
+    ch_line_t:"One quick step: add me on LINE",ch_line_d:"LINE doesn't let me message you first, so please add my account. Then I'll confirm everything there.",
+    ch_kakao_t:"One quick step: add me on KakaoTalk",ch_kakao_d:"KakaoTalk doesn't let me message you first. Search my ID below and add me, then I'll confirm there.",
+    ch_wechat_t:"One quick step: add me on WeChat",ch_wechat_d:"WeChat doesn't let me message you first. Search my ID below and add me, then I'll confirm there.",
+    ch_add:"Add me on {x}",ch_copied:"copied — search it in the app to add me",ch_soon:"⚠️ My ID isn't listed yet — I'll email you instead.",
     f_needs:"What are you most interested in?",
     need1:"Olive Young ingredient-smart shopping",need2:"Korean pharmacy beauty picks",need3:"Brow / lash / hair salon matching",need4:"Personal styling",need_other:"Something else",need_other_ph:"Tell me what you're looking for…",
     f_people_err:"Max {n} guests for this package.",
@@ -749,7 +799,17 @@ const I18N={
     hist_none:"No history yet. It starts building from your next save.",hist_restore:"Restore",hist_latest:"latest",
     hist_confirm:"Restore the site to this point? Your current settings will be backed up first.",hist_done:"Restored.",
     reset_title:"Reset to original",reset_sub:"Put one section back to how it shipped. Also backed up first.",
-    reset_confirm:"Reset \"{x}\" to the original? A backup is saved first.",reset_done:"Reset done.",ab_nav:"Menu order",nav_order_title:"Menu order",nav_order_sub:"Drag to reorder, or use the arrows. Toggle to show/hide.",
+    reset_confirm:"Reset \"{x}\" to the original? A backup is saved first.",reset_done:"Reset done.",
+    wl_full:"This date is fully booked.",wl_cta:"Notify me if a spot opens",wl_title:"Get notified",
+    wl_sub:"If someone cancels on this date, I'll email you right away. No obligation.",
+    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",
+    dep_title:"Deposit to confirm",dep_note:"{pct}% deposit secures your spot. Balance is paid on the day.",
+    dep_after:"After I confirm your request, I'll email payment details.",
+    dep_paid:"Deposit paid",dep_unpaid:"Deposit unpaid",dep_refunded:"Refunded",
+    ab_wait:"Waitlist",wl_none:"No one waiting yet.",wl_notify:"Alert this date",wl_notified:"notified",
+    dep_mark:"Mark paid",dep_unmark:"Mark unpaid",dep_method:"How was it paid? (PayPal / bank / cash)",
+    pay_label:"Payment settings",pay_pct:"Deposit %",pay_ppme:"PayPal.me username",pay_bank:"Bank account (shown to guests)",pay_rate:"KRW per USD (for PayPal)",
+    refund_title:"Refund policy",refund_full:"Full refund up to (days before)",refund_half:"50% refund up to (days before)",ab_nav:"Menu order",nav_order_title:"Menu order",nav_order_sub:"Drag to reorder, or use the arrows. Toggle to show/hide.",
     host_edit:"Edit host info",host_more:"Read more",host_bio:"About me",
     f_agree:"I've read and agree to the cancellation policy and disclaimer.",f_agree_err:"Please agree to continue.",
     f_contact_err:"Please add a messenger ID or number so I can reach you.",
@@ -812,7 +872,12 @@ const I18N={
     ig_kicker:"팔로우하기",ig_title:"인스타그램에서 만나요.",ig_cta:"인스타그램에서 보기",
     disclaimer:"Zeneverse는 의료 행위 및 의료기관 알선·예약을 제공하지 않는 퍼스널 뷰티 컨설팅 & 쇼핑 가이드 서비스입니다.",
     priv_link:"개인정보 처리방침",terms_link:"취소 규정",
-    f_contact:"WhatsApp / LINE / 카카오톡 ID",f_contact_ph:"예: +886 912 345 678  또는  LINE: myid",
+    f_contact:"어떻게 연락드릴까요?",f_contact_ph:"",ch_pick_first:"위에서 메신저를 먼저 선택하세요",ch_err:"연락받을 방법을 선택해주세요.",
+    ch_wa_t:"왓츠앱으로 연락드릴게요",ch_wa_d:"따로 하실 일은 없어요. 신청을 확인한 뒤 남겨주신 번호로 연락드릴게요.",
+    ch_line_t:"한 가지만 해주세요: 라인 친구추가",ch_line_d:"라인은 제가 먼저 메시지를 보낼 수 없어요. 아래에서 제 계정을 추가해주시면 거기서 안내드릴게요.",
+    ch_kakao_t:"한 가지만 해주세요: 카카오톡 친구추가",ch_kakao_d:"카카오톡은 제가 먼저 메시지를 보낼 수 없어요. 아래 ID를 검색해서 추가해주시면 거기서 안내드릴게요.",
+    ch_wechat_t:"한 가지만 해주세요: 위챗 친구추가",ch_wechat_d:"위챗은 제가 먼저 메시지를 보낼 수 없어요. 아래 ID를 검색해서 추가해주시면 거기서 안내드릴게요.",
+    ch_add:"{x}에서 추가하기",ch_copied:"복사됐어요 — 앱에서 검색해 추가해주세요",ch_soon:"⚠️ 아직 ID가 등록되지 않았어요 — 이메일로 안내드릴게요.",
     f_needs:"어떤 게 가장 궁금하세요?",
     need1:"올리브영 성분 분석 쇼핑",need2:"한국 약국 뷰티 꿀조합",need3:"눈썹/속눈썹/헤어샵 매칭",need4:"퍼스널 스타일링",need_other:"기타 (직접 입력)",need_other_ph:"어떤 게 궁금하신지 적어주세요…",
     f_people_err:"이 패키지는 최대 {n}명까지 가능해요.",
@@ -822,7 +887,17 @@ const I18N={
     hist_none:"아직 기록이 없어요. 다음 저장부터 쌓이기 시작해요.",hist_restore:"이 시점으로 복구",hist_latest:"최근",
     hist_confirm:"이 시점으로 되돌릴까요? 지금 상태도 먼저 백업돼요.",hist_done:"복구했어요.",
     reset_title:"처음 상태로 초기화",reset_sub:"특정 항목만 원래대로 되돌려요. 이것도 먼저 백업돼요.",
-    reset_confirm:"\"{x}\"을(를) 처음 상태로 되돌릴까요? 먼저 백업돼요.",reset_done:"초기화했어요.",ab_nav:"메뉴 순서",nav_order_title:"메뉴 순서",nav_order_sub:"드래그하거나 화살표로 순서를 바꾸고, 토글로 표시 여부를 정하세요.",
+    reset_confirm:"\"{x}\"을(를) 처음 상태로 되돌릴까요? 먼저 백업돼요.",reset_done:"초기화했어요.",
+    wl_full:"이 날짜는 예약이 마감됐어요.",wl_cta:"자리 나면 알림 받기",wl_title:"자리 알림 신청",
+    wl_sub:"이 날짜에 취소가 생기면 바로 이메일로 알려드려요. 예약 의무는 없어요.",
+    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",
+    dep_title:"예약금",dep_note:"{pct}% 예약금으로 자리가 확정돼요. 잔금은 당일에 결제합니다.",
+    dep_after:"신청을 확인한 뒤 결제 안내를 이메일로 보내드려요.",
+    dep_paid:"예약금 입금됨",dep_unpaid:"예약금 미입금",dep_refunded:"환불됨",
+    ab_wait:"대기자",wl_none:"아직 대기자가 없어요.",wl_notify:"이 날짜 알림 발송",wl_notified:"발송됨",
+    dep_mark:"입금 확인",dep_unmark:"미입금으로",dep_method:"어떻게 받았나요? (PayPal / 계좌 / 현금)",
+    pay_label:"결제 설정",pay_pct:"예약금 비율 %",pay_ppme:"PayPal.me 아이디",pay_bank:"계좌 정보 (고객에게 표시)",pay_rate:"USD 환율 (PayPal용)",
+    refund_title:"환불 규정",refund_full:"전액 환불 기한 (며칠 전)",refund_half:"50% 환불 기한 (며칠 전)",ab_nav:"메뉴 순서",nav_order_title:"메뉴 순서",nav_order_sub:"드래그하거나 화살표로 순서를 바꾸고, 토글로 표시 여부를 정하세요.",
     host_edit:"호스트 정보 수정",host_more:"더 보기",host_bio:"소개",
     f_agree:"취소 규정과 면책 조항을 읽고 동의합니다.",f_agree_err:"동의해주셔야 진행할 수 있어요.",
     f_contact_err:"연락 가능한 메신저 ID나 번호를 입력해주세요.",
@@ -861,7 +936,12 @@ I18N.zhHant = Object.assign({}, I18N.en, {
   join_title:"告訴我你的日期 — 我來保留位置。",join_sub:"私人服務名額有限，很快就會額滿。送出申請，我會盡快確認可預約時間。",join_cta:"送出預約申請 &rarr;",
   book_title:"預約申請",book_sub:"填寫資料後，我會以電子郵件確認可預約時間。",
   f_name:"姓名",f_email:"電子郵件",f_pkg:"方案",f_addons:"加購項目（選填）",f_date:"希望日期",f_people:"人數",f_note:"有什麼想先讓我知道的嗎？（選填）",
-  f_time:"時段",f_contact:"WhatsApp / LINE / KakaoTalk ID",f_contact_ph:"例如：+886 912 345 678 或 LINE: myid",
+  f_time:"時段",f_contact:"我該如何聯絡你？",f_contact_ph:"",ch_pick_first:"請先選擇上方的通訊軟體",ch_err:"請選擇聯絡方式。",
+  ch_wa_t:"我會用 WhatsApp 聯絡你",ch_wa_d:"你不需要做任何事，我確認申請後會用你留的號碼聯絡你。",
+  ch_line_t:"只需一步：加我 LINE",ch_line_d:"LINE 無法讓我主動傳訊息，請加我的帳號，我會在那裡與你確認。",
+  ch_kakao_t:"只需一步：加我 KakaoTalk",ch_kakao_d:"KakaoTalk 無法讓我主動傳訊息，請搜尋下方 ID 加我。",
+  ch_wechat_t:"只需一步：加我微信",ch_wechat_d:"微信無法讓我主動傳訊息，請搜尋下方 ID 加我。",
+  ch_add:"在 {x} 加我",ch_copied:"已複製 — 請在 App 中搜尋加我",ch_soon:"⚠️ 我的 ID 尚未設定 — 我會改用電子郵件聯絡你。",
   f_needs:"你最感興趣的是？",need1:"Olive Young 成分解析採買",need2:"韓國藥妝店必買組合",need3:"美睫／美眉／髮廊配對",need4:"個人穿搭造型",
   f_agree:"我已閱讀並同意取消規定與免責聲明。",f_agree_err:"請先同意才能繼續。",f_contact_err:"請留下可聯絡的通訊軟體 ID 或號碼。",
   kst_note:"所有時間皆為韓國標準時間（KST, GMT+9）。",
@@ -917,6 +997,7 @@ I18N.zhHans = Object.assign({}, I18N.zhHant, {
   host_philosophy:"我的工作不是让你买更多，而是帮你带走真正适合你肤质的那几样，其余的果断跳过。",host_note:"目前在首尔从事护肤相关工作。",
   faq_title:"常被问到的问题。",rev_title:"客人怎么说。",rev_write:"撰写评价",
   disclaimer:"Zeneverse 是个人美妆咨询与购物导览服务，不提供医疗行为，也不安排、中介或代订任何医疗疗程与诊所预约。",
+  f_contact:"我该如何联系你？",ch_pick_first:"请先选择上方的通讯软件",ch_err:"请选择联系方式。",
   need_other:"其他（自行填写）",need_other_ph:"请告诉我你想了解什么…",f_people_err:"此方案最多 {n} 位。",
   host_more:"更多介绍",host_bio:"关于我",
   priv_link:"隐私政策",terms_link:"取消规定",float_label:"联系我"
@@ -969,7 +1050,7 @@ function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
 
 let adminToken = sessionStorage.getItem("zv_token") || "";
 const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false,
-  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, loaded:false };
+  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, loaded:false };
 
 async function loadConfig(){
   try{
@@ -990,6 +1071,7 @@ async function loadConfig(){
     STATE.terms = c.terms || null;
     STATE.igPosts = c.igPosts || [];
     STATE.langs = c.langs || null;
+    STATE.pay = c.pay || {depositPct:30,refund:{fullDays:7,halfDays:3}};
     STATE.copy = c.copy || null;
     STATE.nav = c.nav || null;
     STATE.loaded = true;
@@ -1018,7 +1100,7 @@ async function saveAll(){
       packages:PACKS, hours:STATE.hours, dayhours:STATE.dayhours,
       closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh,
       feats:loadFeats(), host:STATE.host||DEFAULT_HOST, contact:STATE.contact||DEFAULT_CONTACT,
-      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs()
+      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay
     });
   }catch(e){ alert("저장 실패 / Save failed: "+e.message); }
 }
@@ -1079,7 +1161,7 @@ const DEFAULT_HOST={photo:"",
           ko:["피부 타입 분석","성분 읽기","루틴 설계","올리브영 큐레이션","민감성 피부","영어 상담"]},
   why:{en:"I've watched too many people fly home with a bag of products that were wrong for them — bought because a shop assistant pointed at a shelf. That's the gap I'm here to close. No commission targets, no upselling. Just an honest read on your skin and a short list you'll actually use.",
        ko:"직원이 가리킨 선반에서 골라, 자기 피부에 안 맞는 제품을 잔뜩 사서 돌아가는 분들을 너무 많이 봤어요. 그 간극을 메우려고 이 일을 해요. 판매 목표도, 업셀링도 없어요. 정직한 피부 분석과 실제로 쓰게 될 짧은 리스트만 드려요."}};
-const DEFAULT_CONTACT={whatsapp:"",line:"",instagram:""};
+const DEFAULT_CONTACT={whatsapp:"",line:"",instagram:"",kakao:"",wechat:""};
 const DEFAULT_MEDIA={v1:"",v2:"",v3:""};
 const DEFAULT_FAQ=[
  {q:{en:"What's included — and what isn't?",ko:"무엇이 포함되고, 무엇이 포함되지 않나요?",zhHant:"包含哪些？不包含哪些？",zhHans:"包含哪些？不包含哪些？"},
@@ -1141,6 +1223,26 @@ function applyContact(){
   mk("fcWa", `https://wa.me/${(c.whatsapp||"").replace(/[^0-9]/g,"")}`, c.whatsapp);
   mk("fcLine", c.line&&c.line.startsWith("http")?c.line:`https://line.me/ti/p/~${c.line||""}`, c.line);
   mk("fcIg", c.instagram&&c.instagram.startsWith("http")?c.instagram:`https://instagram.com/${(c.instagram||"").replace("@","")}`, c.instagram);
+  const show=(id,val)=>{const e=document.getElementById(id);if(e)e.style.display=val?"":"none";};
+  show("fcKakao", c.kakao);
+  show("fcWechat", c.wechat);
+}
+/* WeChat / KakaoTalk can't be opened by link — copy the ID instead */
+function copyChannelId(kind){
+  const c=STATE.contact||DEFAULT_CONTACT,t=I18N[lang];
+  const id=c[kind]||"";
+  if(!id)return;
+  navigator.clipboard?.writeText(id);
+  const label=kind==="kakao"?(lang==="ko"?"카카오톡":"KakaoTalk"):"WeChat";
+  showToast(`${label} ID: ${id} — ${t.ch_copied}`);
+}
+function showToast(msg){
+  let el=document.getElementById("chToast");
+  if(!el){el=document.createElement("div");el.id="chToast";el.className="ch-toast";document.body.appendChild(el);}
+  el.textContent=msg;
+  el.classList.add("show");
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.classList.remove("show"),2600);
 }
 function renderInstagram(){
   const grid=document.getElementById("igGrid");if(!grid)return;
@@ -1883,7 +1985,14 @@ function openBooking(preselect){
         <div class="field"><label>${t.f_time} <span id="bk_durhint" class="dur-hint"></span></label><div id="bk_slots" class="slot-wrap"><span class="slot-hint">${t.slot_pick}</span></div></div>
         <div class="field"><label>${t.f_people} <span class="dur-hint" id="bk_maxhint"></span></label>
           <input id="bk_people" type="number" min="1" value="1" onchange="clampPeople()"></div>
-        <div class="field"><label>${t.f_contact} *</label><input id="bk_contact" type="text" placeholder="${t.f_contact_ph}"></div>
+        <div class="field"><label>${t.f_contact} *</label>
+          <div class="ch-picker">
+            ${[["whatsapp","WhatsApp","💬"],["line","LINE","💚"],["kakao",lang==="ko"?"카카오톡":"KakaoTalk","💛"],["wechat","WeChat","💚"]]
+              .map(([id,label,ic])=>`<button type="button" class="ch-btn" data-ch="${id}" onclick="pickChannel('${id}',this)"><span>${ic}</span>${label}</button>`).join("")}
+          </div>
+          <input id="bk_contact" type="text" placeholder="${t.ch_pick_first}" disabled>
+          <div class="ch-hint" id="ch_hint"></div>
+        </div>
         <div class="field"><label>${t.f_needs}</label>
           <div class="needs-wrap">
             ${[1,2,3,4].map(n=>`<label class="need-check"><input type="checkbox" data-need="${t["need"+n]}"> <span>${t["need"+n]}</span></label>`).join("")}
@@ -1894,6 +2003,7 @@ function openBooking(preselect){
         <div class="form-tips">
           <div class="tip-line">🕘 ${t.kst_note}</div>
           <div class="tip-line">💡 ${t.trip_tip}</div>
+          <div class="tip-line">💳 ${t.dep_note.replace("{pct}",(STATE.pay&&STATE.pay.depositPct)||30)} ${t.dep_after}</div>
         </div>
         <label class="agree-check"><input type="checkbox" id="bk_agree"> <span>${t.f_agree}
           <a onclick="event.stopPropagation();openPolicy('terms')" class="agree-link">${t.terms_link}</a></span></label>
@@ -1903,6 +2013,28 @@ function openBooking(preselect){
     </div>`;
   refreshAddons();
   clampPeople();
+  pickedChannel="";
+}
+const CH_LABEL={whatsapp:"WhatsApp",line:"LINE",kakao:"KakaoTalk",wechat:"WeChat"};
+let pickedChannel="";
+const CH_INFO={
+  whatsapp:{ph:{en:"+886 912 345 678",ko:"+886 912 345 678"},hint:{en:"Include your country code",ko:"국가번호를 포함해주세요"},type:"tel"},
+  line:{ph:{en:"your LINE ID",ko:"라인 아이디"},hint:{en:"Settings → Profile → ID in the LINE app",ko:"라인 앱 → 설정 → 프로필 → ID"},type:"text"},
+  kakao:{ph:{en:"your KakaoTalk ID",ko:"카카오톡 아이디"},hint:{en:"Profile → Settings → KakaoTalk ID",ko:"프로필 → 설정 → 카카오톡 ID"},type:"text"},
+  wechat:{ph:{en:"your WeChat ID",ko:"위챗 아이디"},hint:{en:"Me → the ID under your name",ko:"나 → 이름 아래 ID"},type:"text"}
+};
+function pickChannel(ch,btn){
+  pickedChannel=ch;
+  document.querySelectorAll(".ch-btn").forEach(b=>b.classList.remove("on"));
+  btn.classList.add("on");
+  const inp=document.getElementById("bk_contact"),hint=document.getElementById("ch_hint");
+  const info=CH_INFO[ch]||{};
+  inp.disabled=false;
+  inp.type=info.type||"text";
+  inp.placeholder=(info.ph&&(info.ph[lang]||info.ph.en))||"";
+  inp.value="";
+  hint.textContent=(info.hint&&(info.hint[lang]||info.hint.en))||"";
+  inp.focus();
 }
 function clampPeople(){
   const pk=currentPack(),el=document.getElementById("bk_people");if(!el)return;
@@ -1943,8 +2075,11 @@ async function refreshSlots(){
     const r=await API.get(`/api/slots?date=${encodeURIComponent(date)}&pkg=${encodeURIComponent(pk.id)}`);
     const starts=r.slots||[];
     if(!starts.length){
-      const msg = r.reason==="full" ? t.slot_full : t.slot_none;
-      wrap.innerHTML=`<span class="slot-hint">${msg}</span>`;return;
+      const full = r.reason==="full";
+      const msg = full ? t.slot_full : t.slot_none;
+      wrap.innerHTML=`<span class="slot-hint">${msg}</span>`+
+        (full?`<button type="button" class="wl-cta" onclick="openWaitlist('${date}')">🔔 ${t.wl_cta}</button>`:"");
+      return;
     }
     const q=r.queue||{};
     wrap.innerHTML=starts.map(sl=>{
@@ -1963,9 +2098,11 @@ async function submitBooking(){
   const name=document.getElementById("bk_name").value.trim();
   const email=document.getElementById("bk_email").value.trim();
   const date=document.getElementById("bk_date").value;
-  const contact=document.getElementById("bk_contact").value.trim();
+  const contactId=document.getElementById("bk_contact").value.trim();
+  const contact=pickedChannel?`${CH_LABEL[pickedChannel]}: ${contactId}`:contactId;
   if(!name||!email||!date){msg.style.color="#c96f52";msg.textContent=t.book_err;return;}
-  if(!contact){msg.style.color="#c96f52";msg.textContent=t.f_contact_err;return;}
+  if(!pickedChannel){msg.style.color="#c96f52";msg.textContent=t.ch_err;return;}
+  if(!contactId){msg.style.color="#c96f52";msg.textContent=t.f_contact_err;return;}
   if(!selectedSlot){msg.style.color="#c96f52";msg.textContent=t.slot_choose;return;}
   if(!document.getElementById("bk_agree").checked){msg.style.color="#c96f52";msg.textContent=t.f_agree_err;return;}
   const ppl=parseInt(document.getElementById("bk_people").value)||1;
@@ -1979,11 +2116,11 @@ async function submitBooking(){
     const r=await API.post("/api/book",{
       name,email,pkg:pk.id,date,time:selectedSlot,
       people:document.getElementById("bk_people").value,
-      contact, needs,
+      contact, contact_channel:pickedChannel, contact_id:contactId, needs,
       note:document.getElementById("bk_note").value.trim(),
       addons:selectedAddons()
     });
-    showCode(r.code,r.queueAhead||0);
+    showCode(r.code,r.queueAhead||0,pickedChannel);
     return;
   }catch(e){
     msg.style.color="#c96f52";
@@ -1991,8 +2128,8 @@ async function submitBooking(){
     refreshSlots();
   }
 }
-function showCode(code,queueAhead){
-  const t=I18N[lang];
+function showCode(code,queueAhead,channel){
+  const t=I18N[lang],ko=lang==="ko";
   const q = queueAhead>0 ? t.queue_ahead.replace("{n}",queueAhead) : t.queue_none;
   document.getElementById("modalRoot").innerHTML=`
     <div class="modal-bg" onclick="if(event.target===this)closeModal()">
@@ -2004,14 +2141,40 @@ function showCode(code,queueAhead){
         <div class="code-box">
           <div class="code-label mono">${t.code_title}</div>
           <div class="code-val" id="codeVal">${code}</div>
-          <button class="code-copy" onclick="copyCode()">${lang==="ko"?"복사":"Copy"}</button>
+          <button class="code-copy" onclick="copyCode()">${ko?"복사":"Copy"}</button>
         </div>
         <div class="code-sub">${t.code_sub}</div>
         <div class="queue-pill">${q}</div>
-        <button class="submit" onclick="closeModal()">${lang==="ko"?"확인":"Done"}</button>
+        ${channelStep(channel)}
+        <button class="submit" onclick="closeModal()">${ko?"확인":"Done"}</button>
       </div>
     </div>`;
 }
+/* what the guest must do next, depending on the messenger they chose */
+function channelStep(channel){
+  const t=I18N[lang],c=STATE.contact||{};
+  if(!channel)return "";
+  if(channel==="whatsapp")
+    return `<div class="ch-step ok"><b>✅ ${t.ch_wa_t}</b><p>${t.ch_wa_d}</p></div>`;
+
+  const map={
+    line:{id:c.line,label:"LINE",
+      link:(c.line||"").startsWith("http")?c.line:(c.line?`https://line.me/R/ti/p/~${c.line}`:""),
+      t:t.ch_line_t,d:t.ch_line_d},
+    kakao:{id:c.kakao,label:lang==="ko"?"카카오톡":"KakaoTalk",link:"",t:t.ch_kakao_t,d:t.ch_kakao_d},
+    wechat:{id:c.wechat,label:"WeChat",link:"",t:t.ch_wechat_t,d:t.ch_wechat_d}
+  };
+  const m=map[channel];if(!m)return "";
+  return `<div class="ch-step todo">
+    <b>👉 ${m.t}</b>
+    <p>${m.d}</p>
+    ${m.link?`<a class="ch-add-btn" href="${m.link}" target="_blank" rel="noopener">${t.ch_add.replace("{x}",m.label)} →</a>`:""}
+    ${m.id&&!m.link?`<div class="ch-id-box"><span class="mono">${m.label} ID</span><b>${esc(m.id)}</b>
+      <button class="code-copy" onclick="copyText('${esc(m.id)}')">${lang==="ko"?"복사":"Copy"}</button></div>`:""}
+    ${!m.id?`<p class="ch-warn">${t.ch_soon}</p>`:""}
+  </div>`;
+}
+function copyText(v){navigator.clipboard?.writeText(v);flashSaved();}
 function copyCode(){
   const v=document.getElementById("codeVal").textContent;
   navigator.clipboard?.writeText(v);
@@ -2126,6 +2289,70 @@ async function refreshNewCount(){
   if(!adminToken)return;
   try{const r=await API.get("/api/admin/bookings");newCount=r.newCount||0;renderAdminBar();}catch(e){}
 }
+/* ============ WAITLIST (guest) ============ */
+function openWaitlist(date){
+  const t=I18N[lang];
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:420px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.wl_title}</h3>
+        <div class="sub">${t.wl_full} ${t.wl_sub}</div>
+        <div class="wl-date">📅 ${esc(date)}</div>
+        <div class="field"><label>${t.f_name}</label><input id="wl_name" type="text"></div>
+        <div class="field"><label>${t.f_email}</label><input id="wl_email" type="email"></div>
+        <div class="field"><label>${t.f_contact}</label><input id="wl_contact" type="text" placeholder="${t.f_contact_ph}"></div>
+        <button class="submit" onclick="joinWaitlist('${date}')">🔔 ${t.wl_cta}</button>
+        <div class="msg" id="wl_msg"></div>
+      </div>
+    </div>`;
+}
+async function joinWaitlist(date){
+  const t=I18N[lang],m=document.getElementById("wl_msg");
+  const email=document.getElementById("wl_email").value.trim();
+  if(!email){m.style.color="#c96f52";m.textContent=t.book_err;return;}
+  m.style.color="#7d9488";m.textContent=t.book_sending;
+  try{
+    const r=await API.post("/api/waitlist",{date,email,
+      name:document.getElementById("wl_name").value.trim(),
+      contact:document.getElementById("wl_contact").value.trim(),
+      pkg:currentPack?currentPack().id:""});
+    m.style.color="#3d6b4d";m.textContent=r.already?t.wl_already:t.wl_ok;
+    setTimeout(closeModal,1800);
+  }catch(e){m.style.color="#c96f52";m.textContent=t.book_fail;}
+}
+
+/* ============ ADMIN: waitlist ============ */
+async function adminWaitlist(){
+  const t=I18N[lang];
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal"><button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.ab_wait}</h3><div class="bk-list"><div class="bk-empty">${t.bk_loading}</div></div></div></div>`;
+  let list=[];
+  try{const r=await API.get("/api/admin/waitlist");list=r.waitlist||[];}
+  catch(e){document.querySelector(".bk-list").innerHTML=`<div class="bk-empty">${t.bk_err}</div>`;return;}
+  const byDate={};
+  list.forEach(w=>{(byDate[w.date]=byDate[w.date]||[]).push(w);});
+  const dates=Object.keys(byDate).sort();
+  document.querySelector(".bk-list").innerHTML = dates.length ? dates.map(d=>`
+    <div class="bk-item">
+      <div class="top"><span class="name">📅 ${esc(d)} · ${byDate[d].length}${lang==="ko"?"명":""}</span>
+        <button class="bk-act ok" onclick="pushWaitlist('${d}')">${t.wl_notify}</button></div>
+      ${byDate[d].map(w=>`<div class="meta">${esc(w.name||"-")} · ${esc(w.email)}${w.contact?" · "+esc(w.contact):""}
+        ${w.notified?`<span class="st-pill st-confirmed" style="margin-left:6px">${t.wl_notified}</span>`:""}
+        <button class="bk-del" onclick="delWaitlist(${w.id})">${t.bk_del}</button></div>`).join("")}
+    </div>`).join("") : `<div class="bk-empty">${t.wl_none}</div>`;
+}
+async function pushWaitlist(date){
+  try{const r=await API.post("/api/admin/waitlist/notify",{date});
+    alert((lang==="ko"?"알림 발송: ":"Notified: ")+(r.notified||0));adminWaitlist();}
+  catch(e){alert(I18N[lang].book_fail);}
+}
+async function delWaitlist(id){
+  try{await API.post("/api/admin/waitlist/del",{id});adminWaitlist();}catch(e){}
+}
+
 /* ============ ADMIN: history / restore / reset ============ */
 async function openHistory(){
   const t=I18N[lang],ko=lang==="ko";
@@ -2231,11 +2458,32 @@ function openSettings(){
           <input id="st_line" type="text" value="${esc(c.line||"")}"></div>
         <div class="field"><label>Instagram ${ko?"아이디":"handle"}</label>
           <input id="st_ig" type="text" value="${esc(c.instagram||"")}" placeholder="@myaccount"></div>
+        <div class="field"><label>${ko?"카카오톡 ID (고객이 검색해서 추가)":"KakaoTalk ID (guests search this)"}</label>
+          <input id="st_kakao" type="text" value="${esc(c.kakao||"")}"></div>
+        <div class="field"><label>${ko?"위챗 ID":"WeChat ID"}</label>
+          <input id="st_wechat" type="text" value="${esc(c.wechat||"")}"></div>
 
         <div class="set-label mono">${ko?"유튜브 영상 (ID 또는 링크)":"YouTube videos (ID or link)"}</div>
         <div class="field"><input id="st_v1" type="text" value="${esc(m.v1||"")}" placeholder="Video 1"></div>
         <div class="field"><input id="st_v2" type="text" value="${esc(m.v2||"")}" placeholder="Video 2"></div>
         <div class="field"><input id="st_v3" type="text" value="${esc(m.v3||"")}" placeholder="Video 3"></div>
+
+        <div class="set-label mono">${t.pay_label}</div>
+        <div class="field"><label>${t.pay_pct}</label>
+          <input id="pay_pct" type="number" min="0" max="100" value="${(STATE.pay&&STATE.pay.depositPct)||30}"></div>
+        <div class="field"><label>${t.pay_ppme}</label>
+          <input id="pay_ppme" type="text" value="${esc((STATE.pay&&STATE.pay.paypalMe)||"")}" placeholder="zeneverse"></div>
+        <div class="field"><label>${t.pay_bank}</label>
+          <input id="pay_bank" type="text" value="${esc((STATE.pay&&STATE.pay.bank)||"")}" placeholder="${ko?"우리은행 1002-123-456789 홍길동":"Bank, account no, holder"}"></div>
+        <div class="field"><label>${t.pay_rate}</label>
+          <input id="pay_rate" type="number" min="500" max="3000" value="${(STATE.pay&&STATE.pay.usdRate)||1350}"></div>
+        <div class="set-label mono" style="border-top:none;padding-top:0">${t.refund_title}</div>
+        <div class="field" style="display:flex;gap:8px">
+          <div style="flex:1"><label>${t.refund_full}</label>
+            <input id="ref_full" type="number" min="0" max="60" value="${(STATE.pay&&STATE.pay.refund&&STATE.pay.refund.fullDays)||7}"></div>
+          <div style="flex:1"><label>${t.refund_half}</label>
+            <input id="ref_half" type="number" min="0" max="60" value="${(STATE.pay&&STATE.pay.refund&&STATE.pay.refund.halfDays)||3}"></div>
+        </div>
 
         <div class="set-label mono">${ko?"알림":"Notifications"}</div>
         <div class="sub" style="margin-bottom:10px">${ko?"Cloudflare에 텔레그램·이메일 값을 넣은 뒤 아래 버튼으로 확인하세요.":"After adding the Telegram/email variables in Cloudflare, test them here."}</div>
@@ -2270,8 +2518,11 @@ function saveSettings(){
   h.langs=h.langs||{};h.langs[lang]=g("st_langs");
   h.phil=h.phil||{};h.phil[lang]=g("st_phil");
   STATE.host=h;
-  STATE.contact={whatsapp:g("st_wa"),line:g("st_line"),instagram:g("st_ig")};
+  STATE.contact={whatsapp:g("st_wa"),line:g("st_line"),instagram:g("st_ig"),kakao:g("st_kakao"),wechat:g("st_wechat")};
   STATE.media={v1:g("st_v1"),v2:g("st_v2"),v3:g("st_v3")};
+  const num=(id,d)=>{const v=parseInt(document.getElementById(id).value);return isNaN(v)?d:v;};
+  STATE.pay={depositPct:num("pay_pct",30),paypalMe:g("pay_ppme"),bank:g("pay_bank"),
+    usdRate:num("pay_rate",1350),refund:{fullDays:num("ref_full",7),halfDays:num("ref_half",3)}};
   saveAll();applyFeats();renderMedia();renderInstagram();
   const m=document.getElementById("st_msg");m.style.color="#7d9488";m.textContent=lang==="ko"?"저장됐어요":"Saved";
 }
@@ -2317,6 +2568,7 @@ function renderAdminBar(){
       <button onclick="openNavOrder()">${t.ab_nav}</button>
       <button onclick="openHistory()">${t.ab_hist}</button>
       <button onclick="viewBookings('pending')">${t.ab_view}${newCount?` <i class="ab-badge">${newCount}</i>`:""}</button>
+      <button onclick="adminWaitlist()">${t.ab_wait}</button>
       ${editMode?`<span class="edit-lang">${t.ab_editing} <b>${lang==="ko"?"한국어":"English"}</b> — ${t.ab_switch}</span>`:`<span class="hint"></span>`}
       <span class="spacer"></span>
       <button class="warn" onclick="exitAdmin()">${t.ab_exit}</button>
@@ -2440,13 +2692,23 @@ async function viewBookings(filter){
         <span class="st-pill st-${x.status}">${statusLabel(x.status)}</span>
       </div>
       <div class="meta">${esc(x.pkg_name||x.pkg_id)} &middot; ${esc(x.date)} &middot; <b style="color:var(--clay)">${esc(x.time||"")}${end?"–"+end:""}</b> &middot; ${esc(String(x.people))} ${lang==="ko"?"명":"guest(s)"}</div>
-      <div class="meta">${esc(x.email)}${x.contact?` &middot; 💬 <b>${esc(x.contact)}</b>`:""} &middot; ${t.bk_code}: <code>${esc(x.code||"")}</code></div>
+      <div class="meta">${esc(x.email)} &middot; ${t.bk_code}: <code>${esc(x.code||"")}</code></div>
+      ${x.contact?`<div class="meta ch-row">💬 <b>${esc(x.contact)}</b>
+        ${contactBtns(x)}</div>`:""}
       ${(()=>{const n=safeNeeds(x.needs);return n.length?`<div class="meta">🎯 ${n.map(esc).join(" · ")}</div>`:"";})()}
       ${x.addons&&x.addons.length?`<div class="meta">+ ${x.addons.map(a=>esc(lang==="ko"&&a.name_ko?a.name_ko:a.name)+" ("+wonFmt(a.price||0)+")").join(", ")}</div>`:""}
       ${x.note?`<div class="meta">📝 ${esc(x.note)}</div>`:""}
       ${reason?`<div class="meta reason-line"><b>${t.my_reason}:</b> ${esc(reason)}</div>`:""}
       ${x.change_req?`<div class="meta chg-line"><b>${t.bk_changereq}:</b> ${esc((x.change_req.newDate||"")+" "+(x.change_req.newTime||""))} ${esc(x.change_req.message||"")}
           ${x.change_req.newDate&&x.change_req.newTime?`<button class="bk-act ok" onclick="acceptChange(${x.id},'${x.change_req.newDate}','${x.change_req.newTime}')">${t.bk_accept_change}</button>`:""}</div>`:""}
+      ${x.deposit_amount>0?`<div class="meta dep-line">
+        💳 ${wonFmt(x.deposit_amount)}
+        <span class="st-pill ${x.deposit_status==="paid"?"st-confirmed":x.deposit_status==="refunded"?"st-cancelled":"st-pending"}">
+          ${x.deposit_status==="paid"?t.dep_paid:x.deposit_status==="refunded"?t.dep_refunded:t.dep_unpaid}</span>
+        ${x.deposit_status==="paid"
+          ? `<button class="bk-del" onclick="markDeposit(${x.id},'unpaid')">${t.dep_unmark}</button>`
+          : `<button class="bk-act ok" style="padding:4px 12px;font-size:.74rem" onclick="markDeposit(${x.id},'paid')">${t.dep_mark}</button>`}
+      </div>`:""}
       <div class="bk-actions">
         ${x.status==="pending"?`<button class="bk-act ok" onclick="approveBk(${x.id})">${t.bk_approve}</button>
           <button class="bk-act no" onclick="declineBk(${x.id})">${t.bk_decline}</button>`:""}
@@ -2455,6 +2717,55 @@ async function viewBookings(filter){
     </div>`;}).join(""):`<div class="bk-empty">${t.bk_none}</div>`;
   document.getElementById("bkTitle").textContent=`${t.bk_title} (${b.length})`;
   document.querySelector(".bk-list").innerHTML=rows;
+}
+function guestMessage(x){
+  const ko=lang==="ko";
+  const end=x.time?pad(parseInt(x.time)+(x.dur_h||1))+":00":"";
+  const pay=STATE.pay||{};
+  const dep=x.deposit_amount||0;
+  const usd=dep?Math.max(1,Math.round(dep/(pay.usdRate||1350))):0;
+  const link=pay.paypalMe&&usd?`https://paypal.me/${pay.paypalMe}/${usd}`:"";
+  return ko
+    ? `안녕하세요 ${x.name}님! Zeneverse 예약이 확정되었습니다 ✨\n\n`+
+      `📅 ${x.date} ${x.time}${end?"–"+end:""}\n📦 ${x.pkg_name||""}\n\n`+
+      (dep?`자리 확정을 위해 예약금을 보내주세요:\n${wonFmt(dep)}${usd?` (≈$${usd})`:""}\n`+
+           (link?`👉 ${link}\n`:"")+(pay.bank?`🏦 ${pay.bank}\n`:""):"")+
+      `\n곧 뵙겠습니다!`
+    : `Hi ${x.name}! Your Zeneverse booking is confirmed ✨\n\n`+
+      `📅 ${x.date} ${x.time}${end?"–"+end:""}\n📦 ${x.pkg_name||""}\n\n`+
+      (dep?`To secure your spot, please send the deposit:\n${wonFmt(dep)}${usd?` (≈$${usd})`:""}\n`+
+           (link?`👉 ${link}\n`:"")+(pay.bank?`🏦 Bank: ${pay.bank}\n`:""):"")+
+      `\nSee you in Seoul!`;
+}
+function contactBtns(x){
+  const ko=lang==="ko",msg=guestMessage(x);
+  const enc=encodeURIComponent(msg);
+  const id=(x.contact_id||"").trim();
+  const btns=[];
+  if(x.contact_channel==="whatsapp"&&id)
+    btns.push(`<a class="ch-act wa" target="_blank" rel="noopener" href="https://wa.me/${id.replace(/[^0-9]/g,"")}?text=${enc}">WhatsApp →</a>`);
+  if(x.contact_channel==="line")
+    btns.push(`<a class="ch-act ln" target="_blank" rel="noopener" href="https://line.me/R/ti/p/~${encodeURIComponent(id)}">LINE →</a>`);
+  if(x.contact_channel==="kakao")
+    btns.push(`<span class="ch-act ka" title="${ko?"카톡에서 ID로 검색하세요":"Search this ID in KakaoTalk"}">Kakao: ${esc(id)}</span>`);
+  if(x.contact_channel==="wechat")
+    btns.push(`<span class="ch-act wc">WeChat: ${esc(id)}</span>`);
+  // these channels need the guest to add me first
+  if(["line","kakao","wechat"].includes(x.contact_channel))
+    btns.push(`<span class="ch-act warn" title="${ko?"고객이 먼저 친구추가해야 대화할 수 있어요":"Guest must add you before you can message"}">⚠️ ${ko?"친구추가 대기":"awaiting add"}</span>`);
+  btns.push(`<button class="ch-act copy" onclick='copyMsg(${JSON.stringify(msg)})'>${ko?"메시지 복사":"Copy message"}</button>`);
+  return btns.join("");
+}
+function copyMsg(m){
+  navigator.clipboard?.writeText(m);
+  flashSaved();
+}
+async function markDeposit(id,status){
+  const t=I18N[lang];
+  let method="";
+  if(status==="paid"){method=prompt(t.dep_method,"PayPal");if(method===null)return;}
+  try{await API.post("/api/admin/deposit",{id,status,method});viewBookings();}
+  catch(e){alert(t.book_fail);}
 }
 async function approveBk(id){
   const t=I18N[lang];
