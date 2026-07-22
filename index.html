@@ -2237,10 +2237,30 @@ function openSettings(){
         <div class="field"><input id="st_v2" type="text" value="${esc(m.v2||"")}" placeholder="Video 2"></div>
         <div class="field"><input id="st_v3" type="text" value="${esc(m.v3||"")}" placeholder="Video 3"></div>
 
-        <button class="submit" onclick="saveSettings()">${ko?"저장":"Save"}</button>
+        <div class="set-label mono">${ko?"알림":"Notifications"}</div>
+        <div class="sub" style="margin-bottom:10px">${ko?"Cloudflare에 텔레그램·이메일 값을 넣은 뒤 아래 버튼으로 확인하세요.":"After adding the Telegram/email variables in Cloudflare, test them here."}</div>
+        <button class="reset-btn" style="width:100%" onclick="testNotify()">${ko?"알림 테스트 보내기 →":"Send test notification →"}</button>
+        <div class="msg" id="nt_msg" style="text-align:left"></div>
+
+        <button class="submit" style="margin-top:18px" onclick="saveSettings()">${ko?"저장":"Save"}</button>
         <div class="msg" id="st_msg"></div>
       </div>
     </div>`;
+}
+async function testNotify(){
+  const ko=lang==="ko",m=document.getElementById("nt_msg");
+  m.style.color="#7d9488";m.textContent=ko?"보내는 중…":"Sending…";
+  try{
+    const r=await API.post("/api/admin/test-notify",{});
+    const lines=[];
+    lines.push(r.telegramConfigured
+      ? (r.telegram?(ko?"✅ 텔레그램: 전송됨 — 앱을 확인하세요":"✅ Telegram: sent"):(ko?"⚠️ 텔레그램: 설정은 됐지만 실패 (토큰/챗ID 확인)":"⚠️ Telegram: configured but failed"))
+      : (ko?"➖ 텔레그램: 아직 설정 안 됨":"➖ Telegram: not configured"));
+    lines.push(r.emailConfigured
+      ? (r.email?(ko?"✅ 이메일: 전송됨":"✅ Email: sent"):(ko?"⚠️ 이메일: 설정은 됐지만 실패":"⚠️ Email: configured but failed"))
+      : (ko?"➖ 이메일: 아직 설정 안 됨":"➖ Email: not configured"));
+    m.style.color="#3c4a48";m.innerHTML=lines.join("<br>");
+  }catch(e){m.style.color="#c96f52";m.textContent=ko?"오류가 났어요":"Something went wrong";}
 }
 function saveSettings(){
   const g=id=>document.getElementById(id).value.trim();

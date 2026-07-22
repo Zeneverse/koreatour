@@ -77,6 +77,33 @@ async function sendMail(env, to, subject, html) {
     return r.ok;
   } catch (e) { return false; }
 }
+/* ============ TELEGRAM (free, unlimited) ============
+   Set in Cloudflare > Settings > Variables:
+     TELEGRAM_BOT_TOKEN - from @BotFather
+     TELEGRAM_CHAT_ID   - your personal chat id (from @userinfobot)
+   If unset, notifications are simply skipped. */
+async function sendTelegram(env, text) {
+  if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) return false;
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        chat_id: env.TELEGRAM_CHAT_ID,
+        text,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+      }),
+    });
+    return r.ok;
+  } catch (e) { return false; }
+}
+/* notify the owner on every channel that's configured */
+async function notifyOwner(env, subject, htmlBody, tgText) {
+  await sendMail(env, env.ADMIN_EMAIL, subject, mailShell(subject, htmlBody));
+  await sendTelegram(env, tgText);
+}
+
 const mailShell = (title, body) => `
   <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#f6f4ef;padding:28px">
     <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:16px;padding:30px">
@@ -294,7 +321,22 @@ export async function onRequest(context) {
           ${note ? row2("Note", String(note)) : ""}
           ${row2("Code", code)}
         </table>`;
-      await sendMail(env, env.ADMIN_EMAIL, `New booking request — ${name} (${date} ${time})`, mailShell("New booking request", adminBody));
+      const endT = String(parseInt(time) + (pk.dur_h || 1)).padStart(2, "0") + ":00";
+      const tgNew =
+        `🔔 <b>새 예약 신청</b>\n\n` +
+        `👤 ${name}\n` +
+        `📦 ${(pk.title && pk.title.en) || pkg}\n` +
+        `📅 ${date}  ⏰ ${time}–${endT}\n` +
+        `👥 ${parseInt(people) || 1}명\n` +
+        `💬 ${contact || "-"}\n` +
+        `📧 ${email}\n` +
+        (needTxt ? `🎯 ${needTxt}\n` : "") +
+        (addonTxt ? `➕ ${addonTxt}\n` : "") +
+        (note ? `📝 ${note}\n` : "") +
+        (queueAhead ? `\n⚠️ 같은 시간 대기 ${queueAhead}명\n` : "") +
+        `\n🔑 <code>${code}</code>\n` +
+        `➡️ 사이트에서 승인/거절하세요`;
+      await notifyOwner(env, `New booking request — ${name} (${date} ${time})`, adminBody, tgNew);
 
       return json({ ok: true, code, queueAhead });
     }
@@ -336,12 +378,13 @@ export async function onRequest(context) {
         .prepare("UPDATE bookings SET status='cancelled', reason=?, seen=0, updated_at=? WHERE code=?")
         .bind(String(reason || "").slice(0, 500), nowISO(), row.code)
         .run();
-      await sendMail(env, env.ADMIN_EMAIL, `Booking cancelled — ${row.name} (${row.date} ${row.time})`,
-        mailShell("A guest cancelled", `
-          <table style="width:100%;border-collapse:collapse">
+      await notifyOwner(env, `Booking cancelled — ${row.name} (${row.date} ${row.time})`,
+        `<table style="width:100%;border-collapse:collapse">
             ${row2("Name", row.name)}${row2("Date / Time", row.date + " " + row.time)}
             ${row2("Code", row.code)}${reason ? row2("Reason", String(reason)) : ""}
-          </table>`));
+          </table>`,
+        `❌ <b>예약 취소</b>\n\n👤 ${row.name}\n📅 ${row.date} ⏰ ${row.time}\n` +
+        (reason ? `💬 ${reason}\n` : "") + `\n🔑 <code>${row.code}</code>\n\n✅ 해당 시간이 다시 열렸어요`);
       return json({ ok: true });
     }
 
@@ -358,13 +401,16 @@ export async function onRequest(context) {
         .prepare("UPDATE bookings SET change_req=?, seen=0, updated_at=? WHERE code=?")
         .bind(req, nowISO(), row.code)
         .run();
-      await sendMail(env, env.ADMIN_EMAIL, `Change requested — ${row.name} (${row.code})`,
-        mailShell("A guest requested a different time", `
-          <table style="width:100%;border-collapse:collapse">
+      await notifyOwner(env, `Change requested — ${row.name} (${row.code})`,
+        `<table style="width:100%;border-collapse:collapse">
             ${row2("Name", row.name)}${row2("Current", row.date + " " + row.time)}
             ${row2("Requested", (newDate || "-") + " " + (newTime || ""))}
             ${message ? row2("Message", String(message)) : ""}
-          </table>`));
+          </table>`,
+        `🔄 <b>시간 변경 요청</b>\n\n👤 ${row.name}\n` +
+        `현재: ${row.date} ${row.time}\n` +
+        `희망: ${newDate || "-"} ${newTime || ""}\n` +
+        (message ? `💬 ${message}\n` : "") + `\n🔑 <code>${row.code}</code>`);
       return json({ ok: true });
     }
 
@@ -506,6 +552,17 @@ export async function onRequest(context) {
       return json({ ok: true });
     }
 
+    /* ---------------- admin: test notifications ---------------- */
+    if (route === "/admin/test-notify" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const tg = await sendTelegram(env, "✅ <b>Zeneverse 연결 성공</b>\n\n이제 예약 알림이 여기로 옵니다.");
+      const mail = await sendMail(env, env.ADMIN_EMAIL, "Zeneverse — test notification",
+        mailShell("Test notification", "<p>If you can read this, email alerts are working.</p>"));
+      return json({ telegram: tg, email: mail,
+        telegramConfigured: !!(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID),
+        emailConfigured: !!(env.RESEND_API_KEY && env.MAIL_FROM && env.ADMIN_EMAIL) });
+    }
+
     /* ---------------- admin: snapshot list ---------------- */
     if (route === "/admin/snapshots" && request.method === "GET") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
@@ -566,6 +623,7 @@ export async function onRequest(context) {
         .run();
       const row = await db.prepare("SELECT last_insert_rowid() AS id").first();
       await audit(db, "review", row.id, "create", "guest", null, { name, rating, text });
+      await sendTelegram(env, `⭐ <b>새 후기</b>\n\n👤 ${name}\n${"★".repeat(Math.min(5, Math.max(1, parseInt(rating) || 5)))}\n\n${String(text).slice(0, 300)}`);
       return json({ ok: true });
     }
 
