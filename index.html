@@ -377,6 +377,18 @@
   .saved-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:30px;font-size:.82rem;z-index:210;opacity:0;pointer-events:none;transition:.25s;font-family:'Space Mono',monospace;letter-spacing:.06em}
   .saved-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* ===== history / restore ===== */
+  .hist-list{display:flex;flex-direction:column;gap:8px;margin-bottom:6px;max-height:38vh;overflow-y:auto}
+  .hist-item{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:11px;padding:11px 14px;background:#fff}
+  .hist-when{font-size:.86rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .hist-when b{font-family:'Space Mono',monospace;font-size:.8rem;font-weight:400}
+  .hist-latest{font-style:normal;font-family:'Space Mono',monospace;font-size:.56rem;background:#3d6b4d;color:#fff;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em}
+  .hist-label{font-size:.72rem;color:var(--sage);background:var(--paper-2);padding:2px 8px;border-radius:20px}
+  .reset-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .reset-btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font-family:inherit;font-size:.84rem;cursor:pointer;color:var(--ink);text-align:left}
+  .reset-btn:hover{border-color:var(--clay);color:var(--clay)}
+  @media (max-width:520px){.reset-grid{grid-template-columns:1fr}}
+
   /* ===== nav order ===== */
   .nav-order{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
   .nav-row{display:flex;align-items:center;gap:8px;padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:#fff;cursor:grab}
@@ -446,12 +458,7 @@
     </div>
     <div class="lang-select">
       <button class="lang-cur" onclick="toggleLangMenu()"><span id="langCurLabel">EN</span> <i>▾</i></button>
-      <div class="lang-menu" id="langMenu">
-        <button onclick="setLang('en')">English</button>
-        <button onclick="setLang('ko')">한국어</button>
-        <button onclick="setLang('zhHant')">繁體中文</button>
-        <button onclick="setLang('zhHans')">简体中文</button>
-      </div>
+      <div class="lang-menu" id="langMenu"></div>
     </div>
     <button class="burger" aria-label="menu" onclick="document.querySelector('.nav-links').style.display='flex'">&#9776;</button>
   </div>
@@ -687,7 +694,12 @@ const I18N={
     need1:"Olive Young ingredient-smart shopping",need2:"Korean pharmacy beauty picks",need3:"Brow / lash / hair salon matching",need4:"Personal styling",need_other:"Something else",need_other_ph:"Tell me what you're looking for…",
     f_people_err:"Max {n} guests for this package.",
     ed_title:"Edit text",ed_save:"Save",ed_cancel:"Cancel",ed_hint:"Click any text on the page to edit it.",
-    ab_text:"Edit page text",ab_nav:"Menu order",nav_order_title:"Menu order",nav_order_sub:"Drag to reorder, or use the arrows. Toggle to show/hide.",
+    ab_text:"Edit page text",ab_hist:"History",
+    hist_title:"Change history",hist_sub:"Every save is backed up. Restore any point below — restoring is itself undoable.",
+    hist_none:"No history yet. It starts building from your next save.",hist_restore:"Restore",hist_latest:"latest",
+    hist_confirm:"Restore the site to this point? Your current settings will be backed up first.",hist_done:"Restored.",
+    reset_title:"Reset to original",reset_sub:"Put one section back to how it shipped. Also backed up first.",
+    reset_confirm:"Reset \"{x}\" to the original? A backup is saved first.",reset_done:"Reset done.",ab_nav:"Menu order",nav_order_title:"Menu order",nav_order_sub:"Drag to reorder, or use the arrows. Toggle to show/hide.",
     host_edit:"Edit host info",host_more:"Read more",host_bio:"About me",
     f_agree:"I've read and agree to the cancellation policy and disclaimer.",f_agree_err:"Please agree to continue.",
     f_contact_err:"Please add a messenger ID or number so I can reach you.",
@@ -755,7 +767,12 @@ const I18N={
     need1:"올리브영 성분 분석 쇼핑",need2:"한국 약국 뷰티 꿀조합",need3:"눈썹/속눈썹/헤어샵 매칭",need4:"퍼스널 스타일링",need_other:"기타 (직접 입력)",need_other_ph:"어떤 게 궁금하신지 적어주세요…",
     f_people_err:"이 패키지는 최대 {n}명까지 가능해요.",
     ed_title:"텍스트 수정",ed_save:"저장",ed_cancel:"취소",ed_hint:"페이지의 아무 글자나 클릭하면 수정할 수 있어요.",
-    ab_text:"페이지 글자 수정",ab_nav:"메뉴 순서",nav_order_title:"메뉴 순서",nav_order_sub:"드래그하거나 화살표로 순서를 바꾸고, 토글로 표시 여부를 정하세요.",
+    ab_text:"페이지 글자 수정",ab_hist:"변경 기록",
+    hist_title:"변경 기록",hist_sub:"저장할 때마다 자동으로 백업돼요. 원하는 시점으로 되돌릴 수 있고, 되돌린 것도 다시 취소할 수 있어요.",
+    hist_none:"아직 기록이 없어요. 다음 저장부터 쌓이기 시작해요.",hist_restore:"이 시점으로 복구",hist_latest:"최근",
+    hist_confirm:"이 시점으로 되돌릴까요? 지금 상태도 먼저 백업돼요.",hist_done:"복구했어요.",
+    reset_title:"처음 상태로 초기화",reset_sub:"특정 항목만 원래대로 되돌려요. 이것도 먼저 백업돼요.",
+    reset_confirm:"\"{x}\"을(를) 처음 상태로 되돌릴까요? 먼저 백업돼요.",reset_done:"초기화했어요.",ab_nav:"메뉴 순서",nav_order_title:"메뉴 순서",nav_order_sub:"드래그하거나 화살표로 순서를 바꾸고, 토글로 표시 여부를 정하세요.",
     host_edit:"호스트 정보 수정",host_more:"더 보기",host_bio:"소개",
     f_agree:"취소 규정과 면책 조항을 읽고 동의합니다.",f_agree_err:"동의해주셔야 진행할 수 있어요.",
     f_contact_err:"연락 가능한 메신저 ID나 번호를 입력해주세요.",
@@ -902,7 +919,7 @@ function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
 
 let adminToken = sessionStorage.getItem("zv_token") || "";
 const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false,
-  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, loaded:false };
+  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, loaded:false };
 
 async function loadConfig(){
   try{
@@ -922,6 +939,7 @@ async function loadConfig(){
     STATE.privacy = c.privacy || null;
     STATE.terms = c.terms || null;
     STATE.igPosts = c.igPosts || [];
+    STATE.langs = c.langs || null;
     STATE.copy = c.copy || null;
     STATE.nav = c.nav || null;
     STATE.loaded = true;
@@ -950,7 +968,7 @@ async function saveAll(){
       packages:PACKS, hours:STATE.hours, dayhours:STATE.dayhours,
       closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh,
       feats:loadFeats(), host:STATE.host||DEFAULT_HOST, contact:STATE.contact||DEFAULT_CONTACT,
-      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav()
+      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs()
     });
   }catch(e){ alert("저장 실패 / Save failed: "+e.message); }
 }
@@ -965,8 +983,27 @@ function saveClosedDates(a){ STATE.closed=a; saveAll(); }
 function isDateOpen(date){ return !STATE.closed.includes(date); }
 function loadBlocked(){ return STATE.blocked; }
 function saveBlocked(b){ STATE.blocked=b; saveAll(); }
-function zhOn(){ return STATE.zh; }
-function setZh(on){ STATE.zh=!!on; saveAll(); applyZh(); }
+/* ---- which languages are offered to visitors ---- */
+const ALL_LANGS=[{id:"en",label:"English",short:"EN"},{id:"ko",label:"한국어",short:"KO"},
+                 {id:"zhHant",label:"繁體中文",short:"繁中"},{id:"zhHans",label:"简体中文",short:"简中"}];
+const DEFAULT_LANGS={en:true,ko:true,zhHant:false,zhHans:false};
+function loadLangs(){return STATE.langs||DEFAULT_LANGS;}
+function langOn(id){const l=loadLangs();return l[id]!==undefined?l[id]:!!DEFAULT_LANGS[id];}
+function setLangOn(id,v){
+  const l=Object.assign({},loadLangs());l[id]=!!v;
+  if(!Object.values(l).some(Boolean))l.en=true;      // never leave zero languages on
+  STATE.langs=l;saveAll();renderLangMenu();applyZh();
+  if(!langOn(lang))setLang(Object.keys(l).find(k=>l[k])||"en");
+}
+function renderLangMenu(){
+  const box=document.getElementById("langMenu");if(!box)return;
+  const on=ALL_LANGS.filter(l=>langOn(l.id));
+  box.innerHTML=on.map(l=>`<button onclick="setLang('${l.id}')">${l.label}</button>`).join("");
+  const sel=document.querySelector(".lang-select");
+  if(sel)sel.style.display = on.length>1 ? "" : "none";   // hide selector if only one language
+}
+/* the 繁體中文 support wording follows the Chinese language toggles */
+function zhOn(){ return langOn("zhHant")||langOn("zhHans"); }
 /* ============ FEATURE FLAGS (admin can turn sections on/off) ============ */
 const DEFAULT_FEATS={host:true,faq:true,watch:false,reviews:false,float:true,instagram:false,payments:false};
 const DEFAULT_HOST={photo:"",exp:{en:"10+ Years Care Expert",ko:"10년+ 케어 전문가"},
@@ -1523,7 +1560,7 @@ let DAY_BOOKINGS=[]; // bookings for the date currently shown in the form
 const LANG_LABEL={en:"EN",ko:"KO",zhHant:"繁中",zhHans:"简中"};
 function toggleLangMenu(){document.getElementById("langMenu").classList.toggle("open");}
 function setLang(l){
-  if(!I18N[l])l="en";
+  if(!I18N[l]||!langOn(l))l=langOn("en")?"en":(ALL_LANGS.find(x=>langOn(x.id))||{id:"en"}).id;
   lang=l;
   document.body.classList.toggle("lang-ko",l==="ko");
   document.body.classList.toggle("lang-zh",l==="zhHant"||l==="zhHans");
@@ -1543,20 +1580,21 @@ function setLang(l){
 }
 /* pick a sensible default language from browser/IP on first visit */
 async function autoLang(){
+  const ok=id=>langOn(id)?id:null;
   let saved=null;try{saved=localStorage.getItem("zv_lang");}catch(e){}
-  if(saved)return saved;
+  if(saved&&langOn(saved))return saved;
   const nav=(navigator.language||"en").toLowerCase();
-  if(nav.startsWith("ko"))return "ko";
-  if(nav.includes("tw")||nav.includes("hk")||nav.includes("hant"))return "zhHant";
-  if(nav.startsWith("zh"))return "zhHans";
+  if(nav.startsWith("ko")&&langOn("ko"))return "ko";
+  if((nav.includes("tw")||nav.includes("hk")||nav.includes("hant"))&&langOn("zhHant"))return "zhHant";
+  if(nav.startsWith("zh")&&langOn("zhHans"))return "zhHans";
   try{
     const r=await fetch("https://ipapi.co/country/",{signal:AbortSignal.timeout(2500)});
     const c=(await r.text()).trim().toUpperCase();
-    if(c==="KR")return "ko";
-    if(c==="TW"||c==="HK"||c==="MO")return "zhHant";
-    if(c==="CN"||c==="SG")return "zhHans";
+    if(c==="KR"&&langOn("ko"))return "ko";
+    if((c==="TW"||c==="HK"||c==="MO")&&langOn("zhHant"))return "zhHant";
+    if((c==="CN"||c==="SG")&&langOn("zhHans"))return "zhHans";
   }catch(e){}
-  return "en";
+  return langOn("en")?"en":(ALL_LANGS.find(l=>langOn(l.id))||{id:"en"}).id;
 }
 
 
@@ -1926,6 +1964,61 @@ async function refreshNewCount(){
   if(!adminToken)return;
   try{const r=await API.get("/api/admin/bookings");newCount=r.newCount||0;renderAdminBar();}catch(e){}
 }
+/* ============ ADMIN: history / restore / reset ============ */
+async function openHistory(){
+  const t=I18N[lang],ko=lang==="ko";
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:520px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.hist_title}</h3><div class="sub">${t.hist_sub}</div>
+        <div class="hist-list"><div class="bk-empty">${t.bk_loading}</div></div>
+        <div class="set-label mono">${t.reset_title}</div>
+        <div class="sub" style="margin-bottom:12px">${t.reset_sub}</div>
+        <div class="reset-grid">
+          ${[["copy",ko?"페이지 글자":"Page text"],["packages",ko?"패키지·가격":"Packages"],
+             ["faq","FAQ"],["host",ko?"호스트 소개":"Host info"],["nav",ko?"메뉴 순서":"Menu order"],
+             ["contact",ko?"연락 채널":"Contacts"],["media",ko?"영상":"Videos"],["langs",ko?"언어 설정":"Languages"]]
+            .map(([k,label])=>`<button class="reset-btn" onclick="resetSection('${k}','${label}')">${label}</button>`).join("")}
+        </div>
+      </div>
+    </div>`;
+  let list=[];
+  try{const r=await API.get("/api/admin/snapshots");list=r.snapshots||[];}
+  catch(e){document.querySelector(".hist-list").innerHTML=`<div class="bk-empty">${t.hist_none}</div>`;return;}
+  document.querySelector(".hist-list").innerHTML = list.length ? list.map((h,i)=>`
+    <div class="hist-item">
+      <div class="hist-when">
+        <b>${esc((h.created_at||"").slice(0,16).replace("T"," "))}</b>
+        ${i===0?`<i class="hist-latest">${t.hist_latest}</i>`:""}
+        ${h.label?`<span class="hist-label">${esc(h.label)}</span>`:""}
+      </div>
+      <button class="bk-act ok" onclick="restoreSnap(${h.id})">${t.hist_restore}</button>
+    </div>`).join("") : `<div class="bk-empty">${t.hist_none}</div>`;
+}
+async function restoreSnap(id){
+  const t=I18N[lang];
+  if(!confirm(t.hist_confirm))return;
+  try{
+    await API.post("/api/admin/restore",{id});
+    await loadConfig();
+    setLang(lang);applyFeats();renderLangMenu();renderMedia();renderInstagram();
+    alert(t.hist_done);
+    openHistory();
+  }catch(e){alert(t.book_fail);}
+}
+async function resetSection(key,label){
+  const t=I18N[lang];
+  if(!confirm(t.reset_confirm.replace("{x}",label)))return;
+  try{
+    await API.post("/api/admin/reset",{key});
+    await loadConfig();
+    setLang(lang);applyFeats();renderLangMenu();renderMedia();renderInstagram();
+    alert(t.reset_done);
+    openHistory();
+  }catch(e){alert(t.book_fail);}
+}
+
 /* ============ ADMIN: site settings panel ============ */
 function openSettings(){
   const t=I18N[lang],f=loadFeats(),h=STATE.host||DEFAULT_HOST,c=STATE.contact||DEFAULT_CONTACT,m=STATE.media||DEFAULT_MEDIA;
@@ -1940,6 +2033,12 @@ function openSettings(){
         <button class="close" onclick="closeModal()">&times;</button>
         <h3>${ko?"사이트 설정":"Site settings"}</h3>
         <div class="sub">${ko?"섹션을 켜고 끄고, 호스트 정보와 연락 채널을 관리하세요.":"Turn sections on/off and manage host info and contact channels."}</div>
+
+        <div class="set-label mono" style="border-top:none;padding-top:0;margin-top:8px">${ko?"제공 언어":"Languages offered"}</div>
+        ${ALL_LANGS.map(L=>`<label class="feat-row">
+            <span><b>${L.label}</b><i>${L.id==="en"?(ko?"기본 언어":"default"):(ko?"번역이 준비된 경우에만 켜세요":"turn on only when translated")}</i></span>
+            <button class="tgl${langOn(L.id)?" on":""}" onclick="setLangOn('${L.id}',!langOn('${L.id}'));openSettings()"></button>
+          </label>`).join("")}
 
         <div class="set-label mono">${ko?"섹션 표시":"Sections"}</div>
         ${row("host",ko?"호스트 소개":"Meet your host")}
@@ -2031,8 +2130,8 @@ function renderAdminBar(){
       <button onclick="adminAudit()">${t.ad_audit}</button>
       <button onclick="toggleTextEdit()" class="${textEditMode?"on":""}">${t.ab_text}${textEditMode?" ✓":""}</button>
       <button onclick="openNavOrder()">${t.ab_nav}</button>
+      <button onclick="openHistory()">${t.ab_hist}</button>
       <button onclick="viewBookings('pending')">${t.ab_view}${newCount?` <i class="ab-badge">${newCount}</i>`:""}</button>
-      <button onclick="setZh(!zhOn());renderAdminBar()" class="${zhOn()?"on":""}">${t.ab_zh} ${zhOn()?"ON":"OFF"}</button>
       ${editMode?`<span class="edit-lang">${t.ab_editing} <b>${lang==="ko"?"한국어":"English"}</b> — ${t.ab_switch}</span>`:`<span class="hint"></span>`}
       <span class="spacer"></span>
       <button class="warn" onclick="exitAdmin()">${t.ab_exit}</button>
@@ -2204,6 +2303,7 @@ function observeReveals(){document.querySelectorAll(".reveal:not(.in)").forEach(
   await loadConfig();
   const l=await autoLang();
   setLang(l);
+  renderLangMenu();
   applyFeats();
   renderNav();
   applyCopy();

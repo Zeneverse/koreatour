@@ -112,6 +112,9 @@ async function audit(db, entity, entityId, action, actor, before, after) {
   } catch (e) { /* audit table may not exist yet */ }
 }
 
+function safeParseObj(s) {
+  try { const v = JSON.parse(s); return v && typeof v === "object" ? v : {}; } catch { return {}; }
+}
 function safeParse(s) {
   try { return JSON.parse(s); } catch { return []; }
 }
@@ -131,7 +134,7 @@ export async function onRequest(context) {
   try {
     /* ---------------- public: config ---------------- */
     if (route === "/config" && request.method === "GET") {
-      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav] = await Promise.all([
+      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs] = await Promise.all([
         getSetting(db, "packages", null),
         getSetting(db, "hours", { open: 10, close: 21 }),
         getSetting(db, "dayhours", {}),
@@ -148,6 +151,7 @@ export async function onRequest(context) {
         getSetting(db, "igPosts", []),
         getSetting(db, "copy", null),
         getSetting(db, "nav", null),
+        getSetting(db, "langs", null),
       ]);
       let reviews = [];
       try {
@@ -156,7 +160,7 @@ export async function onRequest(context) {
           .all();
         reviews = results || [];
       } catch (e) { /* reviews table may not exist yet */ }
-      return json({ packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, reviews });
+      return json({ packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, reviews });
     }
 
     /* ---------------- public: slots (+ queue counts) ---------------- */
@@ -480,8 +484,73 @@ export async function onRequest(context) {
     if (route === "/admin/save" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
       const body = await request.json();
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs"];
+
+      /* keep a snapshot of the current state before overwriting it */
+      const label = body.__label || "";
+      try {
+        const before = {};
+        for (const k of keys) before[k] = await getSetting(db, k, null);
+        const hasAny = Object.values(before).some((v) => v !== null);
+        if (hasAny) {
+          await db
+            .prepare("INSERT INTO snapshots (label, data, created_at) VALUES (?,?,?)")
+            .bind(String(label).slice(0, 80), JSON.stringify(before), nowISO())
+            .run();
+          /* keep only the newest 20 */
+          await db.prepare("DELETE FROM snapshots WHERE id NOT IN (SELECT id FROM snapshots ORDER BY id DESC LIMIT 20)").run();
+        }
+      } catch (e) { /* snapshots table may not exist yet */ }
+
       for (const k of keys) if (body[k] !== undefined) await putSetting(db, k, body[k]);
+      return json({ ok: true });
+    }
+
+    /* ---------------- admin: snapshot list ---------------- */
+    if (route === "/admin/snapshots" && request.method === "GET") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { results } = await db
+        .prepare("SELECT id, label, created_at, length(data) AS size FROM snapshots ORDER BY id DESC LIMIT 20")
+        .all();
+      return json({ snapshots: results || [] });
+    }
+
+    /* ---------------- admin: restore a snapshot ---------------- */
+    if (route === "/admin/restore" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { id } = await request.json();
+      const snap = await db.prepare("SELECT * FROM snapshots WHERE id = ?").bind(id).first();
+      if (!snap) return json({ error: "not found" }, 404);
+      const data = safeParseObj(snap.data);
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs"];
+
+      /* snapshot the current state too, so a restore is itself undoable */
+      try {
+        const before = {};
+        for (const k of keys) before[k] = await getSetting(db, k, null);
+        await db.prepare("INSERT INTO snapshots (label, data, created_at) VALUES (?,?,?)")
+          .bind("before restore", JSON.stringify(before), nowISO()).run();
+      } catch (e) {}
+
+      for (const k of keys) if (data[k] !== undefined && data[k] !== null) await putSetting(db, k, data[k]);
+      await audit(db, "settings", id, "restore", "admin", null, { restoredFrom: snap.created_at });
+      return json({ ok: true });
+    }
+
+    /* ---------------- admin: reset one section to defaults ---------------- */
+    if (route === "/admin/reset" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { key } = await request.json();
+      const allowed = ["packages", "copy", "faq", "host", "contact", "nav", "media", "feats", "langs", "privacy", "terms"];
+      if (!allowed.includes(key)) return json({ error: "not allowed" }, 400);
+      try {
+        const before = {};
+        for (const k of allowed) before[k] = await getSetting(db, k, null);
+        await db.prepare("INSERT INTO snapshots (label, data, created_at) VALUES (?,?,?)")
+          .bind("before reset: " + key, JSON.stringify(before), nowISO()).run();
+      } catch (e) {}
+      await db.prepare("DELETE FROM settings WHERE key = ?").bind(key).run();
+      await audit(db, "settings", 0, "reset", "admin", { key }, null);
       return json({ ok: true });
     }
 
