@@ -150,6 +150,7 @@
   .reveal.in{opacity:1;transform:none}
 
   /* MODAL */
+  .modal-bg.layer2{z-index:150}
   .modal-bg{position:fixed;inset:0;background:rgba(26,43,43,.55);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
   .modal{background:var(--paper);border-radius:22px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:38px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.3)}
   .modal h3{font-family:'Fraunces',serif;font-weight:600;font-size:1.6rem;margin-bottom:6px}
@@ -733,6 +734,7 @@
 </div>
 
 <div id="modalRoot"></div>
+<div id="modalRoot2"></div>
 <div id="adminBar"></div>
 
 <script>
@@ -1037,6 +1039,8 @@ const DEFAULT_PACKS=[
 ];
 
 let lang="en", adminMode=false, editMode=false;
+const CH_LABEL={whatsapp:"WhatsApp",line:"LINE",kakao:"KakaoTalk",wechat:"WeChat"};
+let pickedChannel="";
 
 /* ------------- storage helpers ------------- */
 /* ============ API-backed state ============
@@ -1750,16 +1754,17 @@ function openPolicy(kind){
   const t=I18N[lang];
   const isPriv = kind==="privacy";
   const body = isPriv ? (STATE.privacy?tx(STATE.privacy):defaultPrivacy()) : (STATE.terms?tx(STATE.terms):defaultTerms());
-  document.getElementById("modalRoot").innerHTML=`
-    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+  document.getElementById("modalRoot2").innerHTML=`
+    <div class="modal-bg layer2" onclick="if(event.target===this)closePolicy()">
       <div class="modal" style="max-width:600px">
-        <button class="close" onclick="closeModal()">&times;</button>
+        <button class="close" onclick="closePolicy()">&times;</button>
         <h3>${isPriv?t.priv_link:t.terms_link}</h3>
         <div class="policy-body">${body}</div>
-        <button class="submit" onclick="closeModal()">${lang==="ko"?"확인":"Close"}</button>
+        <button class="submit" onclick="closePolicy()">${lang==="ko"?"확인":"Close"}</button>
       </div>
     </div>`;
 }
+function closePolicy(){document.getElementById("modalRoot2").innerHTML="";}
 function defaultPrivacy(){
   return lang==="ko"
    ? `<p>Zeneverse는 예약 처리를 위해 이름, 이메일, 메신저 ID, 예약 정보를 수집합니다.</p>
@@ -2015,8 +2020,6 @@ function openBooking(preselect){
   clampPeople();
   pickedChannel="";
 }
-const CH_LABEL={whatsapp:"WhatsApp",line:"LINE",kakao:"KakaoTalk",wechat:"WeChat"};
-let pickedChannel="";
 const CH_INFO={
   whatsapp:{ph:{en:"+886 912 345 678",ko:"+886 912 345 678"},hint:{en:"Include your country code",ko:"국가번호를 포함해주세요"},type:"tel"},
   line:{ph:{en:"your LINE ID",ko:"라인 아이디"},hint:{en:"Settings → Profile → ID in the LINE app",ko:"라인 앱 → 설정 → 프로필 → ID"},type:"text"},
@@ -2255,6 +2258,10 @@ async function sendChange(code){
   }catch(e){ alert(t.book_fail); }
 }
 function closeModal(){document.getElementById("modalRoot").innerHTML="";}
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape")return;
+  if(document.getElementById("modalRoot2")?.innerHTML){closePolicy();return;}
+});
 
 /* ------------- admin ------------- */
 function openAdminLogin(){
