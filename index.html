@@ -435,7 +435,7 @@
 
 <nav id="nav">
   <div class="wrap nav-in">
-    <div class="logo"><span class="dot"></span>Zeneverse</div>
+    <div class="logo"><span class="dot"></span><span data-i18n="brand">Zeneverse</span></div>
     <div class="nav-links" id="navLinks">
       <a onclick="scrollToId('packages')" data-i18n="nav_packages">Packages</a>
       <a onclick="scrollToId('host')" data-i18n="nav_host" data-feat="host">Your host</a>
@@ -467,9 +467,9 @@
       <a onclick="scrollToId('packages')" class="btn btn-ghost" data-i18n="hero_cta2">See the packages</a>
     </div>
     <div class="credibility">
-      <div class="cred-item"><div class="k">1:1</div><div class="v" data-i18n="cred1">Private &amp; small-group, never a rushed crowd</div></div>
-      <div class="cred-item"><div class="k">EN</div><div class="v" data-i18n="cred2">Fluent English, built for overseas visitors</div></div>
-      <div class="cred-item" id="credZh"><div class="k">&#33274;&#28207;</div><div class="v" data-i18n="cred3">&#32321;&#39636;&#20013;&#25991; support for Taiwan &amp; Hong Kong guests</div></div>
+      <div class="cred-item"><div class="k" data-i18n="credk1">1:1</div><div class="v" data-i18n="cred1">Private &amp; small-group, never a rushed crowd</div></div>
+      <div class="cred-item"><div class="k" data-i18n="credk2">EN</div><div class="v" data-i18n="cred2">Fluent English, built for overseas visitors</div></div>
+      <div class="cred-item" id="credZh"><div class="k" data-i18n="credk3">&#33274;&#28207;</div><div class="v" data-i18n="cred3">&#32321;&#39636;&#20013;&#25991; support for Taiwan &amp; Hong Kong guests</div></div>
     </div>
   </div>
 </header>
@@ -482,7 +482,7 @@
       <h2 data-i18n="host_title">The person who'll be with you all day.</h2>
     </div>
     <div class="host-card reveal" onclick="openHostBio()" role="button" tabindex="0">
-      <div class="host-photo" id="hostPhoto"><span class="host-ph">ZEN</span></div>
+      <div class="host-photo" id="hostPhoto"><span class="host-ph" data-i18n="host_initials">ZEN</span></div>
       <div class="host-body">
         <div class="host-role mono" data-i18n="host_role">Beauty &amp; skincare professional</div>
         <div class="host-badges">
@@ -516,10 +516,10 @@
       <h2 data-i18n="inc_title">An insider on your side, start to finish.</h2>
     </div>
     <div class="inc-grid">
-      <div class="inc reveal"><div class="n">01</div><h4 data-i18n="inc1_t">Personal consultation</h4><p data-i18n="inc1_d">A careful, personal skin consultation from someone who works in the beauty field every day &mdash; not a sales pitch.</p></div>
-      <div class="inc reveal"><div class="n">02</div><h4 data-i18n="inc2_t">Honest guidance</h4><p data-i18n="inc2_d">What's worth it, what to skip, and what products actually suit your skin.</p></div>
-      <div class="inc reveal"><div class="n">03</div><h4 data-i18n="inc3_t">Vetted partners</h4><p data-i18n="inc3_d">Trusted brow &amp; lash, hair salons and stores &mdash; matched to you, no markup games.</p></div>
-      <div class="inc reveal"><div class="n">04</div><h4 data-i18n="inc4_t">English, all day</h4><p data-i18n="inc4_d">No translation stress. Every step explained clearly, at your pace.</p></div>
+      <div class="inc reveal"><div class="n" data-i18n="incn01">01</div><h4 data-i18n="inc1_t">Personal consultation</h4><p data-i18n="inc1_d">A careful, personal skin consultation from someone who works in the beauty field every day &mdash; not a sales pitch.</p></div>
+      <div class="inc reveal"><div class="n" data-i18n="incn02">02</div><h4 data-i18n="inc2_t">Honest guidance</h4><p data-i18n="inc2_d">What's worth it, what to skip, and what products actually suit your skin.</p></div>
+      <div class="inc reveal"><div class="n" data-i18n="incn03">03</div><h4 data-i18n="inc3_t">Vetted partners</h4><p data-i18n="inc3_d">Trusted brow &amp; lash, hair salons and stores &mdash; matched to you, no markup games.</p></div>
+      <div class="inc reveal"><div class="n" data-i18n="incn04">04</div><h4 data-i18n="inc4_t">English, all day</h4><p data-i18n="inc4_d">No translation stress. Every step explained clearly, at your pace.</p></div>
     </div>
   </div>
 </section>
@@ -598,7 +598,7 @@
 
 <footer>
   <div class="wrap foot-in">
-    <div class="logo"><span class="dot"></span>Zeneverse</div>
+    <div class="logo"><span class="dot"></span><span data-i18n="brand">Zeneverse</span></div>
     <div class="foot-links">
       <a onclick="scrollToId('packages')" data-i18n="nav_packages">Packages</a>
       <a onclick="scrollToId('watch')" data-i18n="nav_watch">Watch</a>
@@ -606,7 +606,7 @@
       <a onclick="openLookup()" data-i18n="my_link">Check my booking</a>
       <a class="admin-dot" onclick="openAdminLogin()">&middot; admin</a>
     </div>
-    <div class="foot-copy">&copy; 2026 Zeneverse &middot; Seoul, Korea</div>
+    <div class="foot-copy" data-i18n="foot_copy">&copy; 2026 Zeneverse &middot; Seoul, Korea</div>
   </div>
   <div class="wrap foot-legal">
     <p class="disclaimer" data-i18n="disclaimer">Zeneverse is a personal beauty consulting &amp; shopping guide service.</p>
@@ -621,9 +621,9 @@
 <!-- FLOATING CONTACT -->
 <div class="float-wrap" id="floatWrap" data-feat="float">
   <div class="float-menu" id="floatMenu">
-    <a class="float-item wa" id="fcWa" href="#" target="_blank" rel="noopener"><span>WhatsApp</span></a>
-    <a class="float-item ln" id="fcLine" href="#" target="_blank" rel="noopener"><span>LINE</span></a>
-    <a class="float-item ig" id="fcIg" href="#" target="_blank" rel="noopener"><span>Instagram</span></a>
+    <a class="float-item wa" id="fcWa" href="#" target="_blank" rel="noopener"><span data-i18n="fc_wa">WhatsApp</span></a>
+    <a class="float-item ln" id="fcLine" href="#" target="_blank" rel="noopener"><span data-i18n="fc_line">LINE</span></a>
+    <a class="float-item ig" id="fcIg" href="#" target="_blank" rel="noopener"><span data-i18n="fc_ig">Instagram</span></a>
   </div>
   <button class="float-btn" onclick="toggleFloat()" aria-label="contact">
     <span class="fb-icon">💬</span>
@@ -642,6 +642,9 @@ const I18N={
     hero_title:"Your own <em>skin-clinic insider</em> in Seoul.",
     hero_lede:"Private, English-guided beauty days led by a working dermatology-clinic manager. Personal skin consultation, honest product picks, and curated K-beauty shopping &amp; salon visits &mdash; no markup games, no language barrier.",
     hero_cta1:"Book a day &rarr;",hero_cta2:"See the packages",
+    credk1:"1:1",credk2:"EN",credk3:"&#33274;&#28207;",brand:"Zeneverse",fc_wa:"WhatsApp",fc_line:"LINE",fc_ig:"Instagram",
+    incn01:"01",incn02:"02",incn03:"03",incn04:"04",host_initials:"ZEN",
+    foot_copy:"&copy; 2026 Zeneverse &middot; Seoul, Korea",
     cred1:"Private &amp; small-group, never a rushed crowd",cred2:"Fluent English, built for overseas visitors",cred3:"&#32321;&#39636;&#20013;&#25991; support for Taiwan &amp; Hong Kong guests",
     pkg_kicker:"The packages",pkg_title:"Pick the day that fits your trip.",
     pkg_sub:"Whether you're on a short layover or staying a while, each day is private and paced around you &mdash; not a fixed bus route.",
@@ -684,7 +687,7 @@ const I18N={
     need1:"Olive Young ingredient-smart shopping",need2:"Korean pharmacy beauty picks",need3:"Brow / lash / hair salon matching",need4:"Personal styling",need_other:"Something else",need_other_ph:"Tell me what you're looking for…",
     f_people_err:"Max {n} guests for this package.",
     ed_title:"Edit text",ed_save:"Save",ed_cancel:"Cancel",ed_hint:"Click any text on the page to edit it.",
-    ab_text:"Edit texts",ab_nav:"Menu order",nav_order_title:"Menu order",nav_order_sub:"Drag to reorder, or use the arrows. Toggle to show/hide.",
+    ab_text:"Edit page text",ab_nav:"Menu order",nav_order_title:"Menu order",nav_order_sub:"Drag to reorder, or use the arrows. Toggle to show/hide.",
     host_edit:"Edit host info",host_more:"Read more",host_bio:"About me",
     f_agree:"I've read and agree to the cancellation policy and disclaimer.",f_agree_err:"Please agree to continue.",
     f_contact_err:"Please add a messenger ID or number so I can reach you.",
@@ -692,7 +695,7 @@ const I18N={
     trip_tip:"Tip: day 2–3 of your trip works best — you'll have time to use what we find.",
     float_label:"Chat with me",slot_loading:"Loading times…",slot_err:"Couldn't load times.",admin_checking:"Checking…",bk_loading:"Loading…",bk_err:"Couldn't load bookings.",
     admin_title:"Admin login",admin_sub:"Enter the password to edit packages and view bookings.",admin_pw:"Password",admin_enter:"Enter",admin_wrong:"Wrong password.",
-    ab_badge:"Admin mode",ab_edit:"Edit packages",ab_done:"Save changes",ab_view:"View bookings",ab_exit:"Exit admin",ab_hint:"Click any package title, text or price to edit.",ab_zh:"繁中",ab_editing:"Editing",ab_switch:"switch language above to edit the other version",
+    ab_badge:"Admin mode",ab_edit:"Edit packages & prices",ab_done:"Save changes",ab_view:"View bookings",ab_exit:"Exit admin",ab_hint:"Click any package title, text or price to edit.",ab_zh:"繁中",ab_editing:"Editing",ab_switch:"switch language above to edit the other version",
     bk_title:"Bookings",bk_none:"No bookings yet.",bk_del:"delete",bk_clear:"Clear all",
     ab_slots:"Availability",f_time:"Time slot",slot_pick:"Pick a date first",slot_none:"This date isn't available",slot_choose:"Choose a time",slot_full:"Fully booked for this date — please try another day.",slot_taken:"That time was just taken — please pick another.",
     av_title:"Availability",av_sub:"Every date is open by default. Just close the days you're off, and 1-hour slots fill your business hours automatically. Guests only see times that fit their package length.",
@@ -707,6 +710,9 @@ const I18N={
     hero_title:"서울에서 만나는 <em>피부과 실장 인사이더</em>.",
     hero_lede:"현직 피부과 실장이 직접 안내하는 프라이빗 영어 뷰티 데이. 맞춤 피부 분석, 솔직한 제품 추천, 엄선된 K-뷰티 쇼핑과 눈썹·헤어샵 동행까지 &mdash; 바가지 없이, 언어 장벽 없이.",
     hero_cta1:"예약하기 &rarr;",hero_cta2:"패키지 보기",
+    credk1:"1:1",credk2:"EN",credk3:"臺港",brand:"Zeneverse",fc_wa:"WhatsApp",fc_line:"LINE",fc_ig:"Instagram",
+    incn01:"01",incn02:"02",incn03:"03",incn04:"04",host_initials:"ZEN",
+    foot_copy:"&copy; 2026 Zeneverse &middot; Seoul, Korea",
     cred1:"1:1 프라이빗 &middot; 소규모, 붐비는 단체 없음",cred2:"유창한 영어, 외국인 방문객 맞춤",cred3:"대만 &middot; 홍콩 게스트를 위한 繁體中文 지원",
     pkg_kicker:"패키지",pkg_title:"내 일정에 맞는 하루를 고르세요.",
     pkg_sub:"짧은 경유든 긴 체류든, 모든 하루는 프라이빗하게 당신에게 맞춰 진행됩니다 &mdash; 정해진 단체 코스가 아니에요.",
@@ -749,7 +755,7 @@ const I18N={
     need1:"올리브영 성분 분석 쇼핑",need2:"한국 약국 뷰티 꿀조합",need3:"눈썹/속눈썹/헤어샵 매칭",need4:"퍼스널 스타일링",need_other:"기타 (직접 입력)",need_other_ph:"어떤 게 궁금하신지 적어주세요…",
     f_people_err:"이 패키지는 최대 {n}명까지 가능해요.",
     ed_title:"텍스트 수정",ed_save:"저장",ed_cancel:"취소",ed_hint:"페이지의 아무 글자나 클릭하면 수정할 수 있어요.",
-    ab_text:"글자 수정",ab_nav:"메뉴 순서",nav_order_title:"메뉴 순서",nav_order_sub:"드래그하거나 화살표로 순서를 바꾸고, 토글로 표시 여부를 정하세요.",
+    ab_text:"페이지 글자 수정",ab_nav:"메뉴 순서",nav_order_title:"메뉴 순서",nav_order_sub:"드래그하거나 화살표로 순서를 바꾸고, 토글로 표시 여부를 정하세요.",
     host_edit:"호스트 정보 수정",host_more:"더 보기",host_bio:"소개",
     f_agree:"취소 규정과 면책 조항을 읽고 동의합니다.",f_agree_err:"동의해주셔야 진행할 수 있어요.",
     f_contact_err:"연락 가능한 메신저 ID나 번호를 입력해주세요.",
@@ -757,7 +763,7 @@ const I18N={
     trip_tip:"팁: 여행 2~3일차가 가장 좋아요 — 찾은 제품을 써볼 시간이 생기거든요.",
     float_label:"문의하기",slot_loading:"시간 불러오는 중…",slot_err:"시간을 불러오지 못했어요.",admin_checking:"확인 중…",bk_loading:"불러오는 중…",bk_err:"예약을 불러오지 못했어요.",
     admin_title:"관리자 로그인",admin_sub:"패키지 수정 및 예약 확인을 위해 비밀번호를 입력하세요.",admin_pw:"비밀번호",admin_enter:"입력",admin_wrong:"비밀번호가 틀렸어요.",
-    ab_badge:"관리자 모드",ab_edit:"패키지 수정",ab_done:"변경 저장",ab_view:"예약 보기",ab_exit:"관리자 종료",ab_hint:"패키지 제목 &middot; 내용 &middot; 가격을 클릭해 수정하세요.",ab_zh:"繁中",ab_editing:"수정 중:",ab_switch:"다른 언어는 위 EN/KO 버튼으로 전환 후 수정",
+    ab_badge:"관리자 모드",ab_edit:"패키지·가격 수정",ab_done:"변경 저장",ab_view:"예약 보기",ab_exit:"관리자 종료",ab_hint:"패키지 제목 &middot; 내용 &middot; 가격을 클릭해 수정하세요.",ab_zh:"繁中",ab_editing:"수정 중:",ab_switch:"다른 언어는 위 EN/KO 버튼으로 전환 후 수정",
     bk_title:"예약 목록",bk_none:"아직 예약이 없어요.",bk_del:"삭제",bk_clear:"전체 삭제",
     ab_slots:"예약 가능 관리",f_time:"시간 슬롯",slot_pick:"먼저 날짜를 선택하세요",slot_none:"이 날짜는 예약할 수 없어요",slot_choose:"시간을 선택하세요",slot_full:"이 날짜는 예약이 마감됐어요 — 다른 날짜를 선택해주세요.",slot_taken:"방금 그 시간이 마감됐어요 — 다른 시간을 골라주세요.",
     av_title:"예약 가능 관리",av_sub:"모든 날짜가 기본으로 열려 있어요. 쉬는 날만 닫으면 되고, 영업시간에 1시간 슬롯이 자동으로 깔립니다. 고객에겐 패키지 소요시간에 맞는 시작 시간만 보여요.",
@@ -774,6 +780,7 @@ I18N.zhHant = Object.assign({}, I18N.en, {
   hero_title:"你在首爾的<em>美妝內行人</em>。",
   hero_lede:"由現職美妝保養從業者帶領的私人導覽。個人膚質諮詢、誠實的產品建議，以及嚴選的韓妝採買與沙龍陪同 — 不哄抬價格，沒有語言隔閡。",
   hero_cta1:"立即預約 &rarr;",hero_cta2:"查看方案",
+  credk1:"1:1",credk2:"EN",credk3:"臺港",brand:"Zeneverse",foot_copy:"&copy; 2026 Zeneverse &middot; Seoul, Korea",
   cred1:"一對一私人服務，不趕行程",cred2:"流利英語，為海外旅客設計",cred3:"為台灣・香港旅客提供繁體中文支援",
   pkg_kicker:"服務方案",pkg_title:"選擇最適合你行程的一天。",
   pkg_sub:"無論是短暫轉機還是長期停留，每一天都是私人專屬、依你的步調安排 — 不是固定的團體行程。",
@@ -821,7 +828,7 @@ I18N.zhHans = Object.assign({}, I18N.zhHant, {
   hero_title:"你在首尔的<em>美妆内行人</em>。",
   hero_lede:"由现职美妆护肤从业者带领的私人导览。个人肤质咨询、诚实的产品建议，以及严选的韩妆采买与沙龙陪同 — 不哄抬价格，没有语言隔阂。",
   hero_cta1:"立即预约 &rarr;",hero_cta2:"查看方案",
-  cred1:"一对一私人服务，不赶行程",cred2:"流利英语，为海外旅客设计",cred3:"为中文旅客提供中文支持",
+  credk3:"中文",cred1:"一对一私人服务，不赶行程",cred2:"流利英语，为海外旅客设计",cred3:"为中文旅客提供中文支持",
   pkg_kicker:"服务方案",pkg_title:"选择最适合你行程的一天。",
   pkg_sub:"无论是短暂转机还是长期停留，每一天都是私人专属、依你的节奏安排 — 不是固定的团体行程。",
   inc_kicker:"每次服务都包含",inc_title:"从头到尾，站在你这边的内行人。",
@@ -1593,13 +1600,19 @@ function renderPacks(){
   });
   if(editMode){
     root.querySelectorAll("[data-e]").forEach(el=>{
+      el.addEventListener("mouseup",()=>setTimeout(showToolbarIfSelection,10));
+      el.addEventListener("keyup",()=>setTimeout(showToolbarIfSelection,10));
+      el.addEventListener("keydown",(e)=>{
+        if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="b"){e.preventDefault();document.execCommand("bold");}
+        if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="i"){e.preventDefault();document.execCommand("italic");}
+      });
       el.addEventListener("blur",()=>{
         const path=el.getAttribute("data-e").split(".");
         const idx=+path[0];
         // strip the inline delete button text if present
         const clone=el.cloneNode(true);
         clone.querySelectorAll(".li-del").forEach(b=>b.remove());
-        const txt=clone.innerText.trim();
+        const txt=clone.innerHTML.trim();
         if(path[1]==="items"){PACKS[idx].items[lang][+path[2]]=txt;}
         else{PACKS[idx][path[1]][lang]=txt;}
         savePacks(PACKS);
