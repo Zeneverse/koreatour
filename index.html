@@ -355,20 +355,27 @@
   .policy-body{font-size:.9rem;line-height:1.7;color:#3c4a48;max-height:52vh;overflow-y:auto;padding-right:6px}
   .policy-body p{margin-bottom:12px}
 
-  /* ===== text editing mode ===== */
-  body.text-edit .editable-text{outline:1px dashed var(--clay);outline-offset:3px;border-radius:3px;cursor:pointer;transition:background .15s}
-  body.text-edit .editable-text:hover{background:rgba(201,111,82,.1)}
-  .te-backdrop{position:fixed;inset:0;background:rgba(26,43,43,.25);z-index:100}
-  .te-pop{position:fixed;left:50%;transform:translateX(-50%);width:min(460px,92vw);background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px;z-index:101;box-shadow:0 24px 60px -20px rgba(26,43,43,.45)}
-  .te-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-  .te-head .mono{color:var(--sage);font-size:.66rem}
-  .te-key{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--sage);background:var(--paper-2);padding:3px 8px;border-radius:20px}
-  .te-pop textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-family:inherit;font-size:.95rem;line-height:1.6;color:var(--ink);resize:vertical}
-  .te-pop textarea:focus{outline:2px solid var(--clay);border-color:transparent}
-  .te-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
-  .te-btn{border-radius:30px;padding:9px 18px;font-family:inherit;font-size:.86rem;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
-  .te-btn.ok{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-  .te-btn:hover{filter:brightness(1.06)}
+  /* ===== inline text editing ===== */
+  body.text-edit .editable-text{outline:1px dashed rgba(201,111,82,.55);outline-offset:3px;border-radius:3px;cursor:text;transition:background .15s,outline-color .15s}
+  body.text-edit .editable-text:hover{background:rgba(201,111,82,.07);outline-color:var(--clay)}
+  body.text-edit .editable-text:focus{background:rgba(201,111,82,.05);outline:2px solid var(--clay);outline-offset:3px}
+  body.text-edit [contenteditable="true"]{cursor:text}
+  body.text-edit a.editable-text{pointer-events:auto}
+
+  /* floating format toolbar */
+  .fmt-bar{position:fixed;display:none;align-items:center;gap:3px;background:var(--ink);border-radius:12px;padding:6px 8px;z-index:200;box-shadow:0 12px 32px -8px rgba(26,43,43,.55)}
+  .fmt-bar button{background:none;border:none;color:var(--paper);width:30px;height:30px;border-radius:7px;cursor:pointer;font-size:.86rem;font-family:inherit;display:grid;place-items:center;transition:background .15s}
+  .fmt-bar button:hover{background:rgba(255,255,255,.16)}
+  .fmt-bar button sup{font-size:.6em}
+  .fmt-sep{width:1px;height:18px;background:rgba(255,255,255,.22);margin:0 3px}
+  .fmt-bar .sw{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.35);padding:0}
+  .fmt-bar .sw:hover{transform:scale(1.14);background:none}
+  .fmt-bar .sw.custom{position:relative;overflow:hidden;background:conic-gradient(#c96f52,#b89355,#7d9488,#1a2b2b,#c96f52);display:inline-block;cursor:pointer}
+  .fmt-bar .sw.custom input{position:absolute;inset:-6px;opacity:0;cursor:pointer;width:200%;height:200%}
+
+  /* saved toast */
+  .saved-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:30px;font-size:.82rem;z-index:210;opacity:0;pointer-events:none;transition:.25s;font-family:'Space Mono',monospace;letter-spacing:.06em}
+  .saved-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
   /* ===== nav order ===== */
   .nav-order{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
@@ -1069,6 +1076,7 @@ function renderReviews(){
     </div>`).join("");
 }
 function openReviewForm(){
+  if(textEditMode)return;
   const t=I18N[lang];
   document.getElementById("modalRoot").innerHTML=`
     <div class="modal-bg" onclick="if(event.target===this)closeModal()">
@@ -1112,46 +1120,131 @@ function applyCopy(){
     if(c[k]!==undefined)el.innerHTML=c[k];
   });
 }
+
+/* ---- inline editing: click text, type straight into the page ---- */
 function toggleTextEdit(){
   textEditMode=!textEditMode;
   document.body.classList.toggle("text-edit",textEditMode);
-  document.querySelectorAll("[data-i18n]").forEach(el=>{
-    el.classList.toggle("editable-text",textEditMode);
-    if(textEditMode)el.onclick=(e)=>{e.preventDefault();e.stopPropagation();openTextEditor(el);};
-    else el.onclick=null;
-  });
+  document.querySelectorAll("[data-i18n]").forEach(el=>enableInline(el,textEditMode));
+  if(!textEditMode)hideToolbar();
   renderAdminBar();
 }
-function openTextEditor(el){
-  const t=I18N[lang],key=el.getAttribute("data-i18n");
-  const cur = copyFor(lang,key) !== undefined ? copyFor(lang,key) : (I18N[lang][key]||el.innerHTML);
-  const rect=el.getBoundingClientRect();
-  const top=Math.min(window.innerHeight-260, Math.max(70, rect.bottom+8));
-  document.getElementById("modalRoot").innerHTML=`
-    <div class="te-backdrop" onclick="closeModal()"></div>
-    <div class="te-pop" style="top:${top}px">
-      <div class="te-head"><span class="mono">${t.ed_title}</span>
-        <span class="te-key">${key}</span></div>
-      <textarea id="te_val" rows="4">${cur.replace(/</g,"&lt;")}</textarea>
-      <div class="te-actions">
-        <button class="te-btn ghost" onclick="closeModal()">${t.ed_cancel}</button>
-        <button class="te-btn ok" onclick="saveText('${key}')">${t.ed_save}</button>
-      </div>
-    </div>`;
-  setTimeout(()=>document.getElementById("te_val")?.focus(),50);
+function enableInline(el,on){
+  if(on){
+    el.classList.add("editable-text");
+    el.setAttribute("contenteditable","true");
+    el.setAttribute("spellcheck","false");
+    if(!el._inlineWired){
+      el._inlineWired=true;
+      el.addEventListener("blur",()=>commitText(el));
+      el.addEventListener("keydown",(e)=>{
+        if(e.key==="Escape"){e.preventDefault();el.blur();}
+        if(e.key==="Enter"&&!e.shiftKey&&el.tagName!=="P"&&el.tagName!=="DIV"){e.preventDefault();el.blur();}
+        if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="b"){e.preventDefault();fmt("bold");}
+        if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="i"){e.preventDefault();fmt("italic");}
+        if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="u"){e.preventDefault();fmt("underline");}
+      });
+      el.addEventListener("mouseup",()=>setTimeout(showToolbarIfSelection,10));
+      el.addEventListener("keyup",()=>setTimeout(showToolbarIfSelection,10));
+      el.addEventListener("click",(e)=>e.stopPropagation());
+    }
+  }else{
+    el.classList.remove("editable-text");
+    el.removeAttribute("contenteditable");
+  }
 }
-function saveText(key){
-  const val=document.getElementById("te_val").value;
+let saveTimer=null;
+function commitText(el){
+  const key=el.getAttribute("data-i18n");
+  const val=el.innerHTML.trim();
   const c=structuredClone(loadCopy());
   if(!c[lang])c[lang]={};
+  if(c[lang][key]===val)return;
   c[lang][key]=val;
   STATE.copy=c;
-  saveAll();
-  document.querySelectorAll(`[data-i18n="${key}"]`).forEach(e=>e.innerHTML=val);
-  closeModal();
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{saveAll();flashSaved();},400);
+}
+function flashSaved(){
+  let t=document.getElementById("savedToast");
+  if(!t){t=document.createElement("div");t.id="savedToast";t.className="saved-toast";document.body.appendChild(t);}
+  t.textContent=lang==="ko"?"저장됨":"Saved";
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),1200);
 }
 
-/* ============ NAV ORDER (drag / arrows / show-hide) ============ */
+/* ---- floating format toolbar ---- */
+function showToolbarIfSelection(){
+  const sel=window.getSelection();
+  if(!sel||sel.isCollapsed||!sel.rangeCount){hideToolbar();return;}
+  const anchor=sel.anchorNode&&sel.anchorNode.parentElement;
+  if(!anchor||!anchor.closest("[contenteditable='true']")){hideToolbar();return;}
+  const r=sel.getRangeAt(0).getBoundingClientRect();
+  const tb=ensureToolbar();
+  tb.style.display="flex";
+  const top=Math.max(8,r.top-tb.offsetHeight-10);
+  let left=r.left+r.width/2-tb.offsetWidth/2;
+  left=Math.max(8,Math.min(left,window.innerWidth-tb.offsetWidth-8));
+  tb.style.top=top+"px";tb.style.left=left+"px";
+}
+function hideToolbar(){const tb=document.getElementById("fmtBar");if(tb)tb.style.display="none";}
+function ensureToolbar(){
+  let tb=document.getElementById("fmtBar");
+  if(tb)return tb;
+  tb=document.createElement("div");
+  tb.id="fmtBar";tb.className="fmt-bar";
+  tb.innerHTML=`
+    <button onclick="fmt('bold')" title="Bold" style="font-weight:800">B</button>
+    <button onclick="fmt('italic')" title="Italic" style="font-style:italic;font-family:Georgia,serif">I</button>
+    <button onclick="fmt('underline')" title="Underline" style="text-decoration:underline">U</button>
+    <span class="fmt-sep"></span>
+    <button class="sw" style="background:#1a2b2b" onclick="fmtColor('#1a2b2b')" title="Ink"></button>
+    <button class="sw" style="background:#c96f52" onclick="fmtColor('#c96f52')" title="Clay"></button>
+    <button class="sw" style="background:#b89355" onclick="fmtColor('#b89355')" title="Gold"></button>
+    <button class="sw" style="background:#7d9488" onclick="fmtColor('#7d9488')" title="Sage"></button>
+    <label class="sw custom" title="Custom colour"><input type="color" oninput="fmtColor(this.value)"></label>
+    <span class="fmt-sep"></span>
+    <button onclick="fmtSize(1)" title="Bigger">A<sup>+</sup></button>
+    <button onclick="fmtSize(-1)" title="Smaller">A<sup>-</sup></button>
+    <span class="fmt-sep"></span>
+    <button onclick="fmtClear()" title="Clear formatting">✕</button>`;
+  document.body.appendChild(tb);
+  tb.addEventListener("mousedown",e=>e.preventDefault()); // keep selection
+  return tb;
+}
+function activeEditable(){
+  const sel=window.getSelection();
+  const n=sel&&sel.anchorNode;
+  return n?(n.nodeType===1?n:n.parentElement)?.closest("[contenteditable='true']"):null;
+}
+function fmt(cmd){
+  document.execCommand(cmd,false,null);
+  const el=activeEditable();if(el)commitText(el);
+  showToolbarIfSelection();
+}
+function fmtColor(c){
+  document.execCommand("styleWithCSS",false,true);
+  document.execCommand("foreColor",false,c);
+  const el=activeEditable();if(el)commitText(el);
+}
+function fmtSize(dir){
+  const sel=window.getSelection();if(!sel||sel.isCollapsed)return;
+  const el=activeEditable();if(!el)return;
+  const span=document.createElement("span");
+  const base=parseFloat(getComputedStyle(el).fontSize)||16;
+  span.style.fontSize=(base+dir*3)+"px";
+  try{ sel.getRangeAt(0).surroundContents(span); }catch(e){ document.execCommand("fontSize",false,dir>0?"5":"2"); }
+  commitText(el);
+}
+function fmtClear(){
+  document.execCommand("removeFormat",false,null);
+  const el=activeEditable();if(el)commitText(el);
+}
+document.addEventListener("mousedown",(e)=>{
+  if(!e.target.closest(".fmt-bar")&&!e.target.closest("[contenteditable='true']"))hideToolbar();
+});
+
+/* ============ NAV ORDER/* ============ NAV ORDER (drag / arrows / show-hide) ============ */
 const DEFAULT_NAV=[
  {key:"nav_packages",target:"packages",on:true},
  {key:"nav_host",target:"host",on:true},
@@ -1171,7 +1264,7 @@ function renderNav(){
     return `<a onclick="${act}" data-i18n="${n.key}">${label}</a>`;
   }).join("")+`<a onclick="openBooking()" class="nav-cta" data-i18n="nav_book">${(loadCopy()[lang]&&loadCopy()[lang].nav_book)||I18N[lang].nav_book}</a>`;
   if(textEditMode){
-    box.querySelectorAll("[data-i18n]").forEach(el=>{el.classList.add("editable-text");el.onclick=(e)=>{e.preventDefault();e.stopPropagation();openTextEditor(el);};});
+    box.querySelectorAll("[data-i18n]").forEach(el=>enableInline(el,true));
   }
 }
 function openNavOrder(){
@@ -1223,6 +1316,7 @@ function toggleNav(i){
 
 /* ============ HOST BIO POPUP ============ */
 function openHostBio(){
+  if(textEditMode)return;
   const t=I18N[lang],h=STATE.host||DEFAULT_HOST;
   const bio = tx(h.bio) || tx(h.phil);
   document.getElementById("modalRoot").innerHTML=`
@@ -1553,12 +1647,13 @@ function priceHTML(p){
     <span class="pr-usd">≈ $${usd}</span>
     ${hasDiscount?`<span class="pr-tag">${launchLabel}</span>`:""}`;
 }
-function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});}
+function scrollToId(id){if(textEditMode)return;const e=document.getElementById(id);if(e)e.scrollIntoView({behavior:"smooth"});}
 const nav=document.getElementById("nav");
 addEventListener("scroll",()=>nav.classList.toggle("scrolled",scrollY>20));
 
 /* ------------- booking modal ------------- */
 function openBooking(preselect){
+  if(textEditMode)return;
   const t=I18N[lang];
   const opts=PACKS.map(p=>`<option value="${p.id}"${preselect===p.id?" selected":""}>${p.title[lang]} · ${p.dur_h}${lang==="ko"?"시간":"h"}</option>`).join("");
   document.getElementById("modalRoot").innerHTML=`
@@ -1710,6 +1805,7 @@ function copyCode(){
   const b=document.querySelector(".code-copy");if(b){b.textContent=I18N[lang].code_copied;}
 }
 function openLookup(prefill){
+  if(textEditMode)return;
   const t=I18N[lang];
   document.getElementById("modalRoot").innerHTML=`
     <div class="modal-bg" onclick="if(event.target===this)closeModal()">
