@@ -1162,7 +1162,9 @@ const DEFAULT_NAV=[
 function loadNav(){return (STATE.nav&&STATE.nav.length)?STATE.nav:DEFAULT_NAV;}
 function renderNav(){
   const box=document.getElementById("navLinks");if(!box)return;
-  const items=loadNav().filter(n=>n.on).filter(n=>n.target==="__lookup"||featOn(n.target)!==false);
+  // "packages" and the lookup link are always available; others follow their feature flag
+  const ALWAYS=["packages","__lookup","included"];
+  const items=loadNav().filter(n=>n.on).filter(n=>ALWAYS.includes(n.target)||featOn(n.target));
   box.innerHTML=items.map(n=>{
     const label=(loadCopy()[lang]&&loadCopy()[lang][n.key])||I18N[lang][n.key]||n.key;
     const act = n.target==="__lookup" ? "openLookup()" : `scrollToId('${n.target}')`;
