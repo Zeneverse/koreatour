@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zeneverse — Korean Beauty Tours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&family=Space+Mono&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1a2b2b;--paper:#f6f4ef;--paper-2:#efece4;--clay:#c96f52;
+    --sage:#7d9488;--mist:#dfe4e0;--line:#cfcabf;--gold:#b89355;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:'Instrument Sans','Noto Sans KR',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body.lang-ko{font-family:'Noto Sans KR','Instrument Sans',sans-serif}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+  .mono{font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.14em;font-size:.7rem}
+  a{color:inherit}
+  [hidden]{display:none !important}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(246,244,239,.82);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+  nav.scrolled{border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+  .logo{font-family:'Fraunces',serif;font-weight:600;font-size:1.35rem;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;flex-shrink:0}
+  .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--clay);display:inline-block}
+  .nav-links{display:flex;gap:26px;align-items:center}
+  .nav-links a{text-decoration:none;font-size:.92rem;opacity:.75;transition:opacity .2s;cursor:pointer}
+  .nav-links a:hover{opacity:1}
+  .nav-cta{border:1px solid var(--ink);border-radius:40px;padding:9px 18px !important;opacity:1 !important;font-weight:500;transition:background .2s,color .2s}
+  .nav-cta:hover{background:var(--ink);color:var(--paper)}
+  .lang-toggle{display:flex;border:1px solid var(--line);border-radius:40px;overflow:hidden;flex-shrink:0}
+  .lang-toggle button{border:none;background:transparent;padding:7px 13px;font-family:'Space Mono',monospace;font-size:.72rem;cursor:pointer;color:var(--ink);opacity:.5;transition:.2s}
+  .lang-toggle button.on{background:var(--ink);color:var(--paper);opacity:1}
+  .burger{display:none;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--ink)}
+
+  header{padding:150px 0 96px}
+  .eyebrow{color:var(--clay);margin-bottom:26px;display:flex;align-items:center;gap:12px}
+  .eyebrow::before{content:"";width:34px;height:1px;background:var(--clay)}
+  h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(2.5rem,6vw,5rem);line-height:1.02;letter-spacing:-.02em;max-width:16ch}
+  body.lang-ko h1{font-family:'Noto Sans KR',sans-serif;font-weight:600;letter-spacing:-.03em}
+  h1 em{font-style:italic;color:var(--clay)}
+  body.lang-ko h1 em{font-style:normal}
+  .lede{margin-top:30px;font-size:1.18rem;max-width:50ch;color:#3c4a48}
+  .hero-actions{margin-top:40px;display:flex;gap:16px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:15px 28px;border-radius:44px;text-decoration:none;font-weight:600;font-size:.98rem;transition:transform .2s,box-shadow .2s;cursor:pointer;border:none;font-family:inherit}
+  .btn-primary{background:var(--ink);color:var(--paper)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(26,43,43,.22)}
+  .btn-ghost{border:1px solid var(--line);color:var(--ink);background:transparent}
+  .btn-ghost:hover{border-color:var(--ink)}
+  .credibility{margin-top:56px;display:flex;gap:36px;flex-wrap:wrap;padding-top:26px;border-top:1px solid var(--line)}
+  .cred-item{max-width:22ch}
+  .cred-item .k{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:600;line-height:1}
+  .cred-item .v{font-size:.85rem;color:#54615f;margin-top:6px}
+
+  section{padding:96px 0;position:relative}
+  .sec-head{max-width:54ch;margin-bottom:56px}
+  .sec-head .mono{color:var(--sage);margin-bottom:18px;display:block}
+  .sec-head h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(2rem,4vw,3rem);line-height:1.08;letter-spacing:-.015em}
+  body.lang-ko .sec-head h2,body.lang-ko h3,body.lang-ko .pack h3,body.lang-ko .signup h2{font-family:'Noto Sans KR',sans-serif;font-weight:600;letter-spacing:-.02em}
+  .sec-head p{margin-top:18px;font-size:1.1rem;color:#4a5654}
+
+  .packs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .pack{border:1px solid var(--line);border-radius:22px;padding:32px;background:#fff;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s}
+  .pack:hover{transform:translateY(-5px);box-shadow:0 26px 60px -34px rgba(26,43,43,.4)}
+  .pack.feature{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .pack .kicker{color:var(--sage)}
+  .pack.feature .kicker{color:var(--gold)}
+  .pack h3{font-family:'Fraunces',serif;font-weight:600;font-size:1.5rem;margin:14px 0 6px}
+  .pack .dur{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.08em;color:var(--clay);text-transform:uppercase}
+  .pack.feature .dur{color:var(--gold)}
+  .pack .desc{margin-top:16px;font-size:.95rem;color:#4a5654}
+  .pack.feature .desc{color:#b9c4c0}
+  .pack ul{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:11px;flex-grow:1}
+  .pack li{font-size:.92rem;padding-left:24px;position:relative;color:#3c4a48}
+  .pack.feature li{color:#d5ddd9}
+  .pack li::before{content:"";position:absolute;left:0;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--clay)}
+  .pack .foot{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+  .pack.feature .foot{border-top-color:#33504f}
+  .pack .price{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px}
+  .pr-enquire{color:var(--sage);font-style:italic;font-weight:500;font-size:1rem}
+  .pr-was{font-size:.95rem;color:var(--sage);text-decoration:line-through;font-weight:400}
+  .pack.feature .pr-was{color:#9fb0ab}
+  .pr-now{font-size:1.35rem;color:var(--ink)}
+  .pack.feature .pr-now{color:var(--paper)}
+  .pr-usd{font-family:'Space Mono',monospace;font-size:.72rem;font-weight:400;color:var(--sage);letter-spacing:.02em}
+  .pr-tag{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;background:var(--clay);color:#fff;padding:3px 8px;border-radius:20px;font-weight:400;align-self:center}
+  .pt-hint{font-size:.68rem !important;color:var(--sage);opacity:.85}
+  /* list item + addon editing */
+  .pack li{position:relative}
+  .li-del{background:none;border:none;color:var(--clay);cursor:pointer;font-size:1rem;line-height:1;padding:0 4px;opacity:.7;margin-left:6px}
+  .li-del:hover{opacity:1}
+  .li-add{background:none;border:1px dashed var(--line);color:var(--sage);border-radius:20px;padding:6px 14px;font-family:inherit;font-size:.8rem;cursor:pointer;margin-top:10px;transition:.2s}
+  .li-add:hover{border-color:var(--clay);color:var(--clay)}
+  .pack.feature .li-add{border-color:#3a4b4b;color:#9fb0ab}
+  .addons{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line)}
+  .pack.feature .addons{border-top-color:#33504f}
+  .addons-label{color:var(--sage);margin-bottom:10px;display:block}
+  .pack.feature .addons-label{color:var(--gold)}
+  .addon-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:.88rem}
+  .addon-name{flex:1;color:#3c4a48}
+  .pack.feature .addon-name{color:#d5ddd9}
+  .addon-price-view{font-family:'Space Mono',monospace;font-size:.78rem;color:var(--clay);white-space:nowrap}
+  .pack.feature .addon-price-view{color:var(--gold)}
+  .addon-price{width:92px;padding:5px 8px;border-radius:8px;border:1px solid var(--line);font-family:'Space Mono',monospace;font-size:.76rem;text-align:right;color:var(--ink);background:#fff}
+  .sep-note{margin-top:14px;font-size:.76rem;line-height:1.5;color:var(--sage);background:var(--paper-2);border-radius:10px;padding:9px 12px}
+  .pack.feature .sep-note{background:#22403f;color:#9fb0ab}
+  /* addon checkboxes in booking form */
+  .addon-check{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:7px;cursor:pointer;font-size:.9rem;font-weight:400}
+  .addon-check:hover{border-color:var(--clay)}
+  .addon-check input{width:auto;margin:0}
+  .addon-check span{flex:1}
+  .addon-check b{font-family:'Space Mono',monospace;font-size:.78rem;color:var(--clay);font-weight:400}
+  .pack .book-btn{margin-top:14px;width:100%;padding:12px;border-radius:40px;border:1px solid var(--clay);background:var(--clay);color:#fff;font-family:inherit;font-weight:600;cursor:pointer;transition:.2s;font-size:.92rem}
+  .pack.feature .book-btn{background:var(--gold);border-color:var(--gold)}
+  .pack .book-btn:hover{filter:brightness(1.07)}
+  .pack .tag-soon{position:absolute;top:20px;right:-36px;transform:rotate(45deg);background:var(--clay);color:#fff;font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.1em;padding:5px 42px}
+  .edit-field{outline:2px dashed var(--clay);outline-offset:3px;border-radius:4px;cursor:text}
+
+  .included{background:var(--paper-2)}
+  .inc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .inc .n{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--clay);letter-spacing:.1em}
+  .inc h4{font-family:'Fraunces',serif;font-weight:600;font-size:1.12rem;margin:10px 0 6px}
+  body.lang-ko .inc h4{font-family:'Noto Sans KR',sans-serif;font-weight:600}
+  .inc p{font-size:.9rem;color:#54615f}
+
+  .vid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .vid{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:9/16;position:relative}
+  .vid iframe{width:100%;height:100%;border:0;display:block}
+  .vid-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:linear-gradient(160deg,#22403f,#1a2b2b);color:var(--paper);text-align:center;padding:20px}
+  .vid-ph .play{width:56px;height:56px;border-radius:50%;background:var(--clay);display:grid;place-items:center}
+  .vid-ph .play::after{content:"";border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+  .vid-ph small{font-family:'Space Mono',monospace;font-size:.66rem;letter-spacing:.1em;color:#9fb0ab;text-transform:uppercase}
+
+  .signup{background:var(--ink);color:var(--paper);border-radius:28px;padding:60px 48px;text-align:center;margin-bottom:30px}
+  .signup h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(1.9rem,4vw,2.6rem);letter-spacing:-.015em;max-width:24ch;margin:0 auto}
+  .signup p{color:#b9c4c0;margin-top:16px;max-width:48ch;margin-left:auto;margin-right:auto}
+
+  footer{padding:44px 0 56px;border-top:1px solid var(--line)}
+  .foot-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a{text-decoration:none;font-size:.9rem;opacity:.7;cursor:pointer}
+  .foot-links a:hover{opacity:1}
+  .foot-copy{font-size:.82rem;color:#54615f}
+  .admin-dot{cursor:pointer;opacity:.35;font-size:.82rem}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* MODAL */
+  .modal-bg{position:fixed;inset:0;background:rgba(26,43,43,.55);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+  .modal{background:var(--paper);border-radius:22px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:38px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+  .modal h3{font-family:'Fraunces',serif;font-weight:600;font-size:1.6rem;margin-bottom:6px}
+  body.lang-ko .modal h3{font-family:'Noto Sans KR',sans-serif}
+  .modal .sub{color:#54615f;font-size:.92rem;margin-bottom:24px}
+  .modal .close{position:absolute;top:18px;right:20px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--sage);line-height:1}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:.82rem;font-weight:600;margin-bottom:6px;color:#3c4a48}
+  .field input,.field select,.field textarea{width:100%;padding:12px 15px;border-radius:12px;border:1px solid var(--line);background:#fff;font-family:inherit;font-size:.95rem;color:var(--ink)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--clay);outline-offset:0;border-color:transparent}
+  .modal .submit{width:100%;padding:14px;border-radius:44px;border:none;background:var(--clay);color:#fff;font-family:inherit;font-weight:600;font-size:1rem;cursor:pointer;margin-top:6px;transition:transform .2s}
+  .modal .submit:hover{transform:translateY(-2px)}
+  .modal .msg{margin-top:14px;font-size:.85rem;text-align:center;min-height:1.2em}
+
+  /* admin bar */
+  .admin-bar{position:fixed;bottom:0;left:0;right:0;background:var(--ink);color:var(--paper);z-index:90;padding:14px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 -10px 30px rgba(0,0,0,.2)}
+  .admin-bar .badge{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--gold);text-transform:uppercase}
+  .admin-bar button{border:1px solid #3a4b4b;background:#22403f;color:var(--paper);border-radius:40px;padding:8px 16px;font-family:inherit;font-size:.85rem;cursor:pointer;transition:.2s}
+  .admin-bar button:hover{background:#2c4f4e}
+  .admin-bar button.warn{border-color:var(--clay);color:#e6a58f}
+  .admin-bar .spacer{flex:1}
+  .admin-bar .hint{font-size:.78rem;color:#9fb0ab}
+  .admin-bar .edit-lang{font-size:.78rem;color:#9fb0ab}
+  .admin-bar .edit-lang b{color:var(--gold)}
+  .admin-bar button.on{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600}
+
+  /* bookings table */
+  .bk-list{margin-top:10px;display:flex;flex-direction:column;gap:10px}
+  .bk-item{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff;font-size:.88rem}
+  .bk-item .top{display:flex;justify-content:space-between;gap:10px;margin-bottom:5px}
+  .bk-item .name{font-weight:600}
+  .bk-item .pk{color:var(--clay);font-family:'Space Mono',monospace;font-size:.72rem;text-transform:uppercase}
+  .bk-item .meta{color:#54615f;font-size:.82rem}
+  .bk-empty{color:#54615f;font-size:.9rem;text-align:center;padding:20px}
+  .bk-del{background:none;border:none;color:var(--clay);cursor:pointer;font-size:.78rem;text-decoration:underline}
+
+  /* slot picker in booking form */
+  .slot-wrap{display:flex;flex-wrap:wrap;gap:8px}
+  .slot-hint{font-size:.85rem;color:var(--sage);padding:4px 0}
+  .slot-btn{border:1px solid var(--line);background:#fff;border-radius:40px;padding:8px 16px;font-family:'Space Mono',monospace;font-size:.82rem;cursor:pointer;transition:.15s;color:var(--ink)}
+  .slot-btn:hover{border-color:var(--clay)}
+  .slot-btn.on{background:var(--clay);border-color:var(--clay);color:#fff}
+  .dur-hint{font-weight:400;color:var(--sage);font-size:.78rem;font-family:'Space Mono',monospace}
+  .pack-timing{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+  .pack-timing label{font-size:.8rem;display:flex;align-items:center;gap:6px;color:inherit}
+  .pack-timing input{width:56px;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:#fff;font-family:'Space Mono',monospace;font-size:.8rem;text-align:center;color:var(--ink)}
+  /* availability manager */
+  .av-hours-box{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:16px}
+  .av-hours-box .mono{color:var(--sage);display:block;margin-bottom:9px}
+  .av-hours-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:.85rem}
+  .av-hours-row input{width:56px;padding:8px;border-radius:10px;border:1px solid var(--line);background:#fff;font-family:inherit;text-align:center;color:var(--ink)}
+  .av-hours-row button{padding:8px 16px;border-radius:40px;border:none;background:var(--ink);color:var(--paper);font-family:inherit;cursor:pointer;margin-left:4px}
+  .av-add-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .av-add-row input{flex:1;min-width:140px;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:#fff;font-family:inherit;font-size:.9rem;color:var(--ink)}
+  .av-add-row button{padding:11px 20px;border-radius:40px;border:none;background:var(--clay);color:#fff;font-family:inherit;font-weight:600;cursor:pointer;font-size:.88rem}
+  .av-open-label{color:var(--sage);margin-bottom:12px;display:block;font-size:.68rem}
+  .av-legend{text-transform:none;letter-spacing:0}
+  .av-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin:0 3px 0 8px;vertical-align:middle}
+  .lg-on{background:#fff;border:1px solid var(--clay)}.lg-off{background:var(--mist)}.lg-bk{background:var(--sage)}
+  .av-list{display:flex;flex-direction:column;gap:12px}
+  .av-day{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff}
+  .av-day-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:.92rem;flex-wrap:wrap;gap:6px}
+  .av-day-hrs{font-family:'Space Mono',monospace;font-size:.76rem;color:var(--sage);display:flex;align-items:center;gap:8px}
+  .av-day-hrs em{font-style:normal;color:var(--clay)}
+  .av-mini{background:none;border:none;cursor:pointer;font-size:.9rem;padding:0;opacity:.6}
+  .av-mini:hover{opacity:1}
+  .av-hrs{display:flex;flex-wrap:wrap;gap:6px}
+  .av-hr{border:1px solid var(--clay);background:#fff;color:var(--ink);border-radius:8px;padding:6px 10px;font-family:'Space Mono',monospace;font-size:.74rem;cursor:pointer;transition:.12s}
+  .av-hr:hover{background:var(--clay);color:#fff}
+  .av-hr.off{background:var(--mist);border-color:var(--mist);color:#9aa39e;text-decoration:line-through}
+  .av-hr.booked{background:var(--sage);border-color:var(--sage);color:#fff;cursor:not-allowed}
+  .av-section-label{color:var(--sage);display:block;margin:18px 0 10px;font-size:.68rem}
+  .av-hint2{text-transform:none;letter-spacing:0;color:var(--sage);opacity:.8}
+  .av-closed-list{display:flex;flex-direction:column;gap:8px}
+  .av-closed-item{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:9px 13px;background:#fff;font-size:.9rem}
+  .av-closed-tag{font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;background:var(--mist);color:#6b746f;padding:3px 9px;border-radius:20px}
+  .av-closed-item .bk-del{margin-left:auto}
+
+  @media (max-width:900px){
+    .packs{grid-template-columns:1fr}.inc-grid{grid-template-columns:repeat(2,1fr)}
+    .vid-grid{grid-template-columns:1fr;max-width:360px;margin:0 auto}
+    .nav-links{display:none}.burger{display:block}
+  }
+  @media (max-width:520px){.inc-grid{grid-template-columns:1fr}.signup{padding:40px 22px}.credibility{gap:24px}.modal{padding:28px 22px}}
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body class="lang-en">
+
+<nav id="nav">
+  <div class="wrap nav-in">
+    <div class="logo"><span class="dot"></span>Zeneverse</div>
+    <div class="nav-links">
+      <a onclick="scrollToId('packages')" data-i18n="nav_packages">Packages</a>
+      <a onclick="scrollToId('included')" data-i18n="nav_included">What's included</a>
+      <a onclick="scrollToId('watch')" data-i18n="nav_watch">Watch</a>
+      <a onclick="openBooking()" class="nav-cta" data-i18n="nav_book">Book now</a>
+    </div>
+    <div class="lang-toggle">
+      <button id="lang-en" class="on" onclick="setLang('en')">EN</button>
+      <button id="lang-ko" onclick="setLang('ko')">KO</button>
+    </div>
+    <button class="burger" aria-label="menu" onclick="document.querySelector('.nav-links').style.display='flex'">&#9776;</button>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow mono" data-i18n="hero_eyebrow">Korean beauty tours &middot; guided in English</div>
+    <h1 data-i18n="hero_title">Your own <em>skin-clinic insider</em> in Seoul.</h1>
+    <p class="lede" data-i18n="hero_lede">Private, English-guided beauty days led by a working dermatology-clinic manager. Personal skin advice, honest product picks, and curated K-beauty shopping &amp; salon visits &mdash; no markup games, no language barrier.</p>
+    <div class="hero-actions">
+      <a onclick="openBooking()" class="btn btn-primary" data-i18n="hero_cta1">Book a day &rarr;</a>
+      <a onclick="scrollToId('packages')" class="btn btn-ghost" data-i18n="hero_cta2">See the packages</a>
+    </div>
+    <div class="credibility">
+      <div class="cred-item"><div class="k">1:1</div><div class="v" data-i18n="cred1">Private &amp; small-group, never a rushed crowd</div></div>
+      <div class="cred-item"><div class="k">EN</div><div class="v" data-i18n="cred2">Fluent English, built for overseas visitors</div></div>
+      <div class="cred-item" id="credZh"><div class="k">&#33274;&#28207;</div><div class="v" data-i18n="cred3">&#32321;&#39636;&#20013;&#25991; support for Taiwan &amp; Hong Kong guests</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="packages">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono" data-i18n="pkg_kicker">The packages</span>
+      <h2 data-i18n="pkg_title">Pick the day that fits your trip.</h2>
+      <p data-i18n="pkg_sub">Whether you're on a short layover or staying a while, each day is private and paced around you &mdash; not a fixed bus route.</p>
+    </div>
+    <div class="packs" id="packs"></div>
+  </div>
+</section>
+
+<section id="included" class="included">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono" data-i18n="inc_kicker">What every day includes</span>
+      <h2 data-i18n="inc_title">An insider on your side, start to finish.</h2>
+    </div>
+    <div class="inc-grid">
+      <div class="inc reveal"><div class="n">01</div><h4 data-i18n="inc1_t">Real diagnosis</h4><p data-i18n="inc1_d">A proper skin read from someone who works with patients every day &mdash; not a sales pitch.</p></div>
+      <div class="inc reveal"><div class="n">02</div><h4 data-i18n="inc2_t">Honest guidance</h4><p data-i18n="inc2_d">What's worth it, what to skip, and what products actually suit your skin.</p></div>
+      <div class="inc reveal"><div class="n">03</div><h4 data-i18n="inc3_t">Vetted partners</h4><p data-i18n="inc3_d">Trusted brow &amp; lash, hair salons and stores &mdash; matched to you, no markup games.</p></div>
+      <div class="inc reveal"><div class="n">04</div><h4 data-i18n="inc4_t">English, all day</h4><p data-i18n="inc4_d">No translation stress. Every step explained clearly, at your pace.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="watch">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono" data-i18n="watch_kicker">See it for yourself</span>
+      <h2 data-i18n="watch_title">A look at the days, on video.</h2>
+      <p data-i18n="watch_sub">The easiest way to get a feel for how a Zeneverse day works before you book.</p>
+    </div>
+    <div class="vid-grid">
+      <div class="vid reveal"><div class="vid-ph"><div class="play"></div><small data-i18n="vid_soon">Video 1 &middot; coming soon</small></div>
+        <!-- <iframe src="https://www.youtube.com/embed/VIDEO_ID_1" allowfullscreen loading="lazy"></iframe> --></div>
+      <div class="vid reveal"><div class="vid-ph"><div class="play"></div><small data-i18n="vid_soon2">Video 2 &middot; coming soon</small></div>
+        <!-- <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" allowfullscreen loading="lazy"></iframe> --></div>
+      <div class="vid reveal"><div class="vid-ph"><div class="play"></div><small data-i18n="vid_soon3">Video 3 &middot; coming soon</small></div>
+        <!-- <iframe src="https://www.youtube.com/embed/VIDEO_ID_3" allowfullscreen loading="lazy"></iframe> --></div>
+    </div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="wrap">
+    <div class="signup reveal">
+      <h2 data-i18n="join_title">Tell me your dates &mdash; I'll hold a spot.</h2>
+      <p data-i18n="join_sub">Days are private and limited, so they book out. Send a request and I'll be in touch about availability.</p>
+      <div class="hero-actions" style="justify-content:center">
+        <a onclick="openBooking()" class="btn btn-primary" style="background:var(--clay)" data-i18n="join_cta">Request a booking &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="logo"><span class="dot"></span>Zeneverse</div>
+    <div class="foot-links">
+      <a onclick="scrollToId('packages')" data-i18n="nav_packages">Packages</a>
+      <a onclick="scrollToId('watch')" data-i18n="nav_watch">Watch</a>
+      <a onclick="openBooking()" data-i18n="nav_book">Book now</a>
+      <a class="admin-dot" onclick="openAdminLogin()">&middot; admin</a>
+    </div>
+    <div class="foot-copy">&copy; 2026 Zeneverse &middot; Seoul, Korea</div>
+  </div>
+</footer>
+
+<div id="modalRoot"></div>
+<div id="adminBar"></div>
+
+<script>
+/* ---------------- i18n ---------------- */
+const I18N={
+  en:{
+    nav_packages:"Packages",nav_included:"What's included",nav_watch:"Watch",nav_book:"Book now",
+    hero_eyebrow:"Korean beauty tours &middot; guided in English",
+    hero_title:"Your own <em>skin-clinic insider</em> in Seoul.",
+    hero_lede:"Private, English-guided beauty days led by a working dermatology-clinic manager. Personal skin advice, honest product picks, and curated K-beauty shopping &amp; salon visits &mdash; no markup games, no language barrier.",
+    hero_cta1:"Book a day &rarr;",hero_cta2:"See the packages",
+    cred1:"Private &amp; small-group, never a rushed crowd",cred2:"Fluent English, built for overseas visitors",cred3:"&#32321;&#39636;&#20013;&#25991; support for Taiwan &amp; Hong Kong guests",
+    pkg_kicker:"The packages",pkg_title:"Pick the day that fits your trip.",
+    pkg_sub:"Whether you're on a short layover or staying a while, each day is private and paced around you &mdash; not a fixed bus route.",
+    inc_kicker:"What every day includes",inc_title:"An insider on your side, start to finish.",
+    inc1_t:"Real diagnosis",inc1_d:"A proper skin read from someone who works with patients every day &mdash; not a sales pitch.",
+    inc2_t:"Honest guidance",inc2_d:"What's worth it, what to skip, and what products actually suit your skin.",
+    inc3_t:"Vetted partners",inc3_d:"Trusted brow &amp; lash, hair salons and stores &mdash; matched to you, no markup games.",
+    inc4_t:"English, all day",inc4_d:"No translation stress. Every step explained clearly, at your pace.",inc4_d_zh:"No translation stress. Every step explained clearly, with &#32321;&#39636;&#20013;&#25991; on request.",
+    watch_kicker:"See it for yourself",watch_title:"A look at the days, on video.",watch_sub:"The easiest way to get a feel for how a Zeneverse day works before you book.",
+    vid_soon:"Video 1 &middot; coming soon",vid_soon2:"Video 2 &middot; coming soon",vid_soon3:"Video 3 &middot; coming soon",
+    join_title:"Tell me your dates &mdash; I'll hold a spot.",join_sub:"Days are private and limited, so they book out. Send a request and I'll be in touch about availability.",join_cta:"Request a booking &rarr;",
+    book_title:"Request a booking",book_sub:"Send your details and I'll confirm availability by email.",
+    f_name:"Name",f_email:"Email",f_pkg:"Package",f_addons:"Add-ons (optional)",f_date:"Preferred date",f_people:"Number of guests",f_note:"Anything I should know? (optional)",
+    book_submit:"Send request",book_ok:"Request received. I'll be in touch soon!",book_err:"Please fill in name, email and date.",book_sending:"Sending…",book_fail:"Something went wrong. Please try again.",slot_loading:"Loading times…",slot_err:"Couldn't load times.",admin_checking:"Checking…",bk_loading:"Loading…",bk_err:"Couldn't load bookings.",
+    admin_title:"Admin login",admin_sub:"Enter the password to edit packages and view bookings.",admin_pw:"Password",admin_enter:"Enter",admin_wrong:"Wrong password.",
+    ab_badge:"Admin mode",ab_edit:"Edit packages",ab_done:"Save changes",ab_view:"View bookings",ab_exit:"Exit admin",ab_hint:"Click any package title, text or price to edit.",ab_zh:"繁中",ab_editing:"Editing",ab_switch:"switch language above to edit the other version",
+    bk_title:"Bookings",bk_none:"No bookings yet.",bk_del:"delete",bk_clear:"Clear all",
+    ab_slots:"Availability",f_time:"Time slot",slot_pick:"Pick a date first",slot_none:"This date isn't available",slot_choose:"Choose a time",slot_full:"Fully booked for this date — please try another day.",slot_taken:"That time was just taken — please pick another.",
+    av_title:"Availability",av_sub:"Every date is open by default. Just close the days you're off, and 1-hour slots fill your business hours automatically. Guests only see times that fit their package length.",
+    av_bizhours:"Default business hours",av_save:"Save",av_close:"Done",av_booked:"booked",
+    av_closeday:"Close a day off",av_closebtn:"Close this date",av_closedtag:"closed",av_reopen:"reopen",av_noclosed:"No days closed — every date is open.",
+    av_special:"Special hours for a date",av_specialhint:"(optional — block specific hours or change hours for one date)",av_specialbtn:"Add date",
+    av_prompt:"Custom hours for {d}? Enter as open-close (e.g. 12-20):"
+  },
+  ko:{
+    nav_packages:"패키지",nav_included:"포함 사항",nav_watch:"영상",nav_book:"예약하기",
+    hero_eyebrow:"한국 뷰티 투어 &middot; 영어 가이드",
+    hero_title:"서울에서 만나는 <em>피부과 실장 인사이더</em>.",
+    hero_lede:"현직 피부과 실장이 직접 안내하는 프라이빗 영어 뷰티 데이. 피부 진단, 솔직한 제품 추천, 엄선된 K-뷰티 쇼핑과 눈썹·헤어샵 동행까지 &mdash; 바가지 없이, 언어 장벽 없이.",
+    hero_cta1:"예약하기 &rarr;",hero_cta2:"패키지 보기",
+    cred1:"1:1 프라이빗 &middot; 소규모, 붐비는 단체 없음",cred2:"유창한 영어, 외국인 방문객 맞춤",cred3:"대만 &middot; 홍콩 게스트를 위한 繁體中文 지원",
+    pkg_kicker:"패키지",pkg_title:"내 일정에 맞는 하루를 고르세요.",
+    pkg_sub:"짧은 경유든 긴 체류든, 모든 하루는 프라이빗하게 당신에게 맞춰 진행됩니다 &mdash; 정해진 단체 코스가 아니에요.",
+    inc_kicker:"모든 데이에 포함",inc_title:"처음부터 끝까지, 당신 편의 인사이더.",
+    inc1_t:"진짜 진단",inc1_d:"매일 환자를 보는 사람의 제대로 된 피부 진단 &mdash; 판매용 멘트가 아닙니다.",
+    inc2_t:"솔직한 안내",inc2_d:"할 가치가 있는 것, 건너뛸 것, 내 피부에 맞는 제품을 알려드려요.",
+    inc3_t:"검증된 파트너",inc3_d:"믿을 수 있는 눈썹 &middot; 속눈썹 &middot; 헤어샵 &middot; 매장을 당신에게 맞춰 매칭, 바가지 없이.",
+    inc4_t:"하루 종일 영어",inc4_d:"번역 스트레스 없이 모든 단계를 당신 속도에 맞춰 명확히 설명해드려요.",inc4_d_zh:"번역 스트레스 없이 모든 단계를 명확히 설명, 요청 시 繁體中文 지원.",
+    watch_kicker:"직접 확인하세요",watch_title:"영상으로 보는 하루.",watch_sub:"예약 전에 제너버스의 하루가 어떤지 느껴보는 가장 쉬운 방법.",
+    vid_soon:"영상 1 &middot; 준비 중",vid_soon2:"영상 2 &middot; 준비 중",vid_soon3:"영상 3 &middot; 준비 중",
+    join_title:"원하는 날짜를 알려주세요 &mdash; 자리를 잡아둘게요.",join_sub:"프라이빗 데이라 인원이 한정돼 금방 마감돼요. 신청을 보내주시면 가능 여부를 알려드릴게요.",join_cta:"예약 신청하기 &rarr;",
+    book_title:"예약 신청",book_sub:"정보를 보내주시면 이메일로 가능 여부를 확인해드릴게요.",
+    f_name:"이름",f_email:"이메일",f_pkg:"패키지",f_addons:"추가 옵션 (선택)",f_date:"희망 날짜",f_people:"인원 수",f_note:"미리 알려주실 내용이 있나요? (선택)",
+    book_submit:"신청 보내기",book_ok:"신청이 접수됐어요. 곧 연락드릴게요!",book_err:"이름, 이메일, 날짜를 입력해주세요.",book_sending:"보내는 중…",book_fail:"오류가 났어요. 다시 시도해주세요.",slot_loading:"시간 불러오는 중…",slot_err:"시간을 불러오지 못했어요.",admin_checking:"확인 중…",bk_loading:"불러오는 중…",bk_err:"예약을 불러오지 못했어요.",
+    admin_title:"관리자 로그인",admin_sub:"패키지 수정 및 예약 확인을 위해 비밀번호를 입력하세요.",admin_pw:"비밀번호",admin_enter:"입력",admin_wrong:"비밀번호가 틀렸어요.",
+    ab_badge:"관리자 모드",ab_edit:"패키지 수정",ab_done:"변경 저장",ab_view:"예약 보기",ab_exit:"관리자 종료",ab_hint:"패키지 제목 &middot; 내용 &middot; 가격을 클릭해 수정하세요.",ab_zh:"繁中",ab_editing:"수정 중:",ab_switch:"다른 언어는 위 EN/KO 버튼으로 전환 후 수정",
+    bk_title:"예약 목록",bk_none:"아직 예약이 없어요.",bk_del:"삭제",bk_clear:"전체 삭제",
+    ab_slots:"예약 가능 관리",f_time:"시간 슬롯",slot_pick:"먼저 날짜를 선택하세요",slot_none:"이 날짜는 예약할 수 없어요",slot_choose:"시간을 선택하세요",slot_full:"이 날짜는 예약이 마감됐어요 — 다른 날짜를 선택해주세요.",slot_taken:"방금 그 시간이 마감됐어요 — 다른 시간을 골라주세요.",
+    av_title:"예약 가능 관리",av_sub:"모든 날짜가 기본으로 열려 있어요. 쉬는 날만 닫으면 되고, 영업시간에 1시간 슬롯이 자동으로 깔립니다. 고객에겐 패키지 소요시간에 맞는 시작 시간만 보여요.",
+    av_bizhours:"기본 영업시간",av_save:"저장",av_close:"완료",av_booked:"예약됨",
+    av_closeday:"쉬는 날 닫기",av_closebtn:"이 날짜 닫기",av_closedtag:"휴무",av_reopen:"다시 열기",av_noclosed:"닫힌 날이 없어요 — 모든 날짜가 열려 있어요.",
+    av_special:"특정 날짜 시간 조정",av_specialhint:"(선택 — 특정 시간만 끄거나 그 날 영업시간만 다르게)",av_specialbtn:"날짜 추가",
+    av_prompt:"{d} 날짜만 영업시간을 다르게 할까요? 시작-종료로 입력 (예: 12-20):"
+  }
+};
+
+/* ------------- default package data (editable) ------------- */
+const DEFAULT_PACKS=[
+  {id:"makeover",feature:true,tag:"Signature",dur_h:4,last_start:17,max_per_day:2,
+   kicker:{en:"Most popular",ko:"가장 인기"},
+   title:{en:"All-in Beauty Makeover",ko:"올인원 뷰티 메이크오버"},
+   dur:{en:"1 day · beauty focus",ko:"1일 · 뷰티 집중"},
+   desc:{en:"The full insider day — from a proper skin read to walking out with the right products in your bag.",ko:"제대로 된 피부 진단부터 딱 맞는 제품을 손에 들고 나올 때까지, 인사이더의 하루 풀코스."},
+   items:{en:["1:1 skin diagnosis & honest advice","Olive Young & store shopping, guided","Vetted brow / lash / hair salon matching","Personal outfit & styling picks"],
+          ko:["1:1 피부 진단 & 솔직한 조언","올리브영 & 매장 쇼핑 가이드","검증된 눈썹/속눈썹/헤어샵 매칭","퍼스널 의류 & 스타일링 추천"]},
+   addons:[{name:{en:"Brow tattoo consult & booking",ko:"눈썹 문신 상담 & 예약"},price:50000},
+           {name:{en:"Hair salon accompaniment",ko:"헤어샵 동행"},price:50000}],
+   pricing:{regular:500000,launch:400000}},
+  {id:"layover",feature:false,tag:"",dur_h:2,last_start:19,max_per_day:3,
+   kicker:{en:"Short & sharp",ko:"짧고 굵게"},
+   title:{en:"Layover Glow",ko:"레이오버 글로우"},
+   dur:{en:"Half day · express",ko:"반나절 · 익스프레스"},
+   desc:{en:"A tight, high-impact half-day for travellers passing through — the essentials, done right.",ko:"경유하는 여행객을 위한 짧고 강력한 반나절 — 핵심만 제대로."},
+   items:{en:["Quick skin read & priorities","One curated shopping stop","Brow / lash / styling match","Product shortlist to take home"],
+          ko:["빠른 피부 진단 & 우선순위","엄선된 쇼핑 한 곳","눈썹/속눈썹/스타일링 매칭","집에 가져갈 제품 리스트"]},
+   addons:[{name:{en:"Extra shopping stop (+1h)",ko:"쇼핑 한 곳 추가 (+1시간)"},price:60000}],
+   pricing:{regular:250000,launch:200000}},
+  {id:"reset",feature:false,tag:"",dur_h:4,last_start:17,max_per_day:2,
+   kicker:{en:"Stay longer",ko:"길게 머물기"},
+   title:{en:"Skin Reset",ko:"스킨 리셋"},
+   dur:{en:"1 day + follow-up",ko:"1일 + 후속 케어"},
+   desc:{en:"For guests staying weeks or months — a full day plus a check-in to keep your routine on track.",ko:"몇 주에서 몇 달 머무는 게스트를 위해 — 하루 풀코스 + 루틴 유지를 위한 후속 점검."},
+   items:{en:["Everything in the Makeover day","Custom skincare blend, mixed for you","Routine plan for your skin","One follow-up review during your stay"],
+          ko:["메이크오버 데이 전체 포함","당신을 위한 맞춤 스킨케어 조제","내 피부 맞춤 루틴 플랜","체류 중 1회 후속 점검"]},
+   addons:[{name:{en:"Extra custom blend refill",ko:"맞춤 조제 리필 추가"},price:80000}],
+   pricing:{regular:800000,launch:650000}}
+];
+
+let lang="en", adminMode=false, editMode=false;
+
+/* ------------- storage helpers ------------- */
+/* ============ API-backed state ============
+   All data now lives in Cloudflare D1 via /api/*.
+   STATE is the in-memory mirror, refreshed from the server. */
+const API = {
+  async get(path){ const r=await fetch(path,{headers:authHeaders()}); if(!r.ok) throw new Error((await r.json().catch(()=>({}))).error||r.status); return r.json(); },
+  async post(path,body){ const r=await fetch(path,{method:"POST",headers:{"content-type":"application/json",...authHeaders()},body:JSON.stringify(body||{})}); const d=await r.json().catch(()=>({})); if(!r.ok) throw Object.assign(new Error(d.error||r.status),{code:d.error}); return d; }
+};
+function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
+
+let adminToken = sessionStorage.getItem("zv_token") || "";
+const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false, loaded:false };
+
+async function loadConfig(){
+  try{
+    const c = await API.get("/api/config");
+    STATE.packages = (c.packages && c.packages.length) ? c.packages : structuredClone(DEFAULT_PACKS);
+    STATE.hours = c.hours || {open:10,close:21};
+    STATE.dayhours = c.dayhours || {};
+    STATE.closed = c.closed || [];
+    STATE.blocked = c.blocked || {};
+    STATE.zh = !!c.zh;
+    STATE.loaded = true;
+    // first run: push the defaults up so the DB has something
+    if(!c.packages) { /* saved on first admin save */ }
+  }catch(e){
+    console.warn("config load failed, using defaults:",e.message);
+    STATE.packages = structuredClone(DEFAULT_PACKS);
+  }
+  PACKS = STATE.packages;
+  backfillPacks(PACKS);
+}
+function backfillPacks(p){
+  p.forEach(pk=>{const d=DEFAULT_PACKS.find(x=>x.id===pk.id);if(d){
+    if(pk.dur_h==null)pk.dur_h=d.dur_h;
+    if(pk.last_start==null)pk.last_start=d.last_start;
+    if(pk.pricing==null)pk.pricing=structuredClone(d.pricing);
+    if(pk.max_per_day==null)pk.max_per_day=d.max_per_day;
+    if(pk.addons==null)pk.addons=structuredClone(d.addons||[]);
+  }});
+}
+async function saveAll(){
+  if(!adminToken) return;
+  try{
+    await API.post("/api/admin/save",{
+      packages:PACKS, hours:STATE.hours, dayhours:STATE.dayhours,
+      closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh
+    });
+  }catch(e){ alert("저장 실패 / Save failed: "+e.message); }
+}
+/* synchronous accessors used across the UI */
+function savePacks(){ saveAll(); }
+function loadHours(){ return STATE.hours; }
+function saveHours(h){ STATE.hours=h; saveAll(); }
+function loadDayHours(){ return STATE.dayhours; }
+function saveDayHours(o){ STATE.dayhours=o; saveAll(); }
+function loadClosedDates(){ return STATE.closed; }
+function saveClosedDates(a){ STATE.closed=a; saveAll(); }
+function isDateOpen(date){ return !STATE.closed.includes(date); }
+function loadBlocked(){ return STATE.blocked; }
+function saveBlocked(b){ STATE.blocked=b; saveAll(); }
+function zhOn(){ return STATE.zh; }
+function setZh(on){ STATE.zh=!!on; saveAll(); applyZh(); }
+function applyZh(){
+  const on=zhOn(),el=document.getElementById("credZh");
+  if(el)el.hidden=!on;
+  const inc4=document.querySelector('[data-i18n="inc4_d"]');
+  if(inc4){const k=on?"inc4_d_zh":"inc4_d";if(I18N[lang][k])inc4.innerHTML=I18N[lang][k];}
+}
+
+
+function hoursFor(date){const dh=loadDayHours()[date];return dh?dh:loadHours();}
+function pad(n){return(n<10?"0":"")+n;}
+function todayStr(){const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+/* all 1-hour start slots within a date's business hours */
+function allSlots(date){const h=hoursFor(date);const out=[];for(let t=h.open;t<h.close;t++)out.push(pad(t)+":00");return out;}
+/* slots taken by existing bookings, expanded across their duration */
+function bookedRanges(date){
+  return DAY_BOOKINGS.filter(b=>b.date===date&&b.time).map(b=>{
+    const start=parseInt(b.time);const dur=b.dur_h||1;return {start,end:start+dur};
+  });
+}
+function isBlocked(date,slot){return (loadBlocked()[date]||[]).includes(slot);}
+/* start slots where a package fits: within hours, before last_start, not blocked, not overlapping a booking */
+function bookableStarts(date,dur,lastStart){
+  const h=hoursFor(date),ranges=bookedRanges(date),out=[];
+  const cap=(lastStart!=null)?Math.min(lastStart,h.close-dur):(h.close-dur);
+  for(let t=h.open;t<=cap;t++){
+    const slot=pad(t)+":00";
+    if(isBlocked(date,slot))continue;
+    let clash=false;
+    for(const r of ranges){if(t<r.end && (t+dur)>r.start){clash=true;break;}}
+    for(let k=0;k<dur;k++){if(isBlocked(date,pad(t+k)+":00")){clash=true;break;}}
+    if(!clash)out.push(slot);
+  }
+  return out;
+}
+let PACKS=structuredClone(DEFAULT_PACKS);
+let DAY_BOOKINGS=[]; // bookings for the date currently shown in the form
+
+/* ------------- i18n apply ------------- */
+function setLang(l){
+  lang=l;document.body.classList.toggle("lang-ko",l==="ko");document.body.classList.toggle("lang-en",l==="en");
+  document.getElementById("lang-en").classList.toggle("on",l==="en");
+  document.getElementById("lang-ko").classList.toggle("on",l==="ko");
+  document.documentElement.lang=l;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.getAttribute("data-i18n");if(I18N[l][k]!==undefined)el.innerHTML=I18N[l][k];});
+  applyZh();
+  renderPacks();
+  if(adminMode)renderAdminBar();
+  try{localStorage.setItem("zv_lang",l);}catch(e){}
+}
+
+/* ------------- render packages ------------- */
+function renderPacks(){
+  const root=document.getElementById("packs");root.innerHTML="";
+  PACKS.forEach((p,i)=>{
+    const card=document.createElement("div");
+    card.className="pack reveal in"+(p.feature?" feature":"");
+    const ed=editMode?' contenteditable="true" class="edit-field"':'';
+    card.innerHTML=`
+      ${p.tag?`<span class="tag-soon">${p.tag}</span>`:""}
+      <div class="mono kicker"${editMode?' contenteditable="true"':''} data-e="${i}.kicker">${p.kicker[lang]}</div>
+      <h3${editMode?' contenteditable="true" class="edit-field"':''} data-e="${i}.title">${p.title[lang]}</h3>
+      <div class="dur"${editMode?' contenteditable="true"':''} data-e="${i}.dur">${p.dur[lang]}</div>
+      <p class="desc"${editMode?' contenteditable="true" class="edit-field"':''} data-e="${i}.desc">${p.desc[lang]}</p>
+      <ul>${p.items[lang].map((it,j)=>`<li${editMode?' contenteditable="true" class="edit-field"':''} data-e="${i}.items.${j}">${it}${editMode?`<button class="li-del" contenteditable="false" onclick="delItem(${i},${j})" title="remove">&times;</button>`:""}</li>`).join("")}</ul>
+      ${editMode?`<button class="li-add" onclick="addItem(${i})">+ ${lang==="ko"?"항목 추가":"Add item"}</button>`:""}
+      ${(p.addons&&p.addons.length)||editMode?`<div class="addons">
+        <div class="addons-label mono">${lang==="ko"?"추가 옵션":"Add-ons"}</div>
+        ${(p.addons||[]).map((a,j)=>`<div class="addon-row">
+            <span class="addon-name"${editMode?` contenteditable="true" class="addon-name edit-field" data-a="${i}.${j}"`:""}>${a.name[lang]}</span>
+            ${editMode?`<input class="addon-price" type="number" min="0" step="10000" value="${a.price||0}" onchange="setAddonPrice(${i},${j},this.value)"><button class="li-del" onclick="delAddon(${i},${j})">&times;</button>`:`<span class="addon-price-view">+${wonFmt(a.price||0)}</span>`}
+          </div>`).join("")}
+        ${editMode?`<button class="li-add" onclick="addAddon(${i})">+ ${lang==="ko"?"옵션 추가":"Add option"}</button>`:""}
+      </div>`:""}
+      <div class="sep-note">${lang==="ko"?"※ 눈썹·헤어샵 등 파트너 시술·서비스 비용은 현장에서 별도 결제됩니다.":"Note: brow, lash, hair salon and other partner services are paid separately on site."}</div>
+      <div class="foot">
+        <div class="price">${priceHTML(p)}</div>
+        ${editMode?`<div class="pack-timing">
+            <label>${lang==="ko"?"정가":"Regular"} ₩<input type="number" min="0" step="10000" value="${p.pricing.regular||0}" onchange="setPrice(${i},'regular',this.value)"></label>
+            <label>${lang==="ko"?"런칭가":"Launch"} ₩<input type="number" min="0" step="10000" value="${p.pricing.launch||0}" onchange="setPrice(${i},'launch',this.value)"></label>
+            <label class="pt-hint">${lang==="ko"?"0 = 가격 문의로 표시":"0 = shows 'Enquire'"}</label>
+            <label>${lang==="ko"?"소요":"Duration"}: <input type="number" min="1" max="12" value="${p.dur_h}" onchange="setPackNum(${i},'dur_h',this.value)"> ${lang==="ko"?"시간":"h"}</label>
+            <label>${lang==="ko"?"마지막 시작":"Last start"}: <input type="number" min="0" max="23" value="${p.last_start}" onchange="setPackNum(${i},'last_start',this.value)"> :00</label>
+            <label>${lang==="ko"?"하루 최대 팀":"Max teams/day"}: <input type="number" min="1" max="10" value="${p.max_per_day}" onchange="setPackNum(${i},'max_per_day',this.value)"> ${lang==="ko"?"팀":"teams"}</label>
+          </div>`:`<button class="book-btn" onclick="openBooking('${p.id}')">${lang==="ko"?"이 패키지 예약":"Book this"}</button>`}
+      </div>`;
+    root.appendChild(card);
+  });
+  if(editMode){
+    root.querySelectorAll("[data-e]").forEach(el=>{
+      el.addEventListener("blur",()=>{
+        const path=el.getAttribute("data-e").split(".");
+        const idx=+path[0];
+        // strip the inline delete button text if present
+        const clone=el.cloneNode(true);
+        clone.querySelectorAll(".li-del").forEach(b=>b.remove());
+        const txt=clone.innerText.trim();
+        if(path[1]==="items"){PACKS[idx].items[lang][+path[2]]=txt;}
+        else{PACKS[idx][path[1]][lang]=txt;}
+        savePacks(PACKS);
+      });
+    });
+    root.querySelectorAll("[data-a]").forEach(el=>{
+      el.addEventListener("blur",()=>{
+        const [i,j]=el.getAttribute("data-a").split(".").map(Number);
+        PACKS[i].addons[j].name[lang]=el.innerText.trim();
+        savePacks(PACKS);
+      });
+    });
+  }
+}
+function setPackNum(idx,key,val){const n=parseInt(val);if(!isNaN(n)){PACKS[idx][key]=n;savePacks(PACKS);}}
+function addItem(i){
+  PACKS[i].items.en.push("New item");PACKS[i].items.ko.push("새 항목");
+  savePacks(PACKS);renderPacks();
+}
+function delItem(i,j){
+  PACKS[i].items.en.splice(j,1);PACKS[i].items.ko.splice(j,1);
+  savePacks(PACKS);renderPacks();
+}
+function addAddon(i){
+  if(!PACKS[i].addons)PACKS[i].addons=[];
+  PACKS[i].addons.push({name:{en:"New option",ko:"새 옵션"},price:0});
+  savePacks(PACKS);renderPacks();
+}
+function delAddon(i,j){PACKS[i].addons.splice(j,1);savePacks(PACKS);renderPacks();}
+function setAddonPrice(i,j,v){const n=parseInt(v);PACKS[i].addons[j].price=isNaN(n)?0:n;savePacks(PACKS);renderPacks();}
+function setPrice(idx,key,val){const n=parseInt(val);PACKS[idx].pricing[key]=isNaN(n)?0:n;savePacks(PACKS);renderPacks();}
+function wonFmt(n){return "₩"+n.toLocaleString("ko-KR");}
+function usdApprox(won){return Math.round(won/1350/5)*5;} // rough USD, rounded to nearest $5
+function priceHTML(p){
+  const pr=p.pricing||{},reg=pr.regular||0,la=pr.launch||0;
+  const enquire=lang==="ko"?"가격 문의":"Enquire for pricing";
+  if(!reg&&!la)return `<span class="pr-enquire">${enquire}</span>`;
+  const show=la||reg; // launch price is what they pay
+  const hasDiscount=la&&reg&&la<reg;
+  const usd=usdApprox(show);
+  const launchLabel=lang==="ko"?"런칭 특별가":"launch price";
+  return `
+    ${hasDiscount?`<span class="pr-was">${wonFmt(reg)}</span>`:""}
+    <span class="pr-now">${wonFmt(show)}</span>
+    <span class="pr-usd">≈ $${usd}</span>
+    ${hasDiscount?`<span class="pr-tag">${launchLabel}</span>`:""}`;
+}
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});}
+const nav=document.getElementById("nav");
+addEventListener("scroll",()=>nav.classList.toggle("scrolled",scrollY>20));
+
+/* ------------- booking modal ------------- */
+function openBooking(preselect){
+  const t=I18N[lang];
+  const opts=PACKS.map(p=>`<option value="${p.id}"${preselect===p.id?" selected":""}>${p.title[lang]} · ${p.dur_h}${lang==="ko"?"시간":"h"}</option>`).join("");
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.book_title}</h3>
+        <div class="sub">${t.book_sub}</div>
+        <div class="field"><label>${t.f_name}</label><input id="bk_name" type="text"></div>
+        <div class="field"><label>${t.f_email}</label><input id="bk_email" type="email"></div>
+        <div class="field"><label>${t.f_pkg}</label><select id="bk_pkg" onchange="refreshSlots();refreshAddons()">${opts}</select></div>
+        <div class="field" id="bk_addons_wrap"><label>${t.f_addons}</label><div id="bk_addons"></div></div>
+        <div class="field"><label>${t.f_date}</label><input id="bk_date" type="date" min="${todayStr()}" onchange="refreshSlots()"></div>
+        <div class="field"><label>${t.f_time} <span id="bk_durhint" class="dur-hint"></span></label><div id="bk_slots" class="slot-wrap"><span class="slot-hint">${t.slot_pick}</span></div></div>
+        <div class="field"><label>${t.f_people}</label><input id="bk_people" type="number" min="1" value="1"></div>
+        <div class="field"><label>${t.f_note}</label><textarea id="bk_note" rows="2"></textarea></div>
+        <button class="submit" onclick="submitBooking()">${t.book_submit}</button>
+        <div class="msg" id="bk_msg"></div>
+      </div>
+    </div>`;
+  refreshAddons();
+}
+function currentPack(){const id=document.getElementById("bk_pkg").value;return PACKS.find(p=>p.id===id)||PACKS[0];}
+function refreshAddons(){
+  const pk=currentPack(),wrap=document.getElementById("bk_addons"),box=document.getElementById("bk_addons_wrap");
+  const list=pk.addons||[];
+  if(!list.length){box.style.display="none";wrap.innerHTML="";return;}
+  box.style.display="";
+  wrap.innerHTML=list.map((a,j)=>
+    `<label class="addon-check"><input type="checkbox" data-addon="${j}"> <span>${a.name[lang]}</span> <b>+${wonFmt(a.price||0)}</b></label>`
+  ).join("");
+}
+function selectedAddons(){
+  const pk=currentPack(),out=[];
+  document.querySelectorAll("[data-addon]").forEach(cb=>{
+    if(cb.checked){const a=pk.addons[+cb.getAttribute("data-addon")];out.push({name:a.name.en,name_ko:a.name.ko,price:a.price||0});}
+  });
+  return out;
+}
+let selectedSlot="";
+async function refreshSlots(){
+  const t=I18N[lang],date=document.getElementById("bk_date").value,wrap=document.getElementById("bk_slots");
+  const pk=currentPack();
+  document.getElementById("bk_durhint").textContent=`(${pk.dur_h}${lang==="ko"?"시간 소요":"h"})`;
+  selectedSlot="";
+  if(!date){wrap.innerHTML=`<span class="slot-hint">${t.slot_pick}</span>`;return;}
+  wrap.innerHTML=`<span class="slot-hint">${t.slot_loading}</span>`;
+  try{
+    const r=await API.get(`/api/slots?date=${encodeURIComponent(date)}&pkg=${encodeURIComponent(pk.id)}`);
+    const starts=r.slots||[];
+    if(!starts.length){
+      const msg = r.reason==="full" ? t.slot_full : t.slot_none;
+      wrap.innerHTML=`<span class="slot-hint">${msg}</span>`;return;
+    }
+    wrap.innerHTML=starts.map(sl=>{
+      const end=pad(parseInt(sl)+pk.dur_h)+":00";
+      return `<button type="button" class="slot-btn" data-s="${sl}" onclick="pickSlot('${sl}',this)">${sl}–${end}</button>`;
+    }).join("");
+  }catch(e){
+    wrap.innerHTML=`<span class="slot-hint">${t.slot_err}</span>`;
+  }
+}
+function pickSlot(s,el){selectedSlot=s;document.querySelectorAll(".slot-btn").forEach(b=>b.classList.remove("on"));el.classList.add("on");}
+async function submitBooking(){
+  const t=I18N[lang],msg=document.getElementById("bk_msg");
+  const name=document.getElementById("bk_name").value.trim();
+  const email=document.getElementById("bk_email").value.trim();
+  const date=document.getElementById("bk_date").value;
+  if(!name||!email||!date){msg.style.color="#c96f52";msg.textContent=t.book_err;return;}
+  if(!selectedSlot){msg.style.color="#c96f52";msg.textContent=t.slot_choose;return;}
+  const pk=currentPack();
+  msg.style.color="#7d9488";msg.textContent=t.book_sending;
+  try{
+    await API.post("/api/book",{
+      name,email,pkg:pk.id,date,time:selectedSlot,
+      people:document.getElementById("bk_people").value,
+      note:document.getElementById("bk_note").value.trim(),
+      addons:selectedAddons()
+    });
+    msg.style.color="#7d9488";msg.textContent=t.book_ok;
+    setTimeout(closeModal,1800);
+  }catch(e){
+    msg.style.color="#c96f52";
+    msg.textContent = e.code==="full" ? t.slot_full : e.code==="taken" ? t.slot_taken : e.code==="closed" ? t.slot_none : t.book_fail;
+    refreshSlots();
+  }
+}
+function closeModal(){document.getElementById("modalRoot").innerHTML="";}
+
+/* ------------- admin ------------- */
+function openAdminLogin(){
+  const t=I18N[lang];
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:400px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.admin_title}</h3><div class="sub">${t.admin_sub}</div>
+        <div class="field"><label>${t.admin_pw}</label><input id="ad_pw" type="password" onkeydown="if(event.key==='Enter')tryAdmin()"></div>
+        <button class="submit" onclick="tryAdmin()">${t.admin_enter}</button>
+        <div class="msg" id="ad_msg"></div>
+      </div>
+    </div>`;
+}
+async function tryAdmin(){
+  const t=I18N[lang],m=document.getElementById("ad_msg");
+  const pw=document.getElementById("ad_pw").value;
+  m.style.color="#7d9488";m.textContent=t.admin_checking;
+  try{
+    const r=await API.post("/api/admin/login",{password:pw});
+    if(r.ok){
+      adminToken=r.token; sessionStorage.setItem("zv_token",adminToken);
+      adminMode=true; closeModal(); renderAdminBar();
+      // push current defaults up if the DB was empty
+      await saveAll();
+    }
+  }catch(e){
+    m.style.color="#c96f52";m.textContent=t.admin_wrong;
+  }
+}
+function renderAdminBar(){
+  const t=I18N[lang];
+  document.getElementById("adminBar").innerHTML=`
+    <div class="admin-bar">
+      <span class="badge">${t.ab_badge}</span>
+      <button onclick="toggleEdit()">${editMode?t.ab_done:t.ab_edit}</button>
+      <button onclick="manageAvail()">${t.ab_slots}</button>
+      <button onclick="viewBookings()">${t.ab_view}</button>
+      <button onclick="setZh(!zhOn());renderAdminBar()" class="${zhOn()?"on":""}">${t.ab_zh} ${zhOn()?"ON":"OFF"}</button>
+      ${editMode?`<span class="edit-lang">${t.ab_editing} <b>${lang==="ko"?"한국어":"English"}</b> — ${t.ab_switch}</span>`:`<span class="hint"></span>`}
+      <span class="spacer"></span>
+      <button class="warn" onclick="exitAdmin()">${t.ab_exit}</button>
+    </div>`;
+  document.body.style.paddingBottom="70px";
+}
+function toggleEdit(){
+  editMode=!editMode;
+  if(!editMode)savePacks(PACKS);
+  renderPacks();renderAdminBar();
+}
+function exitAdmin(){adminMode=false;editMode=false;savePacks(PACKS);document.getElementById("adminBar").innerHTML="";document.body.style.paddingBottom="0";renderPacks();}
+async function manageAvail(){
+  try{const r=await API.get("/api/admin/bookings");DAY_BOOKINGS=r.bookings||[];}catch(e){DAY_BOOKINGS=[];}
+  const t=I18N[lang],h=loadHours(),closed=loadClosedDates().sort();
+  const closedList=closed.length?closed.map(d=>
+    `<div class="av-closed-item"><b>${d}</b> <span class="av-closed-tag">${t.av_closedtag}</span>
+      <button class="bk-del" onclick="reopenDate('${d}')">${t.av_reopen}</button></div>`
+  ).join(""):`<div class="bk-empty">${t.av_noclosed}</div>`;
+  // per-date hour tweak: show any dates that have custom hours or blocked slots
+  const dh=loadDayHours(),bl=loadBlocked();
+  const tweaked=[...new Set([...Object.keys(dh),...Object.keys(bl)])].filter(d=>!closed.includes(d)).sort();
+  const tweakList=tweaked.length?tweaked.map(d=>{
+    const dd=hoursFor(d),blk=bl[d]||[],ranges=bookedRanges(d);
+    const chips=allSlots(d).map(s=>{
+      const start=parseInt(s),isBooked=ranges.some(r=>start>=r.start&&start<r.end),isOff=blk.includes(s);
+      let cls="av-hr";if(isBooked)cls+=" booked";else if(isOff)cls+=" off";
+      return `<button class="${cls}" ${isBooked?"":`onclick="toggleHour('${d}','${s}')"`}>${s}</button>`;
+    }).join("");
+    return `<div class="av-day"><div class="av-day-head"><b>${d}</b>
+      <span class="av-day-hrs">${dd.open}:00–${dd.close}:00${dh[d]?` <em>(custom)</em>`:""}
+      <button class="av-mini" onclick="editDayHours('${d}')" title="hours">⚙</button>
+      <button class="av-mini" onclick="clearTweak('${d}')" title="reset">↺</button></span></div>
+      <div class="av-hrs">${chips}</div></div>`;
+  }).join(""):"";
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.av_title}</h3><div class="sub">${t.av_sub}</div>
+        <div class="av-hours-box">
+          <span class="mono">${t.av_bizhours}</span>
+          <div class="av-hours-row">
+            <input id="biz_open" type="number" min="0" max="23" value="${h.open}"> :00 —
+            <input id="biz_close" type="number" min="1" max="24" value="${h.close}"> :00
+            <button onclick="saveBizHours()">${t.av_save}</button>
+          </div>
+        </div>
+        <div class="av-section-label mono">${t.av_closeday}</div>
+        <div class="av-add-row">
+          <input id="av_date" type="date">
+          <button onclick="closeThisDate()">${t.av_closebtn}</button>
+        </div>
+        <div class="av-closed-list">${closedList}</div>
+        <div class="av-section-label mono">${t.av_special} <span class="av-hint2">${t.av_specialhint}</span></div>
+        <div class="av-add-row">
+          <input id="tw_date" type="date">
+          <button onclick="addTweakDate()">${t.av_specialbtn}</button>
+        </div>
+        ${tweakList?`<div class="av-list">${tweakList}</div>`:""}
+        <button class="submit" style="margin-top:18px" onclick="closeModal()">${t.av_close}</button>
+      </div>
+    </div>`;
+}
+function saveBizHours(){
+  const o=parseInt(document.getElementById("biz_open").value),c=parseInt(document.getElementById("biz_close").value);
+  if(isNaN(o)||isNaN(c)||c<=o)return;
+  saveHours({open:o,close:c});manageAvail();
+}
+function closeThisDate(){
+  const d=document.getElementById("av_date").value;if(!d)return;
+  const c=loadClosedDates();if(!c.includes(d))c.push(d);saveClosedDates(c);manageAvail();
+}
+function reopenDate(d){saveClosedDates(loadClosedDates().filter(x=>x!==d));manageAvail();}
+function addTweakDate(){
+  const d=document.getElementById("tw_date").value;if(!d)return;
+  const bl=loadBlocked();if(!bl[d])bl[d]=[];saveBlocked(bl);manageAvail();
+}
+function clearTweak(d){
+  const bl=loadBlocked();delete bl[d];saveBlocked(bl);
+  const dh=loadDayHours();delete dh[d];saveDayHours(dh);manageAvail();
+}
+function toggleHour(d,s){
+  const bl=loadBlocked();if(!bl[d])bl[d]=[];
+  if(bl[d].includes(s))bl[d]=bl[d].filter(x=>x!==s);else bl[d].push(s);
+  if(!bl[d].length)delete bl[d];
+  saveBlocked(bl);manageAvail();
+}
+function editDayHours(d){
+  const t=I18N[lang],cur=hoursFor(d);
+  const val=prompt(t.av_prompt.replace("{d}",d),`${cur.open}-${cur.close}`);
+  if(!val)return;
+  const m=val.split(/[-~]/).map(x=>parseInt(x.trim()));
+  if(m.length===2&&!isNaN(m[0])&&!isNaN(m[1])&&m[1]>m[0]){
+    const dh=loadDayHours();dh[d]={open:m[0],close:m[1]};saveDayHours(dh);manageAvail();
+  }
+}
+async function viewBookings(){
+  const t=I18N[lang];
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal"><button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.bk_title}</h3><div class="bk-list"><div class="bk-empty">${t.bk_loading}</div></div></div></div>`;
+  let b=[];
+  try{ const r=await API.get("/api/admin/bookings"); b=r.bookings||[]; }
+  catch(e){ document.querySelector(".bk-list").innerHTML=`<div class="bk-empty">${t.bk_err}</div>`; return; }
+  const rows=b.length?b.map(x=>`
+    <div class="bk-item">
+      <div class="top"><span class="name">${esc(x.name)}</span><span class="pk">${esc(x.pkg_name||x.pkg_id)}</span></div>
+      <div class="meta">${esc(x.email)} &middot; ${esc(x.date)}${x.time?` &middot; <b style="color:var(--clay)">${esc(x.time)}${x.dur_h?"–"+pad(parseInt(x.time)+x.dur_h)+":00":""}</b>`:""} &middot; ${esc(String(x.people))} ${lang==="ko"?"명":"guest(s)"}</div>
+      ${x.addons&&x.addons.length?`<div class="meta">+ ${x.addons.map(a=>esc(lang==="ko"&&a.name_ko?a.name_ko:a.name)+" ("+wonFmt(a.price||0)+")").join(", ")}</div>`:""}
+      ${x.note?`<div class="meta">📝 ${esc(x.note)}</div>`:""}
+      <div class="meta" style="margin-top:4px;opacity:.7">${esc(String(x.created_at||"").slice(0,16).replace("T"," "))} &middot; <button class="bk-del" onclick="delBooking(${x.id})">${t.bk_del}</button></div>
+    </div>`).join(""):`<div class="bk-empty">${t.bk_none}</div>`;
+  document.querySelector(".modal h3").textContent=`${t.bk_title} (${b.length})`;
+  document.querySelector(".bk-list").innerHTML=rows;
+}
+async function delBooking(id){
+  try{ await API.post("/api/admin/bookings/del",{id}); viewBookings(); }
+  catch(e){ alert("삭제 실패 / Delete failed"); }
+}
+function esc(s){return(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+/* ------------- init ------------- */
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
+function observeReveals(){document.querySelectorAll(".reveal:not(.in)").forEach(el=>io.observe(el));}
+(async function init(){
+  let saved="en";try{saved=localStorage.getItem("zv_lang")||"en";}catch(e){}
+  await loadConfig();
+  setLang(saved);
+  observeReveals();
+  if(adminToken){ adminMode=true; renderAdminBar(); }
+})();
+</script>
+</body>
+</html>
