@@ -181,6 +181,20 @@ function depositFor(pay, pk, people) {
   return { total, deposit: dep };
 }
 
+/* ============ REWARD SETTINGS (editable in admin) ============ */
+const DEFAULT_REWARD = {
+  enabled: true,
+  signupBonus: 1000,      // points given once on registration
+  earnRate: 1,            // % of package price earned per completed visit
+  reviewBonus: 500,       // points for leaving a review
+  pointValue: 1,          // 1 point = 1 KRW when redeemed
+  minRedeem: 5000         // minimum points before they can be used
+};
+async function rewardCfg(db) {
+  const saved = await getSetting(db, "reward", null);
+  return Object.assign({}, DEFAULT_REWARD, saved || {});
+}
+
 /* ============ CUSTOMERS ============
    Every booking is linked to a customer row, whether or not they registered.
    That's what makes new-vs-returning stats possible from day one. */
@@ -275,7 +289,7 @@ export async function onRequest(context) {
   try {
     /* ---------------- public: config ---------------- */
     if (route === "/config" && request.method === "GET") {
-      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, pay, msgsCfg, biz] = await Promise.all([
+      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, pay, msgsCfg, biz, reward] = await Promise.all([
         getSetting(db, "packages", null),
         getSetting(db, "hours", { open: 10, close: 21 }),
         getSetting(db, "dayhours", {}),
@@ -296,6 +310,7 @@ export async function onRequest(context) {
         getSetting(db, "pay", null),
         getSetting(db, "msgs", null),
         getSetting(db, "biz", null),
+        getSetting(db, "reward", null),
       ]);
       let reviews = [];
       try {
@@ -307,7 +322,7 @@ export async function onRequest(context) {
       return json({ packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, reviews,
         pay: { depositPct: (pay && pay.depositPct) || DEFAULT_PAY.depositPct,
                refund: (pay && pay.refund) || DEFAULT_PAY.refund },
-        msgs: msgsCfg, msgsDefault: DEFAULT_MSGS, biz });
+        msgs: msgsCfg, msgsDefault: DEFAULT_MSGS, biz, reward: Object.assign({}, DEFAULT_REWARD, reward || {}) });
     }
 
     /* ---------------- public: slots (+ queue counts) ---------------- */
@@ -623,7 +638,8 @@ export async function onRequest(context) {
 
       /* welcome bonus, once */
       const already = await db.prepare("SELECT id FROM point_log WHERE customer_id=? AND reason='signup'").bind(c.id).first();
-      if (!already) await addPoints(db, c.id, 1000, "signup", null);
+      const rw = await rewardCfg(db);
+      if (!already && rw.enabled && rw.signupBonus > 0) await addPoints(db, c.id, rw.signupBonus, "signup", null);
 
       const fresh = await db.prepare("SELECT * FROM customers WHERE id = ?").bind(c.id).first();
       return json({ ok: true, token: hash, customer: { email: fresh.email, name: fresh.name, points: fresh.points, visits: fresh.booking_count } });
@@ -719,6 +735,13 @@ export async function onRequest(context) {
         .prepare("SELECT c.*, cu.email AS owner_email FROM coupons c LEFT JOIN customers cu ON cu.id=c.customer_id ORDER BY c.id DESC LIMIT 100")
         .all();
       return json({ coupons: results || [] });
+    }
+
+    if (route === "/admin/coupon/del" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { id } = await request.json();
+      await db.prepare("DELETE FROM coupons WHERE id = ?").bind(id).run();
+      return json({ ok: true });
     }
 
     /* ---------------- admin: adjust points ---------------- */
@@ -831,7 +854,8 @@ export async function onRequest(context) {
         /* count the visit and award points — 1 point per 100 KRW of the package */
         if (b.customer_id) {
           await db.prepare("UPDATE customers SET visit_count = visit_count + 1 WHERE id = ?").bind(b.customer_id).run();
-          const earned = Math.round((b.total_amount || 0) / 100);
+          const rw = await rewardCfg(db);
+          const earned = rw.enabled ? Math.round(((b.total_amount || 0) * rw.earnRate) / 100) : 0;
           if (earned > 0) await addPoints(db, b.customer_id, earned, "visit", b.id);
         }
         const MP = await msgs(db);
@@ -892,7 +916,7 @@ export async function onRequest(context) {
     if (route === "/admin/save" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
       const body = await request.json();
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz", "reward"];
 
       /* keep a snapshot of the current state before overwriting it */
       const label = body.__label || "";
@@ -947,7 +971,7 @@ export async function onRequest(context) {
       const snap = await db.prepare("SELECT * FROM snapshots WHERE id = ?").bind(id).first();
       if (!snap) return json({ error: "not found" }, 404);
       const data = safeParseObj(snap.data);
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz", "reward"];
 
       /* snapshot the current state too, so a restore is itself undoable */
       try {
@@ -981,7 +1005,8 @@ export async function onRequest(context) {
 
     /* ---------------- public: post a review ---------------- */
     if (route === "/review" && request.method === "POST") {
-      const { name, text, rating, password } = await request.json();
+      const body = await request.json();
+      const { name, text, rating, password } = body;
       if (!name || !text || !password) return json({ error: "missing fields" }, 400);
       const pwHash = await sha256(password);
       await db
@@ -991,6 +1016,14 @@ export async function onRequest(context) {
         .run();
       const row = await db.prepare("SELECT last_insert_rowid() AS id").first();
       await audit(db, "review", row.id, "create", "guest", null, { name, rating, text });
+      /* reward the reviewer if they have an account */
+      try {
+        const rw = await rewardCfg(db);
+        if (rw.enabled && rw.reviewBonus > 0 && body && body.email) {
+          const c = await db.prepare("SELECT id FROM customers WHERE email = ?").bind(String(body.email).toLowerCase()).first();
+          if (c) await addPoints(db, c.id, rw.reviewBonus, "review", null);
+        }
+      } catch (e) {}
       await sendTelegram(env, `⭐ <b>새 후기</b>\n\n👤 ${name}\n${"★".repeat(Math.min(5, Math.max(1, parseInt(rating) || 5)))}\n\n${String(text).slice(0, 300)}`);
       return json({ ok: true });
     }
