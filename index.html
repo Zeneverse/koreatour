@@ -647,6 +647,19 @@
   @keyframes shakeX{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
   .agree-check.shake{animation:shakeX .4s}
 
+  /* ===== buffer & addon gating ===== */
+  .addon-check.off{opacity:.55;cursor:not-allowed;background:var(--paper-2)}
+  .ao-note{display:block;font-style:normal;font-size:.72rem;color:var(--sage);margin-top:2px;line-height:1.4}
+  .ao-block{display:block;font-style:normal;font-size:.72rem;color:var(--clay);margin-top:3px;line-height:1.4}
+  .ao-tag{font-style:normal;font-family:'Space Mono',monospace;font-size:.58rem;padding:2px 8px;border-radius:20px;white-space:nowrap;letter-spacing:.04em}
+  .ao-tag.pre{background:var(--ink);color:var(--gold)}
+  .ao-tag.day{background:var(--mist);color:#6b746f}
+  .buf-line{display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:var(--paper-2);border-radius:9px;padding:8px 11px;margin-top:8px;font-size:.78rem}
+  .buf-line i{font-style:normal;color:var(--sage);font-size:.74rem}
+  .tgl.sm{width:36px;height:20px}
+  .tgl.sm::after{width:15px;height:15px;top:2.5px;left:2.5px}
+  .tgl.sm.on::after{left:18px}
+
   /* ===== A/B options ===== */
   .opt-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
   .opt-tab{display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 13px;cursor:pointer;font-family:inherit;transition:.15s}
@@ -1110,7 +1123,7 @@ const I18N={
     reset_confirm:"Reset \"{x}\" to the original? A backup is saved first.",reset_done:"Reset done.",
     wl_full:"This date is fully booked.",wl_cta:"Notify me if a spot opens",wl_title:"Get notified",
     wl_sub:"If someone cancels on this date, I'll email you right away. No obligation.",
-    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",acc_login:"Log in",acc_register:"Create account",acc_pw:"Password",acc_login_sub:"See your past bookings, points and coupons.",acc_reg_sub:"Optional — you can book without an account. Members earn points and get return-visit offers.",acc_have:"Already have an account?",acc_no:"No account yet?",acc_bonus:"{n} points just for joining",acc_welcome:"Welcome! Points added.",acc_dup:"That email is already registered — try logging in.",acc_short:"Password must be at least 6 characters.",acc_none:"No account with that email yet.",acc_wrong:"Wrong email or password.",acc_my:"My page",acc_points:"points",acc_visits:"{n} bookings",acc_bookings:"My bookings",acc_no_bookings:"No bookings yet.",acc_coupons:"My coupons",acc_off:"off",acc_history:"Points history",acc_logout:"Log out",acc_nth:"visit #{n}",tier1:"First-timer",tier2:"Returning guest",tier3:"Regular",pr_signup:"Joined",pr_visit:"Visit completed",pr_review:"Left a review",pr_manual:"Adjusted",grp_ops:"Bookings",grp_cust:"Guests",grp_edit:"Edit site",grp_sys:"Settings",ab_reward:"Points & coupons",rw_sub:"Set how points are earned, and issue coupons.",rw_enabled:"Rewards programme",rw_enabled_note:"Turn off to stop all point earning",rw_signup:"Sign-up bonus (points)",rw_earn:"Earn rate (% of package price)",rw_review:"Review bonus (points)",rw_minredeem:"Minimum points before redeeming",rw_example:"Example:",rw_coupons:"Coupons",rw_issue:"Issue",rw_used:"used",rw_anyone:"anyone",rw_no_coupons:"No coupons issued yet.",ab_cust:"Customers",cs_total:"Total",cs_new:"First-time",cs_return:"Returning",cs_rate:"Return rate",cs_list:"Customer list",cs_returning:"returning",cs_first:"new",cs_member:"member",cs_bookings:"{n} bookings",cs_visits:"{n} visits",cs_since:"since",cs_none:"No customers yet.",cs_coupon:"Give coupon",cs_points:"Adjust points",ie_included:"What's included",ie_excluded:"Not included",meet_title:"Where we meet",meet_map:"Open in Google Maps",meet_note:"Staying elsewhere? Tell me in your booking note and we can adjust the meeting point.",biz_title:"Business information",biz_name:"Business name",biz_owner:"Representative",biz_reg:"Business registration no.",biz_mailorder:"Mail-order sales no.",biz_addr:"Address",biz_email:"Support email",os_title:"Paying on the day",os_sub:"Balance is settled when we meet — several ways to do it.",os_modal_sub:"Accepted payment methods for the remaining balance.",os_card:"Credit / debit cards — NFC, Apple Pay, Google Pay",os_qr:"QR payments — Alipay, WeChat Pay",os_cash:"Cash in ",os_flex_badge:"Flexible change",os_flex:"Paying in USD or EUR cash? Choose the currency you get your change back in — whatever suits the rest of your trip.",os_flex_note:"Foreign change is given in notes only, rounded to the nearest dollar or euro.",os_link:"How I take payment on the day",ao_prepay:"prepaid",ao_onsite:"on the day",ps_incl_pre:"incl. prepaid extras",per_person:"per person",f_option:"Choose your option",f_option_err:"Please choose Option A or B.",f_option_compare:"Compare A and B in detail",ps_total:"Total",ps_deposit:"Deposit now ({p}%)",ps_deposit_due:"Deposit to confirm",ps_note:"Balance of {a} is paid on the day.",pay_title:"Pay your deposit",pay_deposit:"Deposit due",pay_method:"How would you like to pay?",pay_global:"International card / Apple Pay / Alipay",pay_domestic:"Korean card / Naver Pay / Kakao Pay",pay_agree:"I have read and agree to the cancellation and refund policy.",pay_go:"Pay deposit securely →",pay_pick_err:"Please choose a payment method.",pay_opening:"Opening secure payment…",pay_verifying:"Confirming your payment…",pay_failed:"Payment was not completed.",pay_verify_fail:"We could not confirm the payment. If money left your account, contact me and I will check.",pay_done:"Deposit received",pay_done_sub:"Your spot is secured. See you in Seoul!",pay_now:"Pay deposit {a}",pay_note:"Payments are processed by PortOne. We never see or store your card details.",itin_sub:"How the day flows — you pick the start time when you book.",itin_note:"⏱ <b>You choose your start time</b> from whatever is open on your date — morning, afternoon or evening. The steps below only show the order and rough pacing, and we shift things around on the day.",
+    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",acc_login:"Log in",acc_register:"Create account",acc_pw:"Password",acc_login_sub:"See your past bookings, points and coupons.",acc_reg_sub:"Optional — you can book without an account. Members earn points and get return-visit offers.",acc_have:"Already have an account?",acc_no:"No account yet?",acc_bonus:"{n} points just for joining",acc_welcome:"Welcome! Points added.",acc_dup:"That email is already registered — try logging in.",acc_short:"Password must be at least 6 characters.",acc_none:"No account with that email yet.",acc_wrong:"Wrong email or password.",acc_my:"My page",acc_points:"points",acc_visits:"{n} bookings",acc_bookings:"My bookings",acc_no_bookings:"No bookings yet.",acc_coupons:"My coupons",acc_off:"off",acc_history:"Points history",acc_logout:"Log out",acc_nth:"visit #{n}",tier1:"First-timer",tier2:"Returning guest",tier3:"Regular",pr_signup:"Joined",pr_visit:"Visit completed",pr_review:"Left a review",pr_manual:"Adjusted",grp_ops:"Bookings",grp_cust:"Guests",grp_edit:"Edit site",grp_sys:"Settings",ab_reward:"Points & coupons",rw_sub:"Set how points are earned, and issue coupons.",rw_enabled:"Rewards programme",rw_enabled_note:"Turn off to stop all point earning",rw_signup:"Sign-up bonus (points)",rw_earn:"Earn rate (% of package price)",rw_review:"Review bonus (points)",rw_minredeem:"Minimum points before redeeming",rw_example:"Example:",rw_coupons:"Coupons",rw_issue:"Issue",rw_used:"used",rw_anyone:"anyone",rw_no_coupons:"No coupons issued yet.",ab_cust:"Customers",cs_total:"Total",cs_new:"First-time",cs_return:"Returning",cs_rate:"Return rate",cs_list:"Customer list",cs_returning:"returning",cs_first:"new",cs_member:"member",cs_bookings:"{n} bookings",cs_visits:"{n} visits",cs_since:"since",cs_none:"No customers yet.",cs_coupon:"Give coupon",cs_points:"Adjust points",ie_included:"What's included",ie_excluded:"Not included",meet_title:"Where we meet",meet_map:"Open in Google Maps",meet_note:"Staying elsewhere? Tell me in your booking note and we can adjust the meeting point.",biz_title:"Business information",biz_name:"Business name",biz_owner:"Representative",biz_reg:"Business registration no.",biz_mailorder:"Mail-order sales no.",biz_addr:"Address",biz_email:"Support email",os_title:"Paying on the day",os_sub:"Balance is settled when we meet — several ways to do it.",os_modal_sub:"Accepted payment methods for the remaining balance.",os_card:"Credit / debit cards — NFC, Apple Pay, Google Pay",os_qr:"QR payments — Alipay, WeChat Pay",os_cash:"Cash in ",os_flex_badge:"Flexible change",os_flex:"Paying in USD or EUR cash? Choose the currency you get your change back in — whatever suits the rest of your trip.",os_flex_note:"Foreign change is given in notes only, rounded to the nearest dollar or euro.",os_link:"How I take payment on the day",ao_prepay:"prepaid",ao_onsite:"on the day",ps_incl_pre:"incl. prepaid extras",ao_no_room:"Not available for this start time — the slot after is taken",ops_label:"Scheduling",ops_buffer:"Rest buffer after each booking (hours)",ops_buffer_note:"Blocked automatically after every confirmed booking, so you get a break between guests. You can release it per booking.",buf_label:"Rest buffer",buf_on_note:"1h blocked after this booking",buf_off_note:"back-to-back allowed",slot_no_addon:"That start time cannot take the extra hour. Pick another time or remove the add-on.",per_person:"per person",f_option:"Choose your option",f_option_err:"Please choose Option A or B.",f_option_compare:"Compare A and B in detail",ps_total:"Total",ps_deposit:"Deposit now ({p}%)",ps_deposit_due:"Deposit to confirm",ps_note:"Balance of {a} is paid on the day.",pay_title:"Pay your deposit",pay_deposit:"Deposit due",pay_method:"How would you like to pay?",pay_global:"International card / Apple Pay / Alipay",pay_domestic:"Korean card / Naver Pay / Kakao Pay",pay_agree:"I have read and agree to the cancellation and refund policy.",pay_go:"Pay deposit securely →",pay_pick_err:"Please choose a payment method.",pay_opening:"Opening secure payment…",pay_verifying:"Confirming your payment…",pay_failed:"Payment was not completed.",pay_verify_fail:"We could not confirm the payment. If money left your account, contact me and I will check.",pay_done:"Deposit received",pay_done_sub:"Your spot is secured. See you in Seoul!",pay_now:"Pay deposit {a}",pay_note:"Payments are processed by PortOne. We never see or store your card details.",itin_sub:"How the day flows — you pick the start time when you book.",itin_note:"⏱ <b>You choose your start time</b> from whatever is open on your date — morning, afternoon or evening. The steps below only show the order and rough pacing, and we shift things around on the day.",
     msg_title:"Message templates",msg_sub:"These are the emails guests receive. Edit the wording to sound like you.",
     msg_approved:"When you approve a booking",msg_declined:"When you decline",msg_bumped:"When someone else got the slot",msg_bumpedCta:"Button text on that email",
     msg_wlopen:"When a spot opens (waitlist)",msg_deposit:"When you mark the deposit paid",msg_subject:"Subject",msg_body:"Message",ab_msgs:"Messages",msg_reset:"Reset to default",
@@ -1201,7 +1214,7 @@ const I18N={
     reset_confirm:"\"{x}\"을(를) 처음 상태로 되돌릴까요? 먼저 백업돼요.",reset_done:"초기화했어요.",
     wl_full:"이 날짜는 예약이 마감됐어요.",wl_cta:"자리 나면 알림 받기",wl_title:"자리 알림 신청",
     wl_sub:"이 날짜에 취소가 생기면 바로 이메일로 알려드려요. 예약 의무는 없어요.",
-    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",acc_login:"로그인",acc_register:"회원가입",acc_pw:"비밀번호",acc_login_sub:"지난 예약 내역과 포인트·쿠폰을 확인하세요.",acc_reg_sub:"선택 사항이에요 — 가입 없이도 예약할 수 있어요. 회원은 포인트가 쌓이고 재방문 혜택을 받아요.",acc_have:"이미 계정이 있으신가요?",acc_no:"아직 계정이 없으신가요?",acc_bonus:"가입만 해도 {n}포인트",acc_welcome:"환영합니다! 포인트가 적립됐어요.",acc_dup:"이미 가입된 이메일이에요 — 로그인해보세요.",acc_short:"비밀번호는 6자 이상이어야 해요.",acc_none:"해당 이메일로 가입된 계정이 없어요.",acc_wrong:"이메일 또는 비밀번호가 틀렸어요.",acc_my:"마이페이지",acc_points:"포인트",acc_visits:"예약 {n}회",acc_bookings:"내 예약 내역",acc_no_bookings:"아직 예약 내역이 없어요.",acc_coupons:"내 쿠폰",acc_off:"할인",acc_history:"포인트 내역",acc_logout:"로그아웃",acc_nth:"{n}번째 방문",tier1:"첫 방문",tier2:"재방문 고객",tier3:"단골",pr_signup:"회원가입",pr_visit:"방문 완료",pr_review:"후기 작성",pr_manual:"수동 조정",grp_ops:"예약 관리",grp_cust:"고객",grp_edit:"사이트 수정",grp_sys:"설정",ab_reward:"포인트·쿠폰",rw_sub:"포인트 적립 기준을 정하고 쿠폰을 발급하세요.",rw_enabled:"포인트 제도",rw_enabled_note:"끄면 모든 적립이 중단돼요",rw_signup:"가입 보너스 (포인트)",rw_earn:"적립률 (패키지 금액의 %)",rw_review:"후기 작성 보너스 (포인트)",rw_minredeem:"사용 가능 최소 포인트",rw_example:"예시:",rw_coupons:"쿠폰",rw_issue:"발급",rw_used:"사용됨",rw_anyone:"누구나",rw_no_coupons:"발급된 쿠폰이 없어요.",ab_cust:"고객 관리",cs_total:"전체",cs_new:"신규",cs_return:"재방문",cs_rate:"재방문율",cs_list:"고객 목록",cs_returning:"재방문",cs_first:"신규",cs_member:"회원",cs_bookings:"예약 {n}회",cs_visits:"방문 {n}회",cs_since:"첫 방문",cs_none:"아직 고객이 없어요.",cs_coupon:"쿠폰 발급",cs_points:"포인트 조정",ie_included:"포함 사항",ie_excluded:"불포함 사항",meet_title:"만나는 곳",meet_map:"구글맵에서 열기",meet_note:"다른 곳에 머무시나요? 예약할 때 알려주시면 만나는 곳을 조정할 수 있어요.",biz_title:"사업자 정보",biz_name:"상호명",biz_owner:"대표자",biz_reg:"사업자등록번호",biz_mailorder:"통신판매업 신고번호",biz_addr:"주소",biz_email:"고객지원 이메일",os_title:"당일 결제 안내",os_sub:"잔금은 만나서 결제해요 — 방법은 여러 가지예요.",os_modal_sub:"당일 잔금 결제 시 이용 가능한 수단이에요.",os_card:"신용/체크카드 — NFC, 애플페이, 구글페이",os_qr:"QR 결제 — 알리페이, 위챗페이",os_cash:"현금 ",os_flex_badge:"거스름돈 선택",os_flex:"달러나 유로 현금으로 내시나요? 거스름돈을 원하는 통화로 받으실 수 있어요 — 남은 여행 일정에 맞춰서요.",os_flex_note:"외화 거스름돈은 지폐로만 드리며, 달러/유로 단위로 반올림됩니다.",os_link:"당일 결제 방법 보기",ao_prepay:"선결제",ao_onsite:"당일 결제",ps_incl_pre:"선결제 옵션 포함",per_person:"1인 기준",f_option:"옵션을 선택하세요",f_option_err:"Option A 또는 B를 선택해주세요.",f_option_compare:"A·B 자세히 비교하기",ps_total:"총 금액",ps_deposit:"지금 결제할 예약금 ({p}%)",ps_deposit_due:"확정을 위한 예약금",ps_note:"잔금 {a}는 당일에 결제해요.",pay_title:"예약금 결제",pay_deposit:"결제할 예약금",pay_method:"어떻게 결제하시겠어요?",pay_global:"해외 카드 / Apple Pay / Alipay",pay_domestic:"국내 카드 / 네이버페이 / 카카오페이",pay_agree:"취소 및 환불 규정을 읽고 동의합니다.",pay_go:"안전하게 예약금 결제하기 →",pay_pick_err:"결제 수단을 선택해주세요.",pay_opening:"결제창을 여는 중…",pay_verifying:"결제를 확인하는 중…",pay_failed:"결제가 완료되지 않았어요.",pay_verify_fail:"결제 확인에 실패했어요. 출금이 되었다면 연락 주세요, 바로 확인할게요.",pay_done:"예약금 결제 완료",pay_done_sub:"자리가 확정됐어요. 곧 뵙겠습니다!",pay_now:"예약금 {a} 결제하기",pay_note:"결제는 포트원(PortOne)을 통해 안전하게 처리되며, 카드 정보는 저장되지 않아요.",itin_sub:"하루가 어떻게 흘러가는지 — 시작 시간은 예약할 때 직접 고르세요.",itin_note:"⏱ <b>시작 시간은 원하는 대로 고르실 수 있어요</b> — 그날 열려 있는 시간 중에서 오전·오후·저녁 아무 때나요. 아래는 순서와 대략적인 흐름만 보여주는 거예요.",
+    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",acc_login:"로그인",acc_register:"회원가입",acc_pw:"비밀번호",acc_login_sub:"지난 예약 내역과 포인트·쿠폰을 확인하세요.",acc_reg_sub:"선택 사항이에요 — 가입 없이도 예약할 수 있어요. 회원은 포인트가 쌓이고 재방문 혜택을 받아요.",acc_have:"이미 계정이 있으신가요?",acc_no:"아직 계정이 없으신가요?",acc_bonus:"가입만 해도 {n}포인트",acc_welcome:"환영합니다! 포인트가 적립됐어요.",acc_dup:"이미 가입된 이메일이에요 — 로그인해보세요.",acc_short:"비밀번호는 6자 이상이어야 해요.",acc_none:"해당 이메일로 가입된 계정이 없어요.",acc_wrong:"이메일 또는 비밀번호가 틀렸어요.",acc_my:"마이페이지",acc_points:"포인트",acc_visits:"예약 {n}회",acc_bookings:"내 예약 내역",acc_no_bookings:"아직 예약 내역이 없어요.",acc_coupons:"내 쿠폰",acc_off:"할인",acc_history:"포인트 내역",acc_logout:"로그아웃",acc_nth:"{n}번째 방문",tier1:"첫 방문",tier2:"재방문 고객",tier3:"단골",pr_signup:"회원가입",pr_visit:"방문 완료",pr_review:"후기 작성",pr_manual:"수동 조정",grp_ops:"예약 관리",grp_cust:"고객",grp_edit:"사이트 수정",grp_sys:"설정",ab_reward:"포인트·쿠폰",rw_sub:"포인트 적립 기준을 정하고 쿠폰을 발급하세요.",rw_enabled:"포인트 제도",rw_enabled_note:"끄면 모든 적립이 중단돼요",rw_signup:"가입 보너스 (포인트)",rw_earn:"적립률 (패키지 금액의 %)",rw_review:"후기 작성 보너스 (포인트)",rw_minredeem:"사용 가능 최소 포인트",rw_example:"예시:",rw_coupons:"쿠폰",rw_issue:"발급",rw_used:"사용됨",rw_anyone:"누구나",rw_no_coupons:"발급된 쿠폰이 없어요.",ab_cust:"고객 관리",cs_total:"전체",cs_new:"신규",cs_return:"재방문",cs_rate:"재방문율",cs_list:"고객 목록",cs_returning:"재방문",cs_first:"신규",cs_member:"회원",cs_bookings:"예약 {n}회",cs_visits:"방문 {n}회",cs_since:"첫 방문",cs_none:"아직 고객이 없어요.",cs_coupon:"쿠폰 발급",cs_points:"포인트 조정",ie_included:"포함 사항",ie_excluded:"불포함 사항",meet_title:"만나는 곳",meet_map:"구글맵에서 열기",meet_note:"다른 곳에 머무시나요? 예약할 때 알려주시면 만나는 곳을 조정할 수 있어요.",biz_title:"사업자 정보",biz_name:"상호명",biz_owner:"대표자",biz_reg:"사업자등록번호",biz_mailorder:"통신판매업 신고번호",biz_addr:"주소",biz_email:"고객지원 이메일",os_title:"당일 결제 안내",os_sub:"잔금은 만나서 결제해요 — 방법은 여러 가지예요.",os_modal_sub:"당일 잔금 결제 시 이용 가능한 수단이에요.",os_card:"신용/체크카드 — NFC, 애플페이, 구글페이",os_qr:"QR 결제 — 알리페이, 위챗페이",os_cash:"현금 ",os_flex_badge:"거스름돈 선택",os_flex:"달러나 유로 현금으로 내시나요? 거스름돈을 원하는 통화로 받으실 수 있어요 — 남은 여행 일정에 맞춰서요.",os_flex_note:"외화 거스름돈은 지폐로만 드리며, 달러/유로 단위로 반올림됩니다.",os_link:"당일 결제 방법 보기",ao_prepay:"선결제",ao_onsite:"당일 결제",ps_incl_pre:"선결제 옵션 포함",ao_no_room:"이 시작 시간엔 선택할 수 없어요 — 뒤 시간대에 다른 예약이 있어요",ops_label:"일정 운영",ops_buffer:"예약 후 휴식 시간 (시간)",ops_buffer_note:"예약이 확정되면 종료 후 이 시간만큼 자동으로 예약이 막혀요. 필요하면 예약별로 해제할 수 있어요.",buf_label:"휴식 시간",buf_on_note:"종료 후 1시간 차단 중",buf_off_note:"연속 예약 허용됨",slot_no_addon:"이 시작 시간엔 1시간 연장이 어려워요. 다른 시간을 고르거나 옵션을 빼주세요.",per_person:"1인 기준",f_option:"옵션을 선택하세요",f_option_err:"Option A 또는 B를 선택해주세요.",f_option_compare:"A·B 자세히 비교하기",ps_total:"총 금액",ps_deposit:"지금 결제할 예약금 ({p}%)",ps_deposit_due:"확정을 위한 예약금",ps_note:"잔금 {a}는 당일에 결제해요.",pay_title:"예약금 결제",pay_deposit:"결제할 예약금",pay_method:"어떻게 결제하시겠어요?",pay_global:"해외 카드 / Apple Pay / Alipay",pay_domestic:"국내 카드 / 네이버페이 / 카카오페이",pay_agree:"취소 및 환불 규정을 읽고 동의합니다.",pay_go:"안전하게 예약금 결제하기 →",pay_pick_err:"결제 수단을 선택해주세요.",pay_opening:"결제창을 여는 중…",pay_verifying:"결제를 확인하는 중…",pay_failed:"결제가 완료되지 않았어요.",pay_verify_fail:"결제 확인에 실패했어요. 출금이 되었다면 연락 주세요, 바로 확인할게요.",pay_done:"예약금 결제 완료",pay_done_sub:"자리가 확정됐어요. 곧 뵙겠습니다!",pay_now:"예약금 {a} 결제하기",pay_note:"결제는 포트원(PortOne)을 통해 안전하게 처리되며, 카드 정보는 저장되지 않아요.",itin_sub:"하루가 어떻게 흘러가는지 — 시작 시간은 예약할 때 직접 고르세요.",itin_note:"⏱ <b>시작 시간은 원하는 대로 고르실 수 있어요</b> — 그날 열려 있는 시간 중에서 오전·오후·저녁 아무 때나요. 아래는 순서와 대략적인 흐름만 보여주는 거예요.",
     msg_title:"메시지 문구",msg_sub:"고객에게 나가는 이메일 문구예요. 내 말투로 바꿔보세요.",
     msg_approved:"예약을 승인했을 때",msg_declined:"거절했을 때",msg_bumped:"다른 분이 먼저 확정됐을 때",msg_bumpedCta:"그 메일의 버튼 문구",
     msg_wlopen:"자리가 났을 때 (대기자)",msg_deposit:"예약금 입금 확인했을 때",msg_subject:"제목",msg_body:"내용",ab_msgs:"메시지 문구",msg_reset:"기본 문구로 되돌리기",
@@ -1281,6 +1294,7 @@ I18N.zhHant = Object.assign({}, I18N.en, {
   ie_included:"費用包含",ie_excluded:"費用不包含",meet_title:"集合地點",meet_map:"用 Google 地圖開啟",meet_note:"住在其他區域嗎？預約時告訴我，可以調整集合地點。",biz_title:"營業資訊",biz_name:"商號",biz_owner:"代表人",biz_reg:"營業登記號碼",biz_mailorder:"通信販賣申報號碼",biz_addr:"地址",biz_email:"客服信箱",
   os_title:"當天付款方式",os_sub:"餘款於見面時結清 — 有多種方式。",os_modal_sub:"支付餘款時可使用的方式。",os_card:"信用卡／金融卡 — NFC、Apple Pay、Google Pay",os_qr:"QR 支付 — 支付寶、微信支付",os_cash:"現金 ",os_flex_badge:"找零可選",os_flex:"以美金或歐元現金付款嗎？找零幣別由你選擇 — 依你接下來的行程需求。",os_flex_note:"外幣找零僅提供紙鈔，並四捨五入至整數。",os_link:"查看當天付款方式",
   ao_prepay:"預付",ao_onsite:"當天付款",ps_incl_pre:"含預付項目",
+  ao_no_room:"此開始時間無法加購 — 後面時段已有預約",slot_no_addon:"此時段無法延長一小時，請選其他時間或取消加購。",
   per_person:"每人",f_option:"選擇方案",f_option_err:"請選擇 Option A 或 B。",f_option_compare:"詳細比較 A 與 B",
   ps_total:"總金額",ps_deposit:"現在支付訂金（{p}%）",ps_deposit_due:"確認用訂金",ps_note:"餘款 {a} 於當天支付。",
   pay_title:"支付訂金",pay_deposit:"應付訂金",pay_method:"你想如何付款？",pay_global:"國際信用卡 / Apple Pay / 支付寶",pay_domestic:"韓國信用卡 / Naver Pay / Kakao Pay",pay_agree:"我已閱讀並同意取消與退款規定。",pay_go:"安全支付訂金 →",pay_pick_err:"請選擇付款方式。",pay_opening:"正在開啟付款視窗…",pay_verifying:"確認付款中…",pay_failed:"付款未完成。",pay_done:"訂金已收到",pay_done_sub:"你的名額已確認，首爾見！",pay_now:"支付訂金 {a}",
@@ -1373,7 +1387,7 @@ const DEFAULT_PACKS=[
       {t:"1:40–2:00",title:{en:"Emergency AM/PM skincare card",ko:"Emergency AM/PM 스킨케어 카드"},
        d:{en:"Your routine card and wrap-up.",ko:"루틴 카드 전달 및 마감."}}]}],
    addons:[
-     {name:{en:"Extra hour of guiding & shopping",ko:"시간·쇼핑 1시간 연장"},price:120000,prepay:false,
+     {name:{en:"Extra hour of guiding & shopping",ko:"시간·쇼핑 1시간 연장"},price:120000,prepay:false,extendsHour:true,
       note:{en:"Paid on the day",ko:"당일 결제"}},
      {name:{en:"Private hotel / airport pick-up",ko:"호텔·공항 프라이빗 픽업"},price:160000,prepay:true,
       note:{en:"Paid upfront — I need to arrange the car in advance",ko:"차량 사전 예약이 필요해 선결제예요"}}],
@@ -1428,7 +1442,7 @@ const DEFAULT_PACKS=[
       {t:"3:15–4:00",title:{en:"PDF report & photos",ko:"PDF 리포트 브리핑 & 기념 촬영"},
        d:{en:"Fully made over, we finish with your report and photos.",ko:"완벽한 메이크오버 상태로 리포트 브리핑 & 촬영 마감."}}]}],
    addons:[
-     {name:{en:"Extra hour of guiding & shopping",ko:"시간·쇼핑 1시간 연장"},price:120000,prepay:false,
+     {name:{en:"Extra hour of guiding & shopping",ko:"시간·쇼핑 1시간 연장"},price:120000,prepay:false,extendsHour:true,
       note:{en:"Paid on the day",ko:"당일 결제"}},
      {name:{en:"K-Heritage wellness clinic — escort & interpreting",ko:"한방 웰니스 클리닉 동행·통역"},price:160000,prepay:false,
       note:{en:"My escort & interpreting fee. Treatment costs are paid directly to the clinic.",
@@ -1514,7 +1528,7 @@ function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
 
 let adminToken = sessionStorage.getItem("zv_token") || "";
 const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false,
-  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, msgs:null, msgsDefault:null, biz:null, reward:null, areas:null, loaded:false };
+  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, msgs:null, msgsDefault:null, biz:null, reward:null, areas:null, ops:null, loaded:false };
 
 async function loadConfig(){
   try{
@@ -1539,6 +1553,7 @@ async function loadConfig(){
     STATE.biz = c.biz || null;
     STATE.reward = c.reward || null;
     STATE.areas = c.areas || null;
+    STATE.ops = c.ops || {bufferH:1};
     STATE.msgs = c.msgs || null;
     STATE.msgsDefault = c.msgsDefault || null;
     STATE.copy = c.copy || null;
@@ -1569,7 +1584,7 @@ async function saveAll(){
       packages:PACKS, hours:STATE.hours, dayhours:STATE.dayhours,
       closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh,
       feats:loadFeats(), host:STATE.host||DEFAULT_HOST, contact:STATE.contact||DEFAULT_CONTACT,
-      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay, msgs:STATE.msgs, biz:STATE.biz, reward:STATE.reward, areas:loadAreas()
+      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay, msgs:STATE.msgs, biz:STATE.biz, reward:STATE.reward, areas:loadAreas(), ops:STATE.ops
     });
   }catch(e){ alert("저장 실패 / Save failed: "+e.message); }
 }
@@ -2592,6 +2607,7 @@ function updatePriceSum(){
     <div class="ps-note">${t.ps_note.replace("{a}",money(total-dep))}</div>`;
 }
 let pickedOption="";
+let SLOT_EXTENDABLE={},BUFFER_H=1;
 function refreshOptions(){
   const pk=currentPack(),wrap=document.getElementById("bk_options"),box=document.getElementById("bk_opt_wrap");
   if(!wrap||!box)return;
@@ -2612,20 +2628,23 @@ function pickOption(id){
 }
 function refreshAddons(){
   const pk=currentPack(),wrap=document.getElementById("bk_addons"),box=document.getElementById("bk_addons_wrap");
+  if(!wrap||!box)return;
   const list=pk.addons||[];
   if(!list.length){box.style.display="none";wrap.innerHTML="";updatePriceSum();return;}
   box.style.display="";
-  wrap.innerHTML=list.map((a,j)=>
-    `<label class="addon-check">
-       <input type="checkbox" data-addon="${j}" onchange="updatePriceSum()">
-       <span class="ao-body">
-         <span class="ao-top">${a.name[lang]}
-           <i class="ao-tag ${a.prepay?"pre":"day"}">${a.prepay?t.ao_prepay:t.ao_onsite}</i></span>
-         ${a.note?`<i class="ao-note">${esc(tx(a.note))}</i>`:""}
-       </span>
-       <b>+${money(a.price||0)}</b>
-     </label>`
-  ).join("");
+  const t=I18N[lang];
+  wrap.innerHTML=list.map((a,j)=>{
+    /* an add-on that adds an hour needs the next slot free */
+    const blocked = a.extendsHour && selectedSlot && SLOT_EXTENDABLE[selectedSlot]!==true;
+    return `<label class="addon-check${blocked?" off":""}">
+      <input type="checkbox" data-addon="${j}" onchange="updatePriceSum()" ${blocked?"disabled":""}>
+      <span>${a.name[lang]}
+        ${a.note?`<i class="ao-note">${esc(tx(a.note))}</i>`:""}
+        ${blocked?`<i class="ao-block">${t.ao_no_room}</i>`:""}</span>
+      <b>+${money(a.price||0)}</b>
+      ${a.prepay!==undefined?`<i class="ao-tag ${a.prepay?"pre":"day"}">${a.prepay?t.ao_prepay:t.ao_onsite}</i>`:""}
+    </label>`;
+  }).join("");
 }
 function selectedAddons(){
   const pk=currentPack(),out=[];
@@ -2654,6 +2673,8 @@ async function refreshSlots(){
       return;
     }
     const q=r.queue||{};
+    SLOT_EXTENDABLE=r.extendable||{};
+    BUFFER_H=r.bufferH==null?1:r.bufferH;
     wrap.innerHTML=starts.map(sl=>{
       const end=pad(parseInt(sl)+pk.dur_h)+":00";
       const n=q[sl]||0;
@@ -2664,7 +2685,13 @@ async function refreshSlots(){
     wrap.innerHTML=`<span class="slot-hint">${t.slot_err}</span>`;
   }
 }
-function pickSlot(s,el){selectedSlot=s;document.querySelectorAll(".slot-btn").forEach(b=>b.classList.remove("on"));el.classList.add("on");}
+function pickSlot(s,el){
+  selectedSlot=s;
+  document.querySelectorAll(".slot-btn").forEach(b=>b.classList.remove("on"));
+  el.classList.add("on");
+  refreshAddons();          // re-check whether the extra hour still fits
+  updatePriceSum();
+}
 async function submitBooking(){
   const t=I18N[lang],msg=document.getElementById("bk_msg");
   const name=document.getElementById("bk_name").value.trim();
@@ -2699,7 +2726,7 @@ async function submitBooking(){
   }catch(e){
     console.error("booking failed:",e);
     msg.style.color="#c96f52";
-    msg.textContent = e.code==="full" ? t.slot_full : e.code==="taken" ? t.slot_taken
+    msg.textContent = e.code==="full" ? t.slot_full : e.code==="no_room_for_addon" ? t.slot_no_addon : e.code==="taken" ? t.slot_taken
       : e.code==="closed" ? t.slot_none : (t.book_fail+" ("+(e.message||e.code||"error")+")");
     refreshSlots();
   }
@@ -3829,6 +3856,11 @@ function openSettings(){
         <div class="field"><label>${t.biz_addr}</label><input id="bz_addr" type="text" value="${esc((STATE.biz||{}).addr||"")}"></div>
         <div class="field"><label>${t.biz_email}</label><input id="bz_email" type="email" value="${esc((STATE.biz||{}).email||"")}"></div>
 
+        <div class="set-label mono">${t.ops_label}</div>
+        <div class="field"><label>${t.ops_buffer}</label>
+          <input id="ops_buffer" type="number" min="0" max="4" step="0.5" value="${(STATE.ops&&STATE.ops.bufferH)!=null?STATE.ops.bufferH:1}"></div>
+        <div class="rw-preview">${t.ops_buffer_note}</div>
+
         <div class="set-label mono">${t.pay_label}</div>
         <div class="field"><label>${t.pay_pct}</label>
           <input id="pay_pct" type="number" min="0" max="100" value="${(STATE.pay&&STATE.pay.depositPct)||30}"></div>
@@ -3948,6 +3980,8 @@ function saveSettings(){
   STATE.media={v1:g("st_v1"),v2:g("st_v2"),v3:g("st_v3")};
   STATE.biz={name:g("bz_name"),owner:g("bz_owner"),regNo:g("bz_reg"),
     mailOrderNo:g("bz_mail"),addr:g("bz_addr"),email:g("bz_email")};
+  const numOps=(id,d)=>{const v=parseFloat(document.getElementById(id).value);return isNaN(v)?d:v;};
+  STATE.ops={bufferH:numOps("ops_buffer",1)};
   const num=(id,d)=>{const v=parseInt(document.getElementById(id).value);return isNaN(v)?d:v;};
   STATE.pay={depositPct:num("pay_pct",30),paypalMe:g("pay_ppme"),bank:g("pay_bank"),
     usdRate:num("pay_rate",1350),eurRate:num("pay_rate_eur",1450),defaultCurrency:g("pay_defcur"),refund:{fullDays:num("ref_full",7),halfDays:num("ref_half",3)}};
@@ -4184,6 +4218,11 @@ async function viewBookings(filter){
           ? `<button class="bk-del" onclick="markDeposit(${x.id},'unpaid')">${t.dep_unmark}</button>`
           : `<button class="bk-act ok" style="padding:4px 12px;font-size:.74rem" onclick="markDeposit(${x.id},'paid')">${t.dep_mark}</button>`}
       </div>`:""}
+      ${x.status==="confirmed"?`<div class="meta buf-line">
+        <span>${t.buf_label}</span>
+        <button class="tgl sm${x.no_buffer?"":" on"}" onclick="toggleBuffer(${x.id},${x.no_buffer?0:1})"></button>
+        <i>${x.no_buffer?t.buf_off_note:t.buf_on_note}</i>
+      </div>`:""}
       <div class="bk-actions">
         ${x.status==="pending"?`<button class="bk-act ok" onclick="approveBk(${x.id})">${t.bk_approve}</button>
           <button class="bk-act no" onclick="declineBk(${x.id})">${t.bk_decline}</button>`:""}
@@ -4234,6 +4273,10 @@ function contactBtns(x){
 function copyMsg(m){
   navigator.clipboard?.writeText(m);
   flashSaved();
+}
+async function toggleBuffer(id,off){
+  try{ await API.post("/api/admin/buffer",{id,off}); viewBookings(); }
+  catch(e){ alert(A().book_fail); }
 }
 async function markDeposit(id,status){
   const t=A();
