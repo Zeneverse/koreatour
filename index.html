@@ -405,6 +405,13 @@
   .saved-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:30px;font-size:.82rem;z-index:210;opacity:0;pointer-events:none;transition:.25s;font-family:'Space Mono',monospace;letter-spacing:.06em}
   .saved-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* ===== setup status ===== */
+  .setup-status{display:flex;flex-direction:column;gap:7px;margin-bottom:6px}
+  .ss-row{display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:10px;font-size:.85rem;background:var(--paper-2);border:1px solid var(--line);flex-wrap:wrap}
+  .ss-row.on{background:#eaf3ec;border-color:#cfe2d5}
+  .ss-row span{flex:1}
+  .ss-row i{font-style:normal;font-size:.72rem;color:var(--sage)}
+
   /* ===== payment ===== */
   .pay-amount{display:flex;justify-content:space-between;align-items:center;background:var(--ink);color:var(--paper);border-radius:14px;padding:18px 20px;margin:16px 0 20px}
   .pay-amount .mono{font-size:.64rem;color:var(--gold)}
@@ -2809,6 +2816,11 @@ function openSettings(){
         <div class="field"><input id="st_v2" type="text" value="${esc(m.v2||"")}" placeholder="Video 2"></div>
         <div class="field"><input id="st_v3" type="text" value="${esc(m.v3||"")}" placeholder="Video 3"></div>
 
+        <div class="set-label mono">${ko?"연동 상태":"Integration status"}</div>
+        <div class="setup-status" id="setupStatus">
+          <div class="ss-row"><span>${ko?"확인 중…":"Checking…"}</span></div>
+        </div>
+
         <div class="set-label mono">${t.pay_label}</div>
         <div class="field"><label>${t.pay_pct}</label>
           <input id="pay_pct" type="number" min="0" max="100" value="${(STATE.pay&&STATE.pay.depositPct)||30}"></div>
@@ -2835,6 +2847,7 @@ function openSettings(){
         <div class="msg" id="st_msg"></div>
       </div>
     </div>`;
+  renderSetupStatus();
 }
 async function testNotify(){
   const ko=lang==="ko",m=document.getElementById("nt_msg");
@@ -2850,6 +2863,22 @@ async function testNotify(){
       : (ko?"➖ 이메일: 아직 설정 안 됨":"➖ Email: not configured"));
     m.style.color="#3c4a48";m.innerHTML=lines.join("<br>");
   }catch(e){m.style.color="#c96f52";m.textContent=ko?"오류가 났어요":"Something went wrong";}
+}
+async function renderSetupStatus(){
+  const box=document.getElementById("setupStatus");if(!box)return;
+  const ko=lang==="ko";
+  let pay={enabled:false};
+  try{ pay=await API.get("/api/payments/config"); }catch(e){}
+  let notif={telegramConfigured:false,emailConfigured:false};
+  try{ notif=await API.post("/api/admin/test-notify?dry=1",{}); }catch(e){}
+  const row=(on,label,todo)=>`<div class="ss-row ${on?"on":"off"}">
+      <b>${on?"✅":"⏳"}</b><span>${label}</span>${on?"":`<i>${todo}</i>`}</div>`;
+  box.innerHTML=
+    row(!!pay.enabled, ko?"온라인 결제 (PortOne)":"Online payments (PortOne)",
+        ko?"사업자등록 → PG 심사 후 키 입력":"needs business reg. + PG keys")+
+    row(!!notif.telegramConfigured, ko?"텔레그램 알림":"Telegram alerts", ko?"봇 토큰 입력 필요":"add bot token")+
+    row(!!notif.emailConfigured, ko?"이메일 발송":"Email sending",
+        ko?"선택 사항 — 텔레그램으로 충분":"optional — Telegram covers it");
 }
 function saveSettings(){
   const g=id=>document.getElementById(id).value.trim();

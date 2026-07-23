@@ -734,6 +734,12 @@ export async function onRequest(context) {
     /* ---------------- admin: test notifications ---------------- */
     if (route === "/admin/test-notify" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const configured = {
+        telegramConfigured: !!(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID),
+        emailConfigured: !!(env.RESEND_API_KEY && env.MAIL_FROM && env.ADMIN_EMAIL),
+      };
+      /* dry run: just report what's configured, don't actually send */
+      if (url.searchParams.get("dry")) return json({ ...configured, telegram: false, email: false });
       const tg = await sendTelegram(env, "✅ <b>Zeneverse 연결 성공</b>\n\n이제 예약 알림이 여기로 옵니다.");
       const mail = await sendMail(env, env.ADMIN_EMAIL, "Zeneverse — test notification",
         mailShell("Test notification", "<p>If you can read this, email alerts are working.</p>"));
