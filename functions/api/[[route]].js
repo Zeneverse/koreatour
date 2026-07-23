@@ -77,6 +77,41 @@ async function sendMail(env, to, subject, html) {
     return r.ok;
   } catch (e) { return false; }
 }
+/* ============ MESSAGE TEMPLATES (editable in admin) ============ */
+const DEFAULT_MSGS = {
+  approved: {
+    subject: "Your booking is confirmed",
+    body: "Great news — your booking is confirmed. Details are below."
+  },
+  declined: {
+    subject: "About your booking request",
+    body: "Unfortunately I can't take this booking."
+  },
+  bumped: {
+    subject: "That time has been taken",
+    body: "Another guest was confirmed for the time you requested, so I'm not able to hold it for you.\n\nI'd still love to host you. If you'd like, I can let you know the moment a spot opens on this date — cancellations do happen."
+  },
+  bumpedCta: "Yes, notify me if a spot opens",
+  waitlistOpen: {
+    subject: "A spot just opened up",
+    body: "Good news — a spot has opened on the date you asked about. Spots are limited and go quickly, so book as soon as you can."
+  },
+  depositReceived: {
+    subject: "Deposit received",
+    body: "Thank you! Your deposit is confirmed and your spot is secured. See you in Seoul."
+  }
+};
+async function msgs(db) {
+  const saved = await getSetting(db, "msgs", null);
+  const out = JSON.parse(JSON.stringify(DEFAULT_MSGS));
+  if (saved) for (const k of Object.keys(saved)) {
+    if (typeof saved[k] === "object" && out[k]) Object.assign(out[k], saved[k]);
+    else out[k] = saved[k];
+  }
+  return out;
+}
+const nl2br = (t) => String(t || "").replace(/\n/g, "<br>");
+
 /* ============ TELEGRAM (free, unlimited) ============
    Set in Cloudflare > Settings > Variables:
      TELEGRAM_BOT_TOKEN - from @BotFather
@@ -149,6 +184,7 @@ function depositFor(pay, pk, people) {
 /* ---- waitlist: tell everyone waiting that a spot opened ---- */
 async function notifyWaitlist(env, db, date, reasonLabel) {
   try {
+    const MW = await msgs(db);
     const { results } = await db
       .prepare("SELECT * FROM waitlist WHERE date = ? AND notified = 0")
       .bind(date).all();
@@ -156,12 +192,10 @@ async function notifyWaitlist(env, db, date, reasonLabel) {
     if (!rows.length) return 0;
     const site = env.SITE_URL || "";
     for (const w of rows) {
-      await sendMail(env, w.email, `Zeneverse — a spot opened on ${date}`,
-        mailShell("A spot just opened up", `
-          <p style="color:#3c4a48;font-size:14px;line-height:1.7">
-            Good news — a spot has opened on <b>${date}</b>, the date you asked to be notified about.</p>
-          <p style="color:#3c4a48;font-size:14px;line-height:1.7">
-            Spots are limited and go quickly, so book as soon as you can.</p>
+      await sendMail(env, w.email, `Zeneverse — ${MW.waitlistOpen.subject} (${date})`,
+        mailShell(MW.waitlistOpen.subject, `
+          <p style="color:#3c4a48;font-size:14px;line-height:1.7"><b>${date}</b></p>
+          <p style="color:#3c4a48;font-size:14px;line-height:1.7">${nl2br(MW.waitlistOpen.body)}</p>
           ${site ? `<p style="margin-top:16px"><a href="${site}" style="display:inline-block;background:#c96f52;color:#fff;text-decoration:none;padding:12px 24px;border-radius:30px;font-weight:600">Book this date →</a></p>` : ""}`));
     }
     await db.prepare("UPDATE waitlist SET notified = 1 WHERE date = ? AND notified = 0").bind(date).run();
@@ -205,7 +239,7 @@ export async function onRequest(context) {
   try {
     /* ---------------- public: config ---------------- */
     if (route === "/config" && request.method === "GET") {
-      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, pay] = await Promise.all([
+      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, pay, msgsCfg] = await Promise.all([
         getSetting(db, "packages", null),
         getSetting(db, "hours", { open: 10, close: 21 }),
         getSetting(db, "dayhours", {}),
@@ -224,6 +258,7 @@ export async function onRequest(context) {
         getSetting(db, "nav", null),
         getSetting(db, "langs", null),
         getSetting(db, "pay", null),
+        getSetting(db, "msgs", null),
       ]);
       let reviews = [];
       try {
@@ -234,7 +269,8 @@ export async function onRequest(context) {
       } catch (e) { /* reviews table may not exist yet */ }
       return json({ packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, reviews,
         pay: { depositPct: (pay && pay.depositPct) || DEFAULT_PAY.depositPct,
-               refund: (pay && pay.refund) || DEFAULT_PAY.refund } });
+               refund: (pay && pay.refund) || DEFAULT_PAY.refund },
+        msgs: msgsCfg, msgsDefault: DEFAULT_MSGS });
     }
 
     /* ---------------- public: slots (+ queue counts) ---------------- */
@@ -280,7 +316,7 @@ export async function onRequest(context) {
     /* ---------------- public: create request ---------------- */
     if (route === "/book" && request.method === "POST") {
       const body = await request.json();
-      const { name, email, pkg, date, time, people, note, addons, contact, needs } = body || {};
+      const { name, email, pkg, date, time, people, note, addons, contact, contact_channel, contact_id, needs } = body || {};
       if (!name || !email || !pkg || !date || !time) return json({ error: "missing fields" }, 400);
 
       const [packages, hours, dayhours, closed, blocked] = await Promise.all([
@@ -317,14 +353,16 @@ export async function onRequest(context) {
 
       await db
         .prepare(
-          `INSERT INTO bookings (code,name,email,contact,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at,deposit_amount,total_amount)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?,?,?)`
+          `INSERT INTO bookings (code,name,email,contact,contact_channel,contact_id,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at,deposit_amount,total_amount)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?,?,?)`
         )
         .bind(
           code,
           String(name).slice(0, 120),
           String(email).slice(0, 160),
           String(contact || "").slice(0, 160),
+          String(contact_channel || "").slice(0, 20),
+          String(contact_id || "").slice(0, 120),
           JSON.stringify(needs || []),
           pkg,
           (pk.title && pk.title.en) || pkg,
@@ -380,6 +418,8 @@ export async function onRequest(context) {
         `📅 ${date}  ⏰ ${time}–${endT}\n` +
         `👥 ${parseInt(people) || 1}명\n` +
         `💬 ${contact || "-"}\n` +
+        (contact_channel === "whatsapp" && contact_id
+          ? `👉 https://wa.me/${String(contact_id).replace(/[^0-9]/g, "")}\n` : "") +
         `📧 ${email}\n` +
         (needTxt ? `🎯 ${needTxt}\n` : "") +
         (addonTxt ? `➕ ${addonTxt}\n` : "") +
@@ -476,8 +516,24 @@ export async function onRequest(context) {
       await db.prepare("INSERT INTO waitlist (name,email,contact,pkg_id,date,notified,created_at) VALUES (?,?,?,?,?,0,?)")
         .bind(String(name || "").slice(0, 120), String(email).slice(0, 160),
               String(contact || "").slice(0, 160), String(pkg || ""), date, nowISO()).run();
-      await sendTelegram(env, `👀 <b>자리 알림 신청</b>\n\n📅 ${date}\n👤 ${name || "-"}\n📧 ${email}`);
-      return json({ ok: true });
+      const cnt = await db.prepare("SELECT COUNT(*) AS n FROM waitlist WHERE date = ? AND notified = 0").bind(date).first();
+      const position = (cnt && cnt.n) || 1;
+      await sendTelegram(env, `👀 <b>자리 알림 신청</b>\n\n📅 ${date}\n👤 ${name || "-"}\n📧 ${email}\n🔢 ${position}번째 대기`);
+      return json({ ok: true, position });
+    }
+
+    /* ---------------- public: my waitlist position ---------------- */
+    if (route === "/waitlist/status" && request.method === "GET") {
+      const email = (url.searchParams.get("email") || "").trim();
+      const date = url.searchParams.get("date");
+      if (!email || !date) return json({ error: "email and date required" }, 400);
+      const me = await db.prepare("SELECT id, created_at, notified FROM waitlist WHERE email = ? AND date = ? ORDER BY id DESC LIMIT 1")
+        .bind(email, date).first();
+      if (!me) return json({ error: "not found" }, 404);
+      const ahead = await db.prepare("SELECT COUNT(*) AS n FROM waitlist WHERE date = ? AND notified = 0 AND created_at < ?")
+        .bind(date, me.created_at).first();
+      const total = await db.prepare("SELECT COUNT(*) AS n FROM waitlist WHERE date = ? AND notified = 0").bind(date).first();
+      return json({ position: ((ahead && ahead.n) || 0) + 1, total: (total && total.n) || 1, notified: !!me.notified });
     }
 
     /* ---------------- admin: waitlist list ---------------- */
@@ -547,6 +603,7 @@ export async function onRequest(context) {
           .bind("AUTO_TAKEN", nowISO(), c.id)
           .run();
       }
+      const M = await msgs(db);
       const payCfg = (await getSetting(db, "pay", null)) || DEFAULT_PAY;
       const L = payLinks(payCfg, row.deposit_amount || 0);
       const won = (n) => "₩" + Number(n || 0).toLocaleString("en-US");
@@ -558,8 +615,9 @@ export async function onRequest(context) {
             ${L.bank ? `<p style="margin-top:10px;font-size:13px;color:#3c4a48"><b>Bank transfer:</b><br>${L.bank}</p>` : ""}
             <p style="margin-top:10px;font-size:12px;color:#6b746f">The balance is paid on the day. Your spot is held once the deposit arrives.</p>
           </div>` : "";
-      await sendMail(env, row.email, `Zeneverse — booking confirmed (${row.code})`,
-        mailShell("Your booking is confirmed", `
+      await sendMail(env, row.email, `Zeneverse — ${M.approved.subject} (${row.code})`,
+        mailShell(M.approved.subject, `
+          <p style="color:#3c4a48;font-size:14px;line-height:1.7">${nl2br(M.approved.body)}</p>
           <table style="width:100%;border-collapse:collapse">
             ${row2("Package", row.pkg_name || row.pkg_id)}
             ${row2("Date", row.date)}
@@ -568,12 +626,17 @@ export async function onRequest(context) {
           </table>
           ${payBlock}
           <p style="margin-top:16px;font-size:13px;color:#6b746f">See you in Seoul! Reply to this email if anything changes.</p>`));
+      const site = env.SITE_URL || "";
       for (const c of clash) {
-        const cr = await db.prepare("SELECT email, code FROM bookings WHERE id=?").bind(c.id).first();
-        if (cr) await sendMail(env, cr.email, `Zeneverse — that time was taken (${cr.code})`,
-          mailShell("That time is no longer available", `
-            <p style="color:#3c4a48;font-size:14px;line-height:1.7">Another guest was confirmed for the time you requested.
-            I'm sorry to miss you — please pick another time on the site and I'll do my best to make it work.</p>`));
+        const cr = await db.prepare("SELECT email, code, name, date FROM bookings WHERE id=?").bind(c.id).first();
+        if (!cr) continue;
+        const optIn = site
+          ? `${site}?waitlist=${encodeURIComponent(cr.date)}&e=${encodeURIComponent(cr.email)}&n=${encodeURIComponent(cr.name || "")}`
+          : "";
+        await sendMail(env, cr.email, `Zeneverse — ${M.bumped.subject} (${cr.code})`,
+          mailShell(M.bumped.subject, `
+            <p style="color:#3c4a48;font-size:14px;line-height:1.7">${nl2br(M.bumped.body)}</p>
+            ${optIn ? `<p style="margin-top:18px"><a href="${optIn}" style="display:inline-block;background:#c96f52;color:#fff;text-decoration:none;padding:12px 24px;border-radius:30px;font-weight:600">${M.bumpedCta} →</a></p>` : ""}`));
       }
       return json({ ok: true, autoDeclined: clash.length });
     }
@@ -587,8 +650,9 @@ export async function onRequest(context) {
         .bind(st, String(method || ""), st === "paid" ? nowISO() : null, nowISO(), id).run();
       const b = await db.prepare("SELECT email, code, name, deposit_amount FROM bookings WHERE id=?").bind(id).first();
       if (b && st === "paid") {
-        await sendMail(env, b.email, `Zeneverse — deposit received (${b.code})`,
-          mailShell("Deposit received", `<p style="color:#3c4a48;font-size:14px;line-height:1.7">Thank you! Your deposit is confirmed and your spot is secured. See you in Seoul.</p>`));
+        const MP = await msgs(db);
+        await sendMail(env, b.email, `Zeneverse — ${MP.depositReceived.subject} (${b.code})`,
+          mailShell(MP.depositReceived.subject, `<p style="color:#3c4a48;font-size:14px;line-height:1.7">${nl2br(MP.depositReceived.body)}</p>`));
       }
       return json({ ok: true });
     }
@@ -602,9 +666,10 @@ export async function onRequest(context) {
         .prepare("UPDATE bookings SET status='declined', reason=?, seen=1, updated_at=? WHERE id=?")
         .bind(String(reason || "").slice(0, 500), nowISO(), id)
         .run();
-      if (dr) await sendMail(env, dr.email, `Zeneverse — about your request (${dr.code})`,
-        mailShell("About your booking request", `
-          <p style="color:#3c4a48;font-size:14px;line-height:1.7">Unfortunately I can't take this booking.</p>
+      const MD = await msgs(db);
+      if (dr) await sendMail(env, dr.email, `Zeneverse — ${MD.declined.subject} (${dr.code})`,
+        mailShell(MD.declined.subject, `
+          <p style="color:#3c4a48;font-size:14px;line-height:1.7">${nl2br(MD.declined.body)}</p>
           ${reason ? `<p style="background:#f6f4ef;border-radius:10px;padding:12px;font-size:13px;color:#3c4a48"><b>Reason:</b> ${String(reason)}</p>` : ""}
           <p style="font-size:13px;color:#6b746f">You're very welcome to request another date on the site.</p>`));
       return json({ ok: true });
@@ -643,7 +708,7 @@ export async function onRequest(context) {
     if (route === "/admin/save" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
       const body = await request.json();
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs"];
 
       /* keep a snapshot of the current state before overwriting it */
       const label = body.__label || "";
@@ -692,7 +757,7 @@ export async function onRequest(context) {
       const snap = await db.prepare("SELECT * FROM snapshots WHERE id = ?").bind(id).first();
       if (!snap) return json({ error: "not found" }, 404);
       const data = safeParseObj(snap.data);
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs"];
 
       /* snapshot the current state too, so a restore is itself undoable */
       try {

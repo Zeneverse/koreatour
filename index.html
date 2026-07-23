@@ -405,9 +405,18 @@
   .saved-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:30px;font-size:.82rem;z-index:210;opacity:0;pointer-events:none;transition:.25s;font-family:'Space Mono',monospace;letter-spacing:.06em}
   .saved-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* ===== message templates ===== */
+  .msg-block{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:#fff}
+  .msg-label{color:var(--clay);display:block;margin-bottom:9px;font-size:.64rem}
+  .msg-sub,.msg-body{width:100%;padding:10px 13px;border-radius:10px;border:1px solid var(--line);font-family:inherit;font-size:.9rem;color:var(--ink);background:var(--paper)}
+  .msg-sub{margin-bottom:8px;font-weight:600}
+  .msg-body{line-height:1.6;resize:vertical}
+  .msg-sub:focus,.msg-body:focus{outline:2px solid var(--clay);border-color:transparent}
+
   /* ===== waitlist + deposit ===== */
   .wl-cta{width:100%;margin-top:12px;padding:13px;border-radius:30px;border:1px solid var(--gold);background:#fff;color:var(--ink);font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;transition:.2s}
   .wl-cta:hover{background:var(--gold);color:#fff}
+  .wl-pos{margin-top:8px;font-family:'Space Mono',monospace;font-size:.82rem;color:var(--clay);background:var(--paper-2);border-radius:20px;padding:6px 14px;display:inline-block}
   .wl-date{background:var(--paper-2);border-radius:10px;padding:11px 14px;font-family:'Space Mono',monospace;font-size:.88rem;margin-bottom:16px;text-align:center}
   .ch-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
   .ch-act{display:inline-flex;align-items:center;border-radius:20px;padding:5px 12px;font-size:.74rem;text-decoration:none;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;font-family:inherit}
@@ -804,7 +813,10 @@ const I18N={
     reset_confirm:"Reset \"{x}\" to the original? A backup is saved first.",reset_done:"Reset done.",
     wl_full:"This date is fully booked.",wl_cta:"Notify me if a spot opens",wl_title:"Get notified",
     wl_sub:"If someone cancels on this date, I'll email you right away. No obligation.",
-    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",
+    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",
+    msg_title:"Message templates",msg_sub:"These are the emails guests receive. Edit the wording to sound like you.",
+    msg_approved:"When you approve a booking",msg_declined:"When you decline",msg_bumped:"When someone else got the slot",msg_bumpedCta:"Button text on that email",
+    msg_wlopen:"When a spot opens (waitlist)",msg_deposit:"When you mark the deposit paid",msg_subject:"Subject",msg_body:"Message",ab_msgs:"Messages",msg_reset:"Reset to default",
     dep_title:"Deposit to confirm",dep_note:"{pct}% deposit secures your spot. Balance is paid on the day.",
     dep_after:"After I confirm your request, I'll email payment details.",
     dep_paid:"Deposit paid",dep_unpaid:"Deposit unpaid",dep_refunded:"Refunded",
@@ -892,7 +904,10 @@ const I18N={
     reset_confirm:"\"{x}\"을(를) 처음 상태로 되돌릴까요? 먼저 백업돼요.",reset_done:"초기화했어요.",
     wl_full:"이 날짜는 예약이 마감됐어요.",wl_cta:"자리 나면 알림 받기",wl_title:"자리 알림 신청",
     wl_sub:"이 날짜에 취소가 생기면 바로 이메일로 알려드려요. 예약 의무는 없어요.",
-    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",
+    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",
+    msg_title:"메시지 문구",msg_sub:"고객에게 나가는 이메일 문구예요. 내 말투로 바꿔보세요.",
+    msg_approved:"예약을 승인했을 때",msg_declined:"거절했을 때",msg_bumped:"다른 분이 먼저 확정됐을 때",msg_bumpedCta:"그 메일의 버튼 문구",
+    msg_wlopen:"자리가 났을 때 (대기자)",msg_deposit:"예약금 입금 확인했을 때",msg_subject:"제목",msg_body:"내용",ab_msgs:"메시지 문구",msg_reset:"기본 문구로 되돌리기",
     dep_title:"예약금",dep_note:"{pct}% 예약금으로 자리가 확정돼요. 잔금은 당일에 결제합니다.",
     dep_after:"신청을 확인한 뒤 결제 안내를 이메일로 보내드려요.",
     dep_paid:"예약금 입금됨",dep_unpaid:"예약금 미입금",dep_refunded:"환불됨",
@@ -1054,7 +1069,7 @@ function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
 
 let adminToken = sessionStorage.getItem("zv_token") || "";
 const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false,
-  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, loaded:false };
+  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, msgs:null, msgsDefault:null, loaded:false };
 
 async function loadConfig(){
   try{
@@ -1076,6 +1091,8 @@ async function loadConfig(){
     STATE.igPosts = c.igPosts || [];
     STATE.langs = c.langs || null;
     STATE.pay = c.pay || {depositPct:30,refund:{fullDays:7,halfDays:3}};
+    STATE.msgs = c.msgs || null;
+    STATE.msgsDefault = c.msgsDefault || null;
     STATE.copy = c.copy || null;
     STATE.nav = c.nav || null;
     STATE.loaded = true;
@@ -1104,7 +1121,7 @@ async function saveAll(){
       packages:PACKS, hours:STATE.hours, dayhours:STATE.dayhours,
       closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh,
       feats:loadFeats(), host:STATE.host||DEFAULT_HOST, contact:STATE.contact||DEFAULT_CONTACT,
-      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay
+      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay, msgs:STATE.msgs
     });
   }catch(e){ alert("저장 실패 / Save failed: "+e.message); }
 }
@@ -2298,8 +2315,55 @@ async function refreshNewCount(){
   if(!adminToken)return;
   try{const r=await API.get("/api/admin/bookings");newCount=r.newCount||0;renderAdminBar();}catch(e){}
 }
+/* ============ ADMIN: message templates ============ */
+function openMsgs(){
+  const t=I18N[lang],ko=lang==="ko";
+  const M=STATE.msgs||{},D=STATE.msgsDefault||{};
+  const g=(k,f)=>((M[k]&&M[k][f])!==undefined?M[k][f]:((D[k]&&D[k][f])||""));
+  const block=(k,label)=>`
+    <div class="msg-block">
+      <div class="msg-label mono">${label}</div>
+      <input class="msg-sub" data-mk="${k}" data-mf="subject" value="${esc(g(k,"subject"))}" placeholder="${t.msg_subject}">
+      <textarea class="msg-body" data-mk="${k}" data-mf="body" rows="4" placeholder="${t.msg_body}">${esc(g(k,"body"))}</textarea>
+    </div>`;
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:560px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.msg_title}</h3><div class="sub">${t.msg_sub}</div>
+        ${block("approved",t.msg_approved)}
+        ${block("bumped",t.msg_bumped)}
+        <div class="msg-block">
+          <div class="msg-label mono">${t.msg_bumpedCta}</div>
+          <input class="msg-sub" data-mk="bumpedCta" data-mf="__flat" value="${esc(M.bumpedCta!==undefined?M.bumpedCta:(D.bumpedCta||""))}">
+        </div>
+        ${block("declined",t.msg_declined)}
+        ${block("waitlistOpen",t.msg_wlopen)}
+        ${block("depositReceived",t.msg_deposit)}
+        <button class="submit" onclick="saveMsgs()">${ko?"저장":"Save"}</button>
+        <button class="reset-btn" style="width:100%;margin-top:8px" onclick="resetMsgs()">${t.msg_reset}</button>
+        <div class="msg" id="mt_msg"></div>
+      </div>
+    </div>`;
+}
+function saveMsgs(){
+  const out=structuredClone(STATE.msgs||{});
+  document.querySelectorAll("[data-mk]").forEach(el=>{
+    const k=el.getAttribute("data-mk"),f=el.getAttribute("data-mf");
+    if(f==="__flat"){out[k]=el.value;return;}
+    out[k]=out[k]||{};out[k][f]=el.value;
+  });
+  STATE.msgs=out;saveAll();
+  const m=document.getElementById("mt_msg");
+  m.style.color="#7d9488";m.textContent=lang==="ko"?"저장됐어요":"Saved";
+}
+function resetMsgs(){
+  if(!confirm(I18N[lang].reset_confirm.replace("{x}",I18N[lang].msg_title)))return;
+  STATE.msgs=null;saveAll();openMsgs();
+}
+
 /* ============ WAITLIST (guest) ============ */
-function openWaitlist(date){
+function openWaitlist(date,preEmail,preName){
   const t=I18N[lang];
   document.getElementById("modalRoot").innerHTML=`
     <div class="modal-bg" onclick="if(event.target===this)closeModal()">
@@ -2308,8 +2372,8 @@ function openWaitlist(date){
         <h3>${t.wl_title}</h3>
         <div class="sub">${t.wl_full} ${t.wl_sub}</div>
         <div class="wl-date">📅 ${esc(date)}</div>
-        <div class="field"><label>${t.f_name}</label><input id="wl_name" type="text"></div>
-        <div class="field"><label>${t.f_email}</label><input id="wl_email" type="email"></div>
+        <div class="field"><label>${t.f_name}</label><input id="wl_name" type="text" value="${esc(preName||"")}"></div>
+        <div class="field"><label>${t.f_email}</label><input id="wl_email" type="email" value="${esc(preEmail||"")}"></div>
         <div class="field"><label>${t.f_contact}</label><input id="wl_contact" type="text" placeholder="${t.f_contact_ph}"></div>
         <button class="submit" onclick="joinWaitlist('${date}')">🔔 ${t.wl_cta}</button>
         <div class="msg" id="wl_msg"></div>
@@ -2326,8 +2390,10 @@ async function joinWaitlist(date){
       name:document.getElementById("wl_name").value.trim(),
       contact:document.getElementById("wl_contact").value.trim(),
       pkg:currentPack?currentPack().id:""});
-    m.style.color="#3d6b4d";m.textContent=r.already?t.wl_already:t.wl_ok;
-    setTimeout(closeModal,1800);
+    m.style.color="#3d6b4d";
+    m.innerHTML=(r.already?t.wl_already:t.wl_ok)+
+      (r.position?`<div class="wl-pos">${t.wl_pos.replace("{n}",r.position)}</div>`:"");
+    setTimeout(closeModal,3200);
   }catch(e){m.style.color="#c96f52";m.textContent=t.book_fail;}
 }
 
@@ -2578,6 +2644,7 @@ function renderAdminBar(){
       <button onclick="openHistory()">${t.ab_hist}</button>
       <button onclick="viewBookings('pending')">${t.ab_view}${newCount?` <i class="ab-badge">${newCount}</i>`:""}</button>
       <button onclick="adminWaitlist()">${t.ab_wait}</button>
+      <button onclick="openMsgs()">${t.ab_msgs}</button>
       ${editMode?`<span class="edit-lang">${t.ab_editing} <b>${lang==="ko"?"한국어":"English"}</b> — ${t.ab_switch}</span>`:`<span class="hint"></span>`}
       <span class="spacer"></span>
       <button class="warn" onclick="exitAdmin()">${t.ab_exit}</button>
@@ -2808,6 +2875,12 @@ function observeReveals(){document.querySelectorAll(".reveal:not(.in)").forEach(
   await loadConfig();
   const l=await autoLang();
   setLang(l);
+  // one-click waitlist opt-in from an email link
+  try{
+    const q=new URLSearchParams(location.search);
+    const wd=q.get("waitlist");
+    if(wd){ setTimeout(()=>openWaitlist(wd,q.get("e")||"",q.get("n")||""),400); }
+  }catch(e){}
   renderLangMenu();
   applyFeats();
   renderNav();
