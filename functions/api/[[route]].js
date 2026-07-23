@@ -163,6 +163,7 @@ const DEFAULT_PAY = {
   bank: "",              // e.g. "우리은행 1002-123-456789 홍길동"
   usdRate: 1350,         // rough KRW -> USD
   eurRate: 1450,         // rough KRW -> EUR
+  defaultCurrency: "USD",// what guests see first (KRW is always what we bill)
   refund: { fullDays: 7, halfDays: 3 }
 };
 function payLinks(pay, wonAmount) {
@@ -324,6 +325,7 @@ export async function onRequest(context) {
         pay: { depositPct: (pay && pay.depositPct) || DEFAULT_PAY.depositPct,
                usdRate: (pay && pay.usdRate) || DEFAULT_PAY.usdRate,
                eurRate: (pay && pay.eurRate) || DEFAULT_PAY.eurRate,
+               defaultCurrency: (pay && pay.defaultCurrency) || DEFAULT_PAY.defaultCurrency,
                refund: (pay && pay.refund) || DEFAULT_PAY.refund },
         msgs: msgsCfg, msgsDefault: DEFAULT_MSGS, biz, reward: Object.assign({}, DEFAULT_REWARD, reward || {}) });
     }

@@ -1033,7 +1033,7 @@ const I18N={
     dep_paid:"Deposit paid",dep_unpaid:"Deposit unpaid",dep_refunded:"Refunded",
     ab_wait:"Waitlist",wl_none:"No one waiting yet.",wl_notify:"Alert this date",wl_notified:"notified",
     dep_mark:"Mark paid",dep_unmark:"Mark unpaid",dep_method:"How was it paid? (PayPal / bank / cash)",
-    pay_label:"Payment settings",pay_pct:"Deposit %",pay_ppme:"PayPal.me username",pay_bank:"Bank account (shown to guests)",pay_rate:"KRW per USD",pay_rate_eur:"KRW per EUR",cur_note:"Prices are billed in KRW. These rates are only used to show guests an approximate amount.",
+    pay_label:"Payment settings",pay_pct:"Deposit %",pay_ppme:"PayPal.me username",pay_bank:"Bank account (shown to guests)",pay_defcur:"Default currency shown to guests",pay_rate:"KRW per USD",pay_rate_eur:"KRW per EUR",cur_note:"Prices are billed in KRW. These rates are only used to show guests an approximate amount.",
     refund_title:"Refund policy",refund_full:"Full refund up to (days before)",refund_half:"50% refund up to (days before)",ab_nav:"Menu order",nav_order_title:"Menu order",nav_order_sub:"Drag to reorder, or use the arrows. Toggle to show/hide.",
     host_edit:"Edit host info",host_more:"Read more",host_bio:"About me",
     f_agree:"I've read and agree to the cancellation policy and disclaimer.",f_agree_err:"Please agree to continue.",
@@ -1124,7 +1124,7 @@ const I18N={
     dep_paid:"예약금 입금됨",dep_unpaid:"예약금 미입금",dep_refunded:"환불됨",
     ab_wait:"대기자",wl_none:"아직 대기자가 없어요.",wl_notify:"이 날짜 알림 발송",wl_notified:"발송됨",
     dep_mark:"입금 확인",dep_unmark:"미입금으로",dep_method:"어떻게 받았나요? (PayPal / 계좌 / 현금)",
-    pay_label:"결제 설정",pay_pct:"예약금 비율 %",pay_ppme:"PayPal.me 아이디",pay_bank:"계좌 정보 (고객에게 표시)",pay_rate:"USD 환율",pay_rate_eur:"EUR 환율",cur_note:"결제는 원화로 이뤄져요. 이 환율은 고객에게 대략적인 금액을 보여줄 때만 사용됩니다.",
+    pay_label:"결제 설정",pay_pct:"예약금 비율 %",pay_ppme:"PayPal.me 아이디",pay_bank:"계좌 정보 (고객에게 표시)",pay_defcur:"고객에게 기본으로 보이는 통화",pay_rate:"USD 환율",pay_rate_eur:"EUR 환율",cur_note:"결제는 원화로 이뤄져요. 이 환율은 고객에게 대략적인 금액을 보여줄 때만 사용됩니다.",
     refund_title:"환불 규정",refund_full:"전액 환불 기한 (며칠 전)",refund_half:"50% 환불 기한 (며칠 전)",ab_nav:"메뉴 순서",nav_order_title:"메뉴 순서",nav_order_sub:"드래그하거나 화살표로 순서를 바꾸고, 토글로 표시 여부를 정하세요.",
     host_edit:"호스트 정보 수정",host_more:"더 보기",host_bio:"소개",
     f_agree:"취소 규정과 면책 조항을 읽고 동의합니다.",f_agree_err:"동의해주셔야 진행할 수 있어요.",
@@ -1343,7 +1343,7 @@ async function loadConfig(){
     STATE.terms = c.terms || null;
     STATE.igPosts = c.igPosts || [];
     STATE.langs = c.langs || null;
-    STATE.pay = c.pay || {depositPct:30,usdRate:1350,eurRate:1450,refund:{fullDays:7,halfDays:3}};
+    STATE.pay = c.pay || {depositPct:30,usdRate:1350,eurRate:1450,defaultCurrency:"USD",refund:{fullDays:7,halfDays:3}};
     STATE.biz = c.biz || null;
     STATE.reward = c.reward || null;
     STATE.msgs = c.msgs || null;
@@ -2620,7 +2620,8 @@ function rates(){
   return {KRW:1, USD:p.usdRate||1350, EUR:p.eurRate||1450};
 }
 function autoCurrency(){
-  return lang==="ko" ? "KRW" : "USD";   // non-Korean guests see USD by default
+  const set=(STATE.pay&&STATE.pay.defaultCurrency)||"USD";
+  return CURRENCIES[set]?set:"USD";     // admin-configurable, USD by default
 }
 function curNow(){
   if(dispCur&&CURRENCIES[dispCur])return dispCur;
@@ -3476,6 +3477,10 @@ function openSettings(){
           <input id="pay_ppme" type="text" value="${esc((STATE.pay&&STATE.pay.paypalMe)||"")}" placeholder="zeneverse"></div>
         <div class="field"><label>${t.pay_bank}</label>
           <input id="pay_bank" type="text" value="${esc((STATE.pay&&STATE.pay.bank)||"")}" placeholder="${ko?"우리은행 1002-123-456789 홍길동":"Bank, account no, holder"}"></div>
+        <div class="field"><label>${t.pay_defcur}</label>
+          <select id="pay_defcur">
+            ${["USD","KRW","EUR"].map(c=>`<option value="${c}"${((STATE.pay&&STATE.pay.defaultCurrency)||"USD")===c?" selected":""}>${CURRENCIES[c].label}</option>`).join("")}
+          </select></div>
         <div class="field" style="display:flex;gap:8px">
           <div style="flex:1"><label>${t.pay_rate}</label>
             <input id="pay_rate" type="number" min="500" max="3000" value="${(STATE.pay&&STATE.pay.usdRate)||1350}"></div>
@@ -3547,8 +3552,8 @@ function saveSettings(){
     mailOrderNo:g("bz_mail"),addr:g("bz_addr"),email:g("bz_email")};
   const num=(id,d)=>{const v=parseInt(document.getElementById(id).value);return isNaN(v)?d:v;};
   STATE.pay={depositPct:num("pay_pct",30),paypalMe:g("pay_ppme"),bank:g("pay_bank"),
-    usdRate:num("pay_rate",1350),eurRate:num("pay_rate_eur",1450),refund:{fullDays:num("ref_full",7),halfDays:num("ref_half",3)}};
-  saveAll();applyFeats();renderMedia();renderInstagram();renderBiz();
+    usdRate:num("pay_rate",1350),eurRate:num("pay_rate_eur",1450),defaultCurrency:g("pay_defcur"),refund:{fullDays:num("ref_full",7),halfDays:num("ref_half",3)}};
+  saveAll();applyFeats();renderMedia();renderInstagram();renderBiz();renderCurBtn();renderPacks();
   const m=document.getElementById("st_msg");m.style.color="#7d9488";m.textContent=lang==="ko"?"저장됐어요":"Saved";
 }
 /* YouTube embeds */
