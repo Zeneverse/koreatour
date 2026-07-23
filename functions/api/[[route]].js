@@ -239,7 +239,7 @@ export async function onRequest(context) {
   try {
     /* ---------------- public: config ---------------- */
     if (route === "/config" && request.method === "GET") {
-      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, pay, msgsCfg] = await Promise.all([
+      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, pay, msgsCfg, biz] = await Promise.all([
         getSetting(db, "packages", null),
         getSetting(db, "hours", { open: 10, close: 21 }),
         getSetting(db, "dayhours", {}),
@@ -259,6 +259,7 @@ export async function onRequest(context) {
         getSetting(db, "langs", null),
         getSetting(db, "pay", null),
         getSetting(db, "msgs", null),
+        getSetting(db, "biz", null),
       ]);
       let reviews = [];
       try {
@@ -270,7 +271,7 @@ export async function onRequest(context) {
       return json({ packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, reviews,
         pay: { depositPct: (pay && pay.depositPct) || DEFAULT_PAY.depositPct,
                refund: (pay && pay.refund) || DEFAULT_PAY.refund },
-        msgs: msgsCfg, msgsDefault: DEFAULT_MSGS });
+        msgs: msgsCfg, msgsDefault: DEFAULT_MSGS, biz });
     }
 
     /* ---------------- public: slots (+ queue counts) ---------------- */
@@ -709,7 +710,7 @@ export async function onRequest(context) {
     if (route === "/admin/save" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
       const body = await request.json();
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz"];
 
       /* keep a snapshot of the current state before overwriting it */
       const label = body.__label || "";
@@ -764,7 +765,7 @@ export async function onRequest(context) {
       const snap = await db.prepare("SELECT * FROM snapshots WHERE id = ?").bind(id).first();
       if (!snap) return json({ error: "not found" }, 404);
       const data = safeParseObj(snap.data);
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz"];
 
       /* snapshot the current state too, so a restore is itself undoable */
       try {

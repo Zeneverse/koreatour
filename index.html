@@ -405,6 +405,51 @@
   .saved-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:30px;font-size:.82rem;z-index:210;opacity:0;pointer-events:none;transition:.25s;font-family:'Space Mono',monospace;letter-spacing:.06em}
   .saved-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* ===== includes / excludes ===== */
+  .inc-exc{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+  .ie-col{border-radius:13px;padding:14px 15px;border:1px solid var(--line)}
+  .ie-in{background:#eff5f0;border-color:#cfe2d5}
+  .ie-out{background:var(--paper-2)}
+  .ie-head{display:flex;align-items:center;gap:7px;font-size:.78rem;font-weight:600;margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em}
+  .ie-in .ie-head{color:#3d6b4d}
+  .ie-out .ie-head{color:#7a746c}
+  .ie-head i{font-style:normal;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font-size:.66rem;color:#fff}
+  .ie-in .ie-head i{background:#3d6b4d}
+  .ie-out .ie-head i{background:#a09a92}
+  .ie-col ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+  .ie-col li{font-size:.83rem;line-height:1.5;padding-left:14px;position:relative;color:#3c4a48}
+  .ie-col li::before{content:"";position:absolute;left:0;top:.55em;width:5px;height:5px;border-radius:50%}
+  .ie-in li::before{background:#3d6b4d}
+  .ie-out li::before{background:#b0aaa2}
+  .ie-out li{color:#6b746f}
+
+  /* ===== meeting point ===== */
+  .meet-card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:16px;margin-bottom:18px}
+  .meet-head{display:flex;gap:11px;align-items:flex-start;margin-bottom:9px}
+  .meet-pin{font-size:1.2rem;line-height:1}
+  .meet-head b{display:block;font-size:.76rem;color:var(--sage);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+  .meet-head i{font-style:normal;font-size:1rem;font-weight:600;color:var(--ink)}
+  .meet-detail{font-size:.86rem;color:#4a5654;line-height:1.6;margin-bottom:12px}
+  .meet-map{display:block;text-align:center;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:30px;padding:11px;font-size:.86rem;font-weight:600;transition:.2s}
+  .meet-map:hover{filter:brightness(1.15)}
+  .meet-note{margin-top:10px;font-size:.76rem;color:var(--sage);line-height:1.5}
+
+  /* ===== business info footer ===== */
+  .biz-info{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+  .biz-label{color:var(--sage);display:block;margin-bottom:11px;font-size:.62rem}
+  .biz-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px 22px}
+  .biz-row{display:flex;gap:9px;font-size:.76rem;line-height:1.6}
+  .biz-row span{color:var(--sage);flex:0 0 auto;min-width:96px}
+  .biz-row b{font-weight:400;color:#54615f;word-break:break-word}
+  .biz-row a{color:#54615f;text-decoration:none;border-bottom:1px solid var(--line)}
+  .biz-row a:hover{color:var(--clay);border-color:var(--clay)}
+
+  @media (max-width:520px){
+    .inc-exc{grid-template-columns:1fr}
+    .biz-row{flex-direction:column;gap:1px}
+    .biz-row span{min-width:auto}
+  }
+
   /* ===== on-site payment card ===== */
   .onsite-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;margin:16px 0;text-align:left}
   .onsite-head{display:flex;gap:13px;align-items:flex-start;padding:16px 18px;background:var(--paper-2);border-bottom:1px solid var(--line)}
@@ -800,6 +845,9 @@
       <a onclick="openPolicy('terms')" data-i18n="terms_link">Cancellation Policy</a>
     </div>
   </div>
+  <div class="wrap biz-info" id="bizInfo"></div>
+  <div class="wrap">
+  </div>
 </footer>
 
 
@@ -888,7 +936,7 @@ const I18N={
     reset_confirm:"Reset \"{x}\" to the original? A backup is saved first.",reset_done:"Reset done.",
     wl_full:"This date is fully booked.",wl_cta:"Notify me if a spot opens",wl_title:"Get notified",
     wl_sub:"If someone cancels on this date, I'll email you right away. No obligation.",
-    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",os_title:"Paying on the day",os_sub:"Balance is settled when we meet — several ways to do it.",os_modal_sub:"Accepted payment methods for the remaining balance.",os_card:"Credit / debit cards — NFC, Apple Pay, Google Pay",os_qr:"QR payments — Alipay, WeChat Pay",os_cash:"Cash in ",os_flex_badge:"Flexible change",os_flex:"Paying in USD or EUR cash? Choose the currency you get your change back in — whatever suits the rest of your trip.",os_flex_note:"Foreign change is given in notes only, rounded to the nearest dollar or euro.",os_link:"How I take payment on the day",pay_title:"Pay your deposit",pay_deposit:"Deposit due",pay_method:"How would you like to pay?",pay_global:"International card / Apple Pay / Alipay",pay_domestic:"Korean card / Naver Pay / Kakao Pay",pay_agree:"I have read and agree to the cancellation and refund policy.",pay_go:"Pay deposit securely →",pay_pick_err:"Please choose a payment method.",pay_opening:"Opening secure payment…",pay_verifying:"Confirming your payment…",pay_failed:"Payment was not completed.",pay_verify_fail:"We could not confirm the payment. If money left your account, contact me and I will check.",pay_done:"Deposit received",pay_done_sub:"Your spot is secured. See you in Seoul!",pay_now:"Pay deposit {a}",pay_note:"Payments are processed by PortOne. We never see or store your card details.",itin_sub:"How the day flows — you pick the start time when you book.",itin_note:"⏱ <b>You choose your start time</b> from whatever is open on your date — morning, afternoon or evening. The steps below only show the order and rough pacing, and we shift things around on the day.",
+    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",ie_included:"What's included",ie_excluded:"Not included",meet_title:"Where we meet",meet_map:"Open in Google Maps",meet_note:"Staying elsewhere? Tell me in your booking note and we can adjust the meeting point.",biz_title:"Business information",biz_name:"Business name",biz_owner:"Representative",biz_reg:"Business registration no.",biz_mailorder:"Mail-order sales no.",biz_addr:"Address",biz_email:"Support email",os_title:"Paying on the day",os_sub:"Balance is settled when we meet — several ways to do it.",os_modal_sub:"Accepted payment methods for the remaining balance.",os_card:"Credit / debit cards — NFC, Apple Pay, Google Pay",os_qr:"QR payments — Alipay, WeChat Pay",os_cash:"Cash in ",os_flex_badge:"Flexible change",os_flex:"Paying in USD or EUR cash? Choose the currency you get your change back in — whatever suits the rest of your trip.",os_flex_note:"Foreign change is given in notes only, rounded to the nearest dollar or euro.",os_link:"How I take payment on the day",pay_title:"Pay your deposit",pay_deposit:"Deposit due",pay_method:"How would you like to pay?",pay_global:"International card / Apple Pay / Alipay",pay_domestic:"Korean card / Naver Pay / Kakao Pay",pay_agree:"I have read and agree to the cancellation and refund policy.",pay_go:"Pay deposit securely →",pay_pick_err:"Please choose a payment method.",pay_opening:"Opening secure payment…",pay_verifying:"Confirming your payment…",pay_failed:"Payment was not completed.",pay_verify_fail:"We could not confirm the payment. If money left your account, contact me and I will check.",pay_done:"Deposit received",pay_done_sub:"Your spot is secured. See you in Seoul!",pay_now:"Pay deposit {a}",pay_note:"Payments are processed by PortOne. We never see or store your card details.",itin_sub:"How the day flows — you pick the start time when you book.",itin_note:"⏱ <b>You choose your start time</b> from whatever is open on your date — morning, afternoon or evening. The steps below only show the order and rough pacing, and we shift things around on the day.",
     msg_title:"Message templates",msg_sub:"These are the emails guests receive. Edit the wording to sound like you.",
     msg_approved:"When you approve a booking",msg_declined:"When you decline",msg_bumped:"When someone else got the slot",msg_bumpedCta:"Button text on that email",
     msg_wlopen:"When a spot opens (waitlist)",msg_deposit:"When you mark the deposit paid",msg_subject:"Subject",msg_body:"Message",ab_msgs:"Messages",msg_reset:"Reset to default",
@@ -979,7 +1027,7 @@ const I18N={
     reset_confirm:"\"{x}\"을(를) 처음 상태로 되돌릴까요? 먼저 백업돼요.",reset_done:"초기화했어요.",
     wl_full:"이 날짜는 예약이 마감됐어요.",wl_cta:"자리 나면 알림 받기",wl_title:"자리 알림 신청",
     wl_sub:"이 날짜에 취소가 생기면 바로 이메일로 알려드려요. 예약 의무는 없어요.",
-    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",os_title:"당일 결제 안내",os_sub:"잔금은 만나서 결제해요 — 방법은 여러 가지예요.",os_modal_sub:"당일 잔금 결제 시 이용 가능한 수단이에요.",os_card:"신용/체크카드 — NFC, 애플페이, 구글페이",os_qr:"QR 결제 — 알리페이, 위챗페이",os_cash:"현금 ",os_flex_badge:"거스름돈 선택",os_flex:"달러나 유로 현금으로 내시나요? 거스름돈을 원하는 통화로 받으실 수 있어요 — 남은 여행 일정에 맞춰서요.",os_flex_note:"외화 거스름돈은 지폐로만 드리며, 달러/유로 단위로 반올림됩니다.",os_link:"당일 결제 방법 보기",pay_title:"예약금 결제",pay_deposit:"결제할 예약금",pay_method:"어떻게 결제하시겠어요?",pay_global:"해외 카드 / Apple Pay / Alipay",pay_domestic:"국내 카드 / 네이버페이 / 카카오페이",pay_agree:"취소 및 환불 규정을 읽고 동의합니다.",pay_go:"안전하게 예약금 결제하기 →",pay_pick_err:"결제 수단을 선택해주세요.",pay_opening:"결제창을 여는 중…",pay_verifying:"결제를 확인하는 중…",pay_failed:"결제가 완료되지 않았어요.",pay_verify_fail:"결제 확인에 실패했어요. 출금이 되었다면 연락 주세요, 바로 확인할게요.",pay_done:"예약금 결제 완료",pay_done_sub:"자리가 확정됐어요. 곧 뵙겠습니다!",pay_now:"예약금 {a} 결제하기",pay_note:"결제는 포트원(PortOne)을 통해 안전하게 처리되며, 카드 정보는 저장되지 않아요.",itin_sub:"하루가 어떻게 흘러가는지 — 시작 시간은 예약할 때 직접 고르세요.",itin_note:"⏱ <b>시작 시간은 원하는 대로 고르실 수 있어요</b> — 그날 열려 있는 시간 중에서 오전·오후·저녁 아무 때나요. 아래는 순서와 대략적인 흐름만 보여주는 거예요.",
+    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",ie_included:"포함 사항",ie_excluded:"불포함 사항",meet_title:"만나는 곳",meet_map:"구글맵에서 열기",meet_note:"다른 곳에 머무시나요? 예약할 때 알려주시면 만나는 곳을 조정할 수 있어요.",biz_title:"사업자 정보",biz_name:"상호명",biz_owner:"대표자",biz_reg:"사업자등록번호",biz_mailorder:"통신판매업 신고번호",biz_addr:"주소",biz_email:"고객지원 이메일",os_title:"당일 결제 안내",os_sub:"잔금은 만나서 결제해요 — 방법은 여러 가지예요.",os_modal_sub:"당일 잔금 결제 시 이용 가능한 수단이에요.",os_card:"신용/체크카드 — NFC, 애플페이, 구글페이",os_qr:"QR 결제 — 알리페이, 위챗페이",os_cash:"현금 ",os_flex_badge:"거스름돈 선택",os_flex:"달러나 유로 현금으로 내시나요? 거스름돈을 원하는 통화로 받으실 수 있어요 — 남은 여행 일정에 맞춰서요.",os_flex_note:"외화 거스름돈은 지폐로만 드리며, 달러/유로 단위로 반올림됩니다.",os_link:"당일 결제 방법 보기",pay_title:"예약금 결제",pay_deposit:"결제할 예약금",pay_method:"어떻게 결제하시겠어요?",pay_global:"해외 카드 / Apple Pay / Alipay",pay_domestic:"국내 카드 / 네이버페이 / 카카오페이",pay_agree:"취소 및 환불 규정을 읽고 동의합니다.",pay_go:"안전하게 예약금 결제하기 →",pay_pick_err:"결제 수단을 선택해주세요.",pay_opening:"결제창을 여는 중…",pay_verifying:"결제를 확인하는 중…",pay_failed:"결제가 완료되지 않았어요.",pay_verify_fail:"결제 확인에 실패했어요. 출금이 되었다면 연락 주세요, 바로 확인할게요.",pay_done:"예약금 결제 완료",pay_done_sub:"자리가 확정됐어요. 곧 뵙겠습니다!",pay_now:"예약금 {a} 결제하기",pay_note:"결제는 포트원(PortOne)을 통해 안전하게 처리되며, 카드 정보는 저장되지 않아요.",itin_sub:"하루가 어떻게 흘러가는지 — 시작 시간은 예약할 때 직접 고르세요.",itin_note:"⏱ <b>시작 시간은 원하는 대로 고르실 수 있어요</b> — 그날 열려 있는 시간 중에서 오전·오후·저녁 아무 때나요. 아래는 순서와 대략적인 흐름만 보여주는 거예요.",
     msg_title:"메시지 문구",msg_sub:"고객에게 나가는 이메일 문구예요. 내 말투로 바꿔보세요.",
     msg_approved:"예약을 승인했을 때",msg_declined:"거절했을 때",msg_bumped:"다른 분이 먼저 확정됐을 때",msg_bumpedCta:"그 메일의 버튼 문구",
     msg_wlopen:"자리가 났을 때 (대기자)",msg_deposit:"예약금 입금 확인했을 때",msg_subject:"제목",msg_body:"내용",ab_msgs:"메시지 문구",msg_reset:"기본 문구로 되돌리기",
@@ -1055,6 +1103,7 @@ I18N.zhHant = Object.assign({}, I18N.en, {
   rev_edit:"修改",rev_del:"刪除",rev_pw_ask:"請輸入你設定的密碼：",rev_pw_wrong:"密碼錯誤。",
   disclaimer:"Zeneverse 是個人美妝諮詢與購物導覽服務，不提供醫療行為，亦不安排、仲介或代訂任何醫療療程與診所預約。",
   priv_link:"隱私權政策",terms_link:"取消規定",float_label:"聯絡我",
+  ie_included:"費用包含",ie_excluded:"費用不包含",meet_title:"集合地點",meet_map:"用 Google 地圖開啟",meet_note:"住在其他區域嗎？預約時告訴我，可以調整集合地點。",biz_title:"營業資訊",biz_name:"商號",biz_owner:"代表人",biz_reg:"營業登記號碼",biz_mailorder:"通信販賣申報號碼",biz_addr:"地址",biz_email:"客服信箱",
   os_title:"當天付款方式",os_sub:"餘款於見面時結清 — 有多種方式。",os_modal_sub:"支付餘款時可使用的方式。",os_card:"信用卡／金融卡 — NFC、Apple Pay、Google Pay",os_qr:"QR 支付 — 支付寶、微信支付",os_cash:"現金 ",os_flex_badge:"找零可選",os_flex:"以美金或歐元現金付款嗎？找零幣別由你選擇 — 依你接下來的行程需求。",os_flex_note:"外幣找零僅提供紙鈔，並四捨五入至整數。",os_link:"查看當天付款方式",
   pay_title:"支付訂金",pay_deposit:"應付訂金",pay_method:"你想如何付款？",pay_global:"國際信用卡 / Apple Pay / 支付寶",pay_domestic:"韓國信用卡 / Naver Pay / Kakao Pay",pay_agree:"我已閱讀並同意取消與退款規定。",pay_go:"安全支付訂金 →",pay_pick_err:"請選擇付款方式。",pay_opening:"正在開啟付款視窗…",pay_verifying:"確認付款中…",pay_failed:"付款未完成。",pay_done:"訂金已收到",pay_done_sub:"你的名額已確認，首爾見！",pay_now:"支付訂金 {a}",
   itin_sub:"當天的流程 — 開始時間由你預約時選擇。",itin_note:"⏱ <b>開始時間可自由選擇</b> — 從當天有空的時段中挑選，早上、下午或傍晚都可以。以下僅顯示順序與大致節奏。",
@@ -1117,6 +1166,12 @@ const DEFAULT_PACKS=[
      {t:{en:"+3 hrs",ko:"3시간 후"},title:{en:"Lunch break",ko:"점심"},d:{en:"A local spot near where we are — nothing touristy.",ko:"근처 로컬 맛집으로 — 관광지 말고요."}},
      {t:{en:"+4 hrs",ko:"4시간 후"},title:{en:"Salon or styling",ko:"살롱 또는 스타일링"},d:{en:"Brow, lash or hair at a vetted salon — or personal styling if you'd rather shop.",ko:"검증된 샵에서 눈썹·속눈썹·헤어 — 쇼핑을 원하시면 퍼스널 스타일링으로."}}
    ],
+   excludes:{en:["Products you buy (paid on the spot)","Salon services — brow, lash, hair","Your meals and personal expenses","Transport fares (subway/taxi)"],
+             ko:["구매하시는 제품 (현장 결제)","살롱 서비스 — 눈썹·속눈썹·헤어","식사 및 개인 경비","교통비 (지하철·택시)"]},
+   meet:{name:{en:"Hongdae Station, Exit 3",ko:"홍대입구역 3번 출구"},
+         detail:{en:"In front of the Starbucks, just outside Exit 3. I'll be holding a small Zeneverse card.",
+                 ko:"3번 출구 바로 앞 스타벅스 앞이에요. 제너버스 카드를 들고 서 있을게요."},
+         map:"https://maps.google.com/?q=Hongik+University+Station+Exit+3+Seoul"},
    pricing:{regular:500000,launch:400000}},
   {id:"layover",max_people:4,feature:false,tag:"",dur_h:2,last_start:19,max_per_day:3,
    kicker:{en:"Short & sharp",ko:"짧고 굵게"},
@@ -1131,6 +1186,12 @@ const DEFAULT_PACKS=[
      {t:{en:"+30 min",ko:"30분 후"},title:{en:"One focused shopping stop",ko:"핵심 쇼핑 한 곳"},d:{en:"A tight list, no wandering. You leave with what actually works.",ko:"짧은 리스트로 헤매지 않아요. 진짜 맞는 것만 들고 나와요."}},
      {t:{en:"+1.5 hrs",ko:"1시간 반 후"},title:{en:"Wrap up",ko:"마무리"},d:{en:"A written shortlist to take home, plus where to buy it later.",ko:"집에 가져갈 제품 리스트와 나중에 살 수 있는 곳까지."}}
    ],
+   excludes:{en:["Products you buy (paid on the spot)","Salon services","Meals and personal expenses","Transport fares"],
+             ko:["구매하시는 제품 (현장 결제)","살롱 서비스","식사 및 개인 경비","교통비"]},
+   meet:{name:{en:"Hongdae Station, Exit 3",ko:"홍대입구역 3번 출구"},
+         detail:{en:"In front of the Starbucks, just outside Exit 3. Short on time? Tell me your layover window and I'll meet you closer to your route.",
+                 ko:"3번 출구 앞 스타벅스 앞이에요. 시간이 촉박하시면 경유 일정에 맞춰 가까운 곳에서 만날 수 있어요."},
+         map:"https://maps.google.com/?q=Hongik+University+Station+Exit+3+Seoul"},
    pricing:{regular:250000,launch:200000}},
   {id:"reset",max_people:4,feature:false,tag:"",dur_h:4,last_start:17,max_per_day:2,
    kicker:{en:"Stay longer",ko:"길게 머물기"},
@@ -1147,6 +1208,12 @@ const DEFAULT_PACKS=[
      {t:{en:"+4 hrs",ko:"4시간 후"},title:{en:"Guided shopping",ko:"동행 쇼핑"},d:{en:"Fill the gaps in your routine with the right products.",ko:"루틴에서 빠진 부분을 맞는 제품으로 채워요."}},
      {t:{en:"Later",ko:"체류 중"},title:{en:"Follow-up check-in",ko:"후속 점검"},d:{en:"One review during your stay — how's the skin responding?",ko:"체류 중 1회 점검 — 피부가 어떻게 반응하는지 확인해요."}}
    ],
+   excludes:{en:["Products beyond your custom blend","Salon services","Meals and personal expenses","Transport fares"],
+             ko:["맞춤 조제 외 구매 제품","살롱 서비스","식사 및 개인 경비","교통비"]},
+   meet:{name:{en:"Hongdae Station, Exit 3",ko:"홍대입구역 3번 출구"},
+         detail:{en:"In front of the Starbucks, just outside Exit 3. Staying nearby? I can meet you closer to your place.",
+                 ko:"3번 출구 앞 스타벅스 앞이에요. 근처에 머무시면 숙소 가까운 곳에서 만날 수도 있어요."},
+         map:"https://maps.google.com/?q=Hongik+University+Station+Exit+3+Seoul"},
    pricing:{regular:800000,launch:650000}}
 ];
 
@@ -1166,7 +1233,7 @@ function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
 
 let adminToken = sessionStorage.getItem("zv_token") || "";
 const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false,
-  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, msgs:null, msgsDefault:null, loaded:false };
+  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, msgs:null, msgsDefault:null, biz:null, loaded:false };
 
 async function loadConfig(){
   try{
@@ -1188,6 +1255,7 @@ async function loadConfig(){
     STATE.igPosts = c.igPosts || [];
     STATE.langs = c.langs || null;
     STATE.pay = c.pay || {depositPct:30,refund:{fullDays:7,halfDays:3}};
+    STATE.biz = c.biz || null;
     STATE.msgs = c.msgs || null;
     STATE.msgsDefault = c.msgsDefault || null;
     STATE.copy = c.copy || null;
@@ -1208,7 +1276,7 @@ function backfillPacks(p){
     if(pk.last_start==null)pk.last_start=d.last_start;
     if(pk.pricing==null)pk.pricing=structuredClone(d.pricing);
     if(pk.max_per_day==null)pk.max_per_day=d.max_per_day;
-    if(pk.addons==null)pk.addons=structuredClone(d.addons||[]);if(pk.max_people==null)pk.max_people=d.max_people||4;if(pk.itinerary==null)pk.itinerary=structuredClone(d.itinerary||[]);
+    if(pk.addons==null)pk.addons=structuredClone(d.addons||[]);if(pk.max_people==null)pk.max_people=d.max_people||4;if(pk.itinerary==null)pk.itinerary=structuredClone(d.itinerary||[]);if(pk.excludes==null)pk.excludes=structuredClone(d.excludes||{});if(pk.meet==null)pk.meet=structuredClone(d.meet||{});
   }});
 }
 async function saveAll(){
@@ -1218,7 +1286,7 @@ async function saveAll(){
       packages:PACKS, hours:STATE.hours, dayhours:STATE.dayhours,
       closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh,
       feats:loadFeats(), host:STATE.host||DEFAULT_HOST, contact:STATE.contact||DEFAULT_CONTACT,
-      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay, msgs:STATE.msgs
+      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay, msgs:STATE.msgs, biz:STATE.biz
     });
   }catch(e){ alert("저장 실패 / Save failed: "+e.message); }
 }
@@ -1279,6 +1347,9 @@ const DEFAULT_HOST={photo:"",
           ko:["피부 타입 분석","성분 읽기","루틴 설계","올리브영 큐레이션","민감성 피부","영어 상담"]},
   why:{en:"I've watched too many people fly home with a bag of products that were wrong for them — bought because a shop assistant pointed at a shelf. That's the gap I'm here to close. No commission targets, no upselling. Just an honest read on your skin and a short list you'll actually use.",
        ko:"직원이 가리킨 선반에서 골라, 자기 피부에 안 맞는 제품을 잔뜩 사서 돌아가는 분들을 너무 많이 봤어요. 그 간극을 메우려고 이 일을 해요. 판매 목표도, 업셀링도 없어요. 정직한 피부 분석과 실제로 쓰게 될 짧은 리스트만 드려요."}};
+const DEFAULT_BIZ={
+  name:"", owner:"", regNo:"", addr:"", email:"", phone:"", mailOrderNo:""
+};
 const DEFAULT_CONTACT={whatsapp:"",line:"",instagram:"",kakao:"",wechat:""};
 const DEFAULT_MEDIA={v1:"",v2:"",v3:""};
 const DEFAULT_FAQ=[
@@ -1323,6 +1394,7 @@ function applyFeats(){
   });
   applyContact();
   applyHost();
+  renderBiz();
   renderNav();
 }
 function tx(obj){ // pick localized text with sensible fallbacks
@@ -1338,6 +1410,24 @@ function applyHost(){
   if(ph){ if(h.photo){ph.style.backgroundImage=`url(${h.photo})`;ph.classList.add("has-img");}else{ph.style.backgroundImage="";ph.classList.remove("has-img");} }
   const set=(id,val)=>{const e=document.getElementById(id);if(e&&val)e.textContent=val;};
   set("hostExp",tx(h.exp)); set("hostLangs",tx(h.langs)); set("hostPhil",tx(h.phil));
+}
+function renderBiz(){
+  const box=document.getElementById("bizInfo");if(!box)return;
+  const b=STATE.biz||DEFAULT_BIZ,t=I18N[lang];
+  const c=STATE.contact||DEFAULT_CONTACT;
+  const rows=[];
+  if(b.name)rows.push([t.biz_name,esc(b.name)]);
+  if(b.owner)rows.push([t.biz_owner,esc(b.owner)]);
+  if(b.regNo)rows.push([t.biz_reg,esc(b.regNo)]);
+  if(b.mailOrderNo)rows.push([t.biz_mailorder,esc(b.mailOrderNo)]);
+  if(b.addr)rows.push([t.biz_addr,esc(b.addr)]);
+  if(b.email)rows.push([t.biz_email,`<a href="mailto:${esc(b.email)}">${esc(b.email)}</a>`]);
+  const wa=(c.whatsapp||"").replace(/[^0-9]/g,"");
+  if(wa)rows.push(["WhatsApp",`<a href="https://wa.me/${wa}" target="_blank" rel="noopener">${esc(c.whatsapp)}</a>`]);
+  if(!rows.length){box.innerHTML="";box.hidden=true;return;}
+  box.hidden=false;
+  box.innerHTML=`<div class="biz-label mono">${t.biz_title}</div>
+    <div class="biz-grid">${rows.map(([k,v])=>`<div class="biz-row"><span>${k}</span><b>${v}</b></div>`).join("")}</div>`;
 }
 function applyContact(){
   const c=STATE.contact||DEFAULT_CONTACT;
@@ -1960,6 +2050,7 @@ function setLang(l){
   applyZh();
   applyCopy();
   renderNav();
+  renderBiz();
   renderPacks();
   renderFaq();
   renderReviews();
@@ -2639,6 +2730,26 @@ function openItinerary(pkgId){
           ${adminMode?`<button class="hp-add wide" onclick="addItin(${i})">+ ${ko?"단계 추가":"Add step"}</button>`:""}
         </div>
         <div class="it-note">${t.itin_note}</div>
+
+        <div class="inc-exc">
+          <div class="ie-col ie-in">
+            <div class="ie-head"><i>✓</i>${t.ie_included}</div>
+            <ul>${(p.items[lang]||[]).map(x=>`<li>${x}</li>`).join("")}</ul>
+          </div>
+          <div class="ie-col ie-out">
+            <div class="ie-head"><i>✕</i>${t.ie_excluded}</div>
+            <ul>${(tx(p.excludes)||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+          </div>
+        </div>
+
+        ${p.meet&&tx(p.meet.name)?`
+        <div class="meet-card">
+          <div class="meet-head"><span class="meet-pin">📍</span>
+            <div><b>${t.meet_title}</b><i>${esc(tx(p.meet.name))}</i></div></div>
+          <p class="meet-detail">${esc(tx(p.meet.detail))}</p>
+          ${p.meet.map?`<a class="meet-map" href="${esc(p.meet.map)}" target="_blank" rel="noopener">🗺 ${t.meet_map} →</a>`:""}
+          <div class="meet-note">${t.meet_note}</div>
+        </div>`:""}
         <button class="submit" onclick="closeModal();setTimeout(()=>openBooking('${p.id}'),150)">${ko?"이 패키지 예약하기 →":"Book this package →"}</button>
       </div>
     </div>`;
@@ -2902,6 +3013,14 @@ function openSettings(){
           <div class="ss-row"><span>${ko?"확인 중…":"Checking…"}</span></div>
         </div>
 
+        <div class="set-label mono">${t.biz_title} <span class="av-hint2">${ko?"(PG 심사에 필요 — 사업자등록 후 입력)":"(needed for PG approval — fill in after registering)"}</span></div>
+        <div class="field"><label>${t.biz_name}</label><input id="bz_name" type="text" value="${esc((STATE.biz||{}).name||"")}" placeholder="Zeneverse"></div>
+        <div class="field"><label>${t.biz_owner}</label><input id="bz_owner" type="text" value="${esc((STATE.biz||{}).owner||"")}"></div>
+        <div class="field"><label>${t.biz_reg}</label><input id="bz_reg" type="text" value="${esc((STATE.biz||{}).regNo||"")}" placeholder="000-00-00000"></div>
+        <div class="field"><label>${t.biz_mailorder}</label><input id="bz_mail" type="text" value="${esc((STATE.biz||{}).mailOrderNo||"")}" placeholder="2026-Seoul-00000"></div>
+        <div class="field"><label>${t.biz_addr}</label><input id="bz_addr" type="text" value="${esc((STATE.biz||{}).addr||"")}"></div>
+        <div class="field"><label>${t.biz_email}</label><input id="bz_email" type="email" value="${esc((STATE.biz||{}).email||"")}"></div>
+
         <div class="set-label mono">${t.pay_label}</div>
         <div class="field"><label>${t.pay_pct}</label>
           <input id="pay_pct" type="number" min="0" max="100" value="${(STATE.pay&&STATE.pay.depositPct)||30}"></div>
@@ -2971,10 +3090,12 @@ function saveSettings(){
   STATE.host=h;
   STATE.contact={whatsapp:g("st_wa"),line:g("st_line"),instagram:g("st_ig"),kakao:g("st_kakao"),wechat:g("st_wechat")};
   STATE.media={v1:g("st_v1"),v2:g("st_v2"),v3:g("st_v3")};
+  STATE.biz={name:g("bz_name"),owner:g("bz_owner"),regNo:g("bz_reg"),
+    mailOrderNo:g("bz_mail"),addr:g("bz_addr"),email:g("bz_email")};
   const num=(id,d)=>{const v=parseInt(document.getElementById(id).value);return isNaN(v)?d:v;};
   STATE.pay={depositPct:num("pay_pct",30),paypalMe:g("pay_ppme"),bank:g("pay_bank"),
     usdRate:num("pay_rate",1350),refund:{fullDays:num("ref_full",7),halfDays:num("ref_half",3)}};
-  saveAll();applyFeats();renderMedia();renderInstagram();
+  saveAll();applyFeats();renderMedia();renderInstagram();renderBiz();
   const m=document.getElementById("st_msg");m.style.color="#7d9488";m.textContent=lang==="ko"?"저장됐어요":"Saved";
 }
 /* YouTube embeds */
