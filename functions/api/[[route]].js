@@ -183,6 +183,24 @@ function depositFor(pay, pk, people) {
   return { total, deposit: dep };
 }
 
+/* ============ LIVE FX (reference only) ============
+   Prices stay on a fixed rate the owner sets. This endpoint just reports the
+   real market rate so the admin knows when their fixed rate has drifted. */
+async function fetchLiveRates() {
+  /* free, no key needed; falls back quietly if it's down */
+  const r = await fetch("https://api.frankfurter.app/latest?from=KRW&to=USD,EUR", {
+    cf: { cacheTtl: 3600, cacheEverything: true },
+  });
+  if (!r.ok) throw new Error("fx unavailable");
+  const d = await r.json();
+  /* frankfurter gives KRW->USD as a tiny number; we want KRW per 1 USD */
+  return {
+    usd: d.rates && d.rates.USD ? Math.round(1 / d.rates.USD) : null,
+    eur: d.rates && d.rates.EUR ? Math.round(1 / d.rates.EUR) : null,
+    date: d.date || null,
+  };
+}
+
 /* ============ REWARD SETTINGS (editable in admin) ============ */
 const DEFAULT_REWARD = {
   enabled: true,
@@ -747,6 +765,27 @@ export async function onRequest(context) {
       const { id } = await request.json();
       await db.prepare("DELETE FROM coupons WHERE id = ?").bind(id).run();
       return json({ ok: true });
+    }
+
+    /* ---------------- admin: live FX check ---------------- */
+    if (route === "/admin/fx" && request.method === "GET") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const pay = (await getSetting(db, "pay", null)) || DEFAULT_PAY;
+      try {
+        const live = await fetchLiveRates();
+        const drift = (set, real) => (set && real ? Math.round(((set - real) / real) * 1000) / 10 : null);
+        return json({
+          ok: true,
+          live,
+          set: { usd: pay.usdRate || DEFAULT_PAY.usdRate, eur: pay.eurRate || DEFAULT_PAY.eurRate },
+          drift: {
+            usd: drift(pay.usdRate || DEFAULT_PAY.usdRate, live.usd),
+            eur: drift(pay.eurRate || DEFAULT_PAY.eurRate, live.eur),
+          },
+        });
+      } catch (e) {
+        return json({ ok: false, error: "fx unavailable" });
+      }
     }
 
     /* ---------------- admin: adjust points ---------------- */

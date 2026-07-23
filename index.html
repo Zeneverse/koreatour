@@ -437,6 +437,26 @@
   .cp-meta{font-size:.76rem;color:var(--sage);line-height:1.5;padding-right:44px}
   .cp-item .bk-del{position:absolute;top:11px;right:12px}
 
+  /* ===== fx drift panel ===== */
+  .fx-panel{background:var(--paper-2);border-radius:12px;padding:13px 15px;margin-bottom:14px}
+  .fx-note{font-size:.76rem;color:#54615f;line-height:1.5;margin-bottom:11px}
+  .fx-live{display:flex;flex-direction:column;gap:6px}
+  .fx-row{display:flex;align-items:center;gap:9px;background:#fff;border-radius:9px;padding:9px 12px;font-size:.78rem;flex-wrap:wrap;border-left:3px solid var(--mist)}
+  .fx-row.good{border-left-color:#3d6b4d}
+  .fx-row.warn{border-left-color:var(--gold)}
+  .fx-row.bad{border-left-color:var(--clay);background:#fdf3ee}
+  .fx-cur{font-family:'Space Mono',monospace;font-weight:600;flex:0 0 34px}
+  .fx-nums{flex:1;color:#54615f;font-family:'Space Mono',monospace;font-size:.72rem}
+  .fx-nums b{color:var(--ink);font-weight:600}
+  .fx-drift{font-family:'Space Mono',monospace;font-size:.74rem;white-space:nowrap}
+  .fx-row.bad .fx-drift{color:var(--clay);font-weight:600}
+  .fx-actions{display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}
+  .fx-date{font-size:.7rem;color:var(--sage);flex:1}
+  .fx-apply{border:1px solid var(--ink);background:transparent;color:var(--ink);border-radius:30px;padding:7px 15px;font-family:inherit;font-size:.76rem;cursor:pointer;white-space:nowrap}
+  .fx-apply:hover{background:var(--ink);color:var(--paper)}
+  .fx-hint{font-size:.7rem;color:var(--sage);line-height:1.5;margin-top:7px}
+  .fx-off{font-size:.76rem;color:var(--sage)}
+
   /* ===== currency selector ===== */
   .cur-btn{position:relative;flex-shrink:0}
   .cur-cur{border:1px solid var(--line);background:transparent;border-radius:40px;padding:8px 13px;font-family:'Space Mono',monospace;font-size:.74rem;cursor:pointer;color:var(--ink);display:flex;align-items:center;gap:5px;white-space:nowrap}
@@ -1033,7 +1053,7 @@ const I18N={
     dep_paid:"Deposit paid",dep_unpaid:"Deposit unpaid",dep_refunded:"Refunded",
     ab_wait:"Waitlist",wl_none:"No one waiting yet.",wl_notify:"Alert this date",wl_notified:"notified",
     dep_mark:"Mark paid",dep_unmark:"Mark unpaid",dep_method:"How was it paid? (PayPal / bank / cash)",
-    pay_label:"Payment settings",pay_pct:"Deposit %",pay_ppme:"PayPal.me username",pay_bank:"Bank account (shown to guests)",pay_defcur:"Default currency shown to guests",pay_rate:"KRW per USD",pay_rate_eur:"KRW per EUR",cur_note:"Prices are billed in KRW. These rates are only used to show guests an approximate amount.",
+    pay_label:"Payment settings",pay_pct:"Deposit %",pay_ppme:"PayPal.me username",pay_bank:"Bank account (shown to guests)",pay_defcur:"Default currency shown to guests",pay_rate:"KRW per USD",pay_rate_eur:"KRW per EUR",cur_note:"Prices are billed in KRW. These rates only change what guests see.",fx_checking:"Checking live rate…",fx_unavailable:"Live rate unavailable right now.",fx_set:"yours",fx_real:"market",fx_asof:"market rate as of {d}",fx_apply:"Match live rate",fx_hint:"A fixed rate keeps your prices stable. Update it when the gap passes about 5%.",
     refund_title:"Refund policy",refund_full:"Full refund up to (days before)",refund_half:"50% refund up to (days before)",ab_nav:"Menu order",nav_order_title:"Menu order",nav_order_sub:"Drag to reorder, or use the arrows. Toggle to show/hide.",
     host_edit:"Edit host info",host_more:"Read more",host_bio:"About me",
     f_agree:"I've read and agree to the cancellation policy and disclaimer.",f_agree_err:"Please agree to continue.",
@@ -1124,7 +1144,7 @@ const I18N={
     dep_paid:"예약금 입금됨",dep_unpaid:"예약금 미입금",dep_refunded:"환불됨",
     ab_wait:"대기자",wl_none:"아직 대기자가 없어요.",wl_notify:"이 날짜 알림 발송",wl_notified:"발송됨",
     dep_mark:"입금 확인",dep_unmark:"미입금으로",dep_method:"어떻게 받았나요? (PayPal / 계좌 / 현금)",
-    pay_label:"결제 설정",pay_pct:"예약금 비율 %",pay_ppme:"PayPal.me 아이디",pay_bank:"계좌 정보 (고객에게 표시)",pay_defcur:"고객에게 기본으로 보이는 통화",pay_rate:"USD 환율",pay_rate_eur:"EUR 환율",cur_note:"결제는 원화로 이뤄져요. 이 환율은 고객에게 대략적인 금액을 보여줄 때만 사용됩니다.",
+    pay_label:"결제 설정",pay_pct:"예약금 비율 %",pay_ppme:"PayPal.me 아이디",pay_bank:"계좌 정보 (고객에게 표시)",pay_defcur:"고객에게 기본으로 보이는 통화",pay_rate:"USD 환율",pay_rate_eur:"EUR 환율",cur_note:"결제는 원화로 이뤄져요. 이 환율은 고객에게 보이는 금액만 바꿉니다.",fx_checking:"실시간 환율 확인 중…",fx_unavailable:"지금은 실시간 환율을 가져올 수 없어요.",fx_set:"내 설정",fx_real:"실제",fx_asof:"{d} 기준 시장 환율",fx_apply:"현재 환율로 맞추기",fx_hint:"고정 환율이라 가격이 안정적이에요. 차이가 5% 정도 벌어지면 갱신하세요.",
     refund_title:"환불 규정",refund_full:"전액 환불 기한 (며칠 전)",refund_half:"50% 환불 기한 (며칠 전)",ab_nav:"메뉴 순서",nav_order_title:"메뉴 순서",nav_order_sub:"드래그하거나 화살표로 순서를 바꾸고, 토글로 표시 여부를 정하세요.",
     host_edit:"호스트 정보 수정",host_more:"더 보기",host_bio:"소개",
     f_agree:"취소 규정과 면책 조항을 읽고 동의합니다.",f_agree_err:"동의해주셔야 진행할 수 있어요.",
@@ -3487,7 +3507,10 @@ function openSettings(){
           <div style="flex:1"><label>${t.pay_rate_eur}</label>
             <input id="pay_rate_eur" type="number" min="500" max="3000" value="${(STATE.pay&&STATE.pay.eurRate)||1450}"></div>
         </div>
-        <div class="rw-preview">${t.cur_note}</div>
+        <div class="fx-panel" id="fxPanel">
+          <div class="fx-note">${t.cur_note}</div>
+          <div class="fx-live" id="fxLive">${t.fx_checking}</div>
+        </div>
         <div class="set-label mono" style="border-top:none;padding-top:0">${t.refund_title}</div>
         <div class="field" style="display:flex;gap:8px">
           <div style="flex:1"><label>${t.refund_full}</label>
@@ -3506,6 +3529,7 @@ function openSettings(){
       </div>
     </div>`;
   renderSetupStatus();
+  checkFx();
 }
 async function testNotify(){
   const ko=lang==="ko",m=document.getElementById("nt_msg");
@@ -3521,6 +3545,41 @@ async function testNotify(){
       : (ko?"➖ 이메일: 아직 설정 안 됨":"➖ Email: not configured"));
     m.style.color="#3c4a48";m.innerHTML=lines.join("<br>");
   }catch(e){m.style.color="#c96f52";m.textContent=ko?"오류가 났어요":"Something went wrong";}
+}
+async function checkFx(){
+  const box=document.getElementById("fxLive");if(!box)return;
+  const t=I18N[lang],ko=lang==="ko";
+  try{
+    const r=await API.get("/api/admin/fx");
+    if(!r.ok){box.innerHTML=`<span class="fx-off">${t.fx_unavailable}</span>`;return;}
+    const row=(cur,setV,liveV,d)=>{
+      if(!liveV)return "";
+      const ad=Math.abs(d||0);
+      const cls=ad>=5?"bad":ad>=2?"warn":"good";
+      const icon=ad>=5?"⚠️":ad>=2?"·":"✅";
+      return `<div class="fx-row ${cls}">
+        <span class="fx-cur">${cur}</span>
+        <span class="fx-nums">${t.fx_set} <b>${setV.toLocaleString()}</b> · ${t.fx_real} <b>${liveV.toLocaleString()}</b></span>
+        <span class="fx-drift">${icon} ${d>0?"+":""}${d}%</span>
+      </div>`;
+    };
+    box.innerHTML=
+      row("USD",r.set.usd,r.live.usd,r.drift.usd)+
+      row("EUR",r.set.eur,r.live.eur,r.drift.eur)+
+      `<div class="fx-actions">
+        <span class="fx-date">${r.live.date?t.fx_asof.replace("{d}",r.live.date):""}</span>
+        <button class="fx-apply" onclick="applyFx(${r.live.usd||0},${r.live.eur||0})">${t.fx_apply}</button>
+      </div>
+      <div class="fx-hint">${t.fx_hint}</div>`;
+  }catch(e){ box.innerHTML=`<span class="fx-off">${I18N[lang].fx_unavailable}</span>`; }
+}
+function applyFx(usd,eur){
+  const ko=lang==="ko";
+  if(!confirm(ko?"현재 실제 환율로 맞출까요? 고객에게 보이는 금액이 바뀝니다.":"Match the live rate? Guest-facing amounts will change."))return;
+  if(usd)document.getElementById("pay_rate").value=usd;
+  if(eur)document.getElementById("pay_rate_eur").value=eur;
+  saveSettings();
+  setTimeout(checkFx,400);
 }
 async function renderSetupStatus(){
   const box=document.getElementById("setupStatus");if(!box)return;
