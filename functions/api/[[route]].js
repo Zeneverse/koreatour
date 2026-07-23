@@ -176,11 +176,17 @@ function payLinks(pay, wonAmount) {
   links.bank = pay.bank || "";
   return links;
 }
-function depositFor(pay, pk, people) {
-  const price = (pk.pricing && (pk.pricing.launch || pk.pricing.regular)) || 0;
-  const total = price; // per booking, not per person
-  const dep = Math.round((total * (pay.depositPct || 30)) / 100 / 1000) * 1000;
-  return { total, deposit: dep };
+function depositFor(pay, pk, people, addons) {
+  const base = (pk.pricing && (pk.pricing.launch || pk.pricing.regular)) || 0;
+  const list = addons || [];
+  /* add-ons split into two buckets: prepaid ones join the deposit,
+     the rest are settled on the day so guests can still change their mind */
+  const prepaid = list.filter((a) => a && a.prepay).reduce((n, a) => n + (parseInt(a.price) || 0), 0);
+  const onsite = list.filter((a) => !(a && a.prepay)).reduce((n, a) => n + (parseInt(a.price) || 0), 0);
+  const total = base + prepaid + onsite;
+  const depositBase = Math.round((base * (pay.depositPct || 30)) / 100 / 1000) * 1000;
+  const deposit = depositBase + prepaid;   // % of the package + anything prepaid in full
+  return { base, prepaid, onsite, extras: prepaid + onsite, total, deposit, depositBase };
 }
 
 /* ============ LIVE FX (reference only) ============
@@ -389,6 +395,21 @@ export async function onRequest(context) {
       return json({ slots, queue });
     }
 
+    /* ---------------- public: live price quote ---------------- */
+    if (route === "/quote" && request.method === "GET") {
+      const pkgId = url.searchParams.get("pkg");
+      const addonIdx = (url.searchParams.get("addons") || "").split(",").filter((x) => x !== "");
+      const [packages, pay] = await Promise.all([
+        getSetting(db, "packages", []),
+        getSetting(db, "pay", null),
+      ]);
+      const pk = (packages || []).find((p) => p.id === pkgId);
+      if (!pk) return json({ error: "unknown package" }, 400);
+      const chosen = addonIdx.map((i) => (pk.addons || [])[parseInt(i)]).filter(Boolean);
+      const amounts = depositFor(pay || DEFAULT_PAY, pk, 1, chosen);
+      return json({ ...amounts, depositPct: (pay || DEFAULT_PAY).depositPct });
+    }
+
     /* ---------------- public: create request ---------------- */
     if (route === "/book" && request.method === "POST") {
       const body = await request.json();
@@ -422,7 +443,7 @@ export async function onRequest(context) {
 
       const cust = await upsertCustomer(db, { email, name, contact, contact_channel });
       const pay = (await getSetting(db, "pay", null)) || DEFAULT_PAY;
-      const amounts = depositFor(pay, pk, parseInt(people) || 1);
+      const amounts = depositFor(pay, pk, parseInt(people) || 1, addons);
       const code = makeCode();
       const queueAhead = live.filter(
         (b) => b.status === "pending" && overlaps(time, pk.dur_h, b.time, b.dur_h || 1)
@@ -506,6 +527,9 @@ export async function onRequest(context) {
         (area ? `📍 ${area}\n` : "") +
         (needTxt ? `🎯 ${needTxt}\n` : "") +
         (addonTxt ? `➕ ${addonTxt}\n` : "") +
+        `💰 총 ₩${Number(amounts.total).toLocaleString("en-US")}\n` +
+        `   └ 선결제 ₩${Number(amounts.deposit).toLocaleString("en-US")}` +
+        (amounts.onsite ? ` · 당일 ₩${Number(amounts.onsite).toLocaleString("en-US")}` : "") + `\n` +
         (note ? `📝 ${note}\n` : "") +
         (queueAhead ? `\n⚠️ 같은 시간 대기 ${queueAhead}명\n` : "") +
         `\n🔑 <code>${code}</code>\n` +
@@ -536,6 +560,7 @@ export async function onRequest(context) {
           dur_h: row.dur_h, people: row.people, status: row.status, reason: row.reason,
           change_req: row.change_req, addons: safeParse(row.addons),
           deposit_amount: row.deposit_amount || 0, deposit_status: row.deposit_status || "unpaid",
+          total_amount: row.total_amount || 0,
         },
         queueAhead,
       });
