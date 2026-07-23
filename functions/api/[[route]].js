@@ -161,7 +161,8 @@ const DEFAULT_PAY = {
   paypalMe: "",          // e.g. "zeneverse"  ->  paypal.me/zeneverse/120000
   paypalEmail: "",
   bank: "",              // e.g. "우리은행 1002-123-456789 홍길동"
-  usdRate: 1350,         // rough KRW -> USD for PayPal links
+  usdRate: 1350,         // rough KRW -> USD
+  eurRate: 1450,         // rough KRW -> EUR
   refund: { fullDays: 7, halfDays: 3 }
 };
 function payLinks(pay, wonAmount) {
@@ -321,6 +322,8 @@ export async function onRequest(context) {
       } catch (e) { /* reviews table may not exist yet */ }
       return json({ packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, reviews,
         pay: { depositPct: (pay && pay.depositPct) || DEFAULT_PAY.depositPct,
+               usdRate: (pay && pay.usdRate) || DEFAULT_PAY.usdRate,
+               eurRate: (pay && pay.eurRate) || DEFAULT_PAY.eurRate,
                refund: (pay && pay.refund) || DEFAULT_PAY.refund },
         msgs: msgsCfg, msgsDefault: DEFAULT_MSGS, biz, reward: Object.assign({}, DEFAULT_REWARD, reward || {}) });
     }
