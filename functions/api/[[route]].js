@@ -413,7 +413,7 @@ export async function onRequest(context) {
     /* ---------------- public: create request ---------------- */
     if (route === "/book" && request.method === "POST") {
       const body = await request.json();
-      const { name, email, pkg, date, time, people, note, addons, contact, contact_channel, contact_id, area, needs } = body || {};
+      const { name, email, pkg, date, time, people, note, addons, contact, contact_channel, contact_id, area, option, needs } = body || {};
       if (!name || !email || !pkg || !date || !time) return json({ error: "missing fields" }, 400);
 
       const [packages, hours, dayhours, closed, blocked] = await Promise.all([
@@ -451,8 +451,8 @@ export async function onRequest(context) {
 
       await db
         .prepare(
-          `INSERT INTO bookings (code,customer_id,visit_no,name,email,contact,contact_channel,contact_id,area,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at,deposit_amount,total_amount)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?,?,?)`
+          `INSERT INTO bookings (code,customer_id,visit_no,name,email,contact,contact_channel,contact_id,area,opt,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at,deposit_amount,total_amount)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?,?,?)`
         )
         .bind(
           code,
@@ -464,6 +464,7 @@ export async function onRequest(context) {
           String(contact_channel || "").slice(0, 20),
           String(contact_id || "").slice(0, 120),
           String(area || "").slice(0, 40),
+          String(option || "").slice(0, 8),
           JSON.stringify(needs || []),
           pkg,
           (pk.title && pk.title.en) || pkg,
@@ -517,7 +518,7 @@ export async function onRequest(context) {
           ? `🔄 <b>재방문 예약</b> (${cust.bookingNo}번째)\n\n`
           : `✨ <b>신규 예약 신청</b>\n\n`) +
         `👤 ${name}\n` +
-        `📦 ${(pk.title && pk.title.en) || pkg}\n` +
+        `📦 ${(pk.title && pk.title.en) || pkg}${option ? ` (Option ${option})` : ""}\n` +
         `📅 ${date}  ⏰ ${time}–${endT}\n` +
         `👥 ${parseInt(people) || 1}명\n` +
         `💬 ${contact || "-"}\n` +
