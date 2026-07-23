@@ -405,6 +405,30 @@
   .saved-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:30px;font-size:.82rem;z-index:210;opacity:0;pointer-events:none;transition:.25s;font-family:'Space Mono',monospace;letter-spacing:.06em}
   .saved-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* ===== on-site payment card ===== */
+  .onsite-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;margin:16px 0;text-align:left}
+  .onsite-head{display:flex;gap:13px;align-items:flex-start;padding:16px 18px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+  .onsite-ic{font-size:1.4rem;line-height:1}
+  .onsite-head b{display:block;font-size:.96rem;margin-bottom:3px}
+  .onsite-head i{font-style:normal;font-size:.8rem;color:#54615f;line-height:1.5}
+  .onsite-methods{padding:14px 18px}
+  .os-row{display:flex;gap:11px;align-items:flex-start;padding:8px 0;font-size:.88rem;color:#3c4a48;line-height:1.5}
+  .os-ic{flex:0 0 20px;text-align:center}
+  .os-cur{display:inline-block;margin-left:4px;font-family:'Space Mono',monospace;font-size:.78rem;color:var(--clay);background:#fdf3ee;padding:2px 9px;border-radius:20px;white-space:nowrap}
+  .onsite-change{margin:0 18px 18px;background:linear-gradient(135deg,#fdf7f4,#faf3ec);border:1px solid #e8d5c8;border-radius:13px;padding:15px}
+  .oc-badge{display:inline-block;background:var(--clay);color:#fff;border-radius:20px;padding:4px 11px;font-size:.6rem;margin-bottom:9px}
+  .onsite-change p{font-size:.86rem;color:#3c4a48;line-height:1.6;margin-bottom:12px}
+  .oc-picks{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+  .oc-pick{background:#fff;border:1px solid var(--clay);border-radius:9px;padding:8px 14px;font-family:'Space Mono',monospace;font-size:.82rem;color:var(--ink);font-weight:600}
+  .oc-arrow{font-size:.72rem;color:var(--sage)}
+  .oc-note{font-size:.74rem;color:#7a6a5f;line-height:1.5;border-top:1px dashed #e0cbbb;padding-top:9px}
+  .onsite-card.compact .onsite-head{padding:13px 15px}
+  .onsite-card.compact .onsite-methods{padding:11px 15px}
+  .onsite-card.compact .onsite-change{margin:0 15px 15px;padding:13px}
+  .os-link{width:100%;margin-top:9px;background:none;border:1px dashed var(--line);border-radius:9px;padding:9px;font-family:inherit;font-size:.78rem;color:var(--sage);cursor:pointer;transition:.2s}
+  .os-link:hover{border-color:var(--clay);color:var(--clay);border-style:solid}
+  @media (max-width:520px){.oc-picks{gap:5px}.oc-pick{padding:7px 11px;font-size:.76rem}}
+
   /* ===== setup status ===== */
   .setup-status{display:flex;flex-direction:column;gap:7px;margin-bottom:6px}
   .ss-row{display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:10px;font-size:.85rem;background:var(--paper-2);border:1px solid var(--line);flex-wrap:wrap}
@@ -864,7 +888,7 @@ const I18N={
     reset_confirm:"Reset \"{x}\" to the original? A backup is saved first.",reset_done:"Reset done.",
     wl_full:"This date is fully booked.",wl_cta:"Notify me if a spot opens",wl_title:"Get notified",
     wl_sub:"If someone cancels on this date, I'll email you right away. No obligation.",
-    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",pay_title:"Pay your deposit",pay_deposit:"Deposit due",pay_method:"How would you like to pay?",pay_global:"International card / Apple Pay / Alipay",pay_domestic:"Korean card / Naver Pay / Kakao Pay",pay_agree:"I have read and agree to the cancellation and refund policy.",pay_go:"Pay deposit securely →",pay_pick_err:"Please choose a payment method.",pay_opening:"Opening secure payment…",pay_verifying:"Confirming your payment…",pay_failed:"Payment was not completed.",pay_verify_fail:"We could not confirm the payment. If money left your account, contact me and I will check.",pay_done:"Deposit received",pay_done_sub:"Your spot is secured. See you in Seoul!",pay_now:"Pay deposit {a}",pay_note:"Payments are processed by PortOne. We never see or store your card details.",itin_sub:"How the day flows — you pick the start time when you book.",itin_note:"⏱ <b>You choose your start time</b> from whatever is open on your date — morning, afternoon or evening. The steps below only show the order and rough pacing, and we shift things around on the day.",
+    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",os_title:"Paying on the day",os_sub:"Balance is settled when we meet — several ways to do it.",os_modal_sub:"Accepted payment methods for the remaining balance.",os_card:"Credit / debit cards — NFC, Apple Pay, Google Pay",os_qr:"QR payments — Alipay, WeChat Pay",os_cash:"Cash in ",os_flex_badge:"Flexible change",os_flex:"Paying in USD or EUR cash? Choose the currency you get your change back in — whatever suits the rest of your trip.",os_flex_note:"Foreign change is given in notes only, rounded to the nearest dollar or euro.",os_link:"How I take payment on the day",pay_title:"Pay your deposit",pay_deposit:"Deposit due",pay_method:"How would you like to pay?",pay_global:"International card / Apple Pay / Alipay",pay_domestic:"Korean card / Naver Pay / Kakao Pay",pay_agree:"I have read and agree to the cancellation and refund policy.",pay_go:"Pay deposit securely →",pay_pick_err:"Please choose a payment method.",pay_opening:"Opening secure payment…",pay_verifying:"Confirming your payment…",pay_failed:"Payment was not completed.",pay_verify_fail:"We could not confirm the payment. If money left your account, contact me and I will check.",pay_done:"Deposit received",pay_done_sub:"Your spot is secured. See you in Seoul!",pay_now:"Pay deposit {a}",pay_note:"Payments are processed by PortOne. We never see or store your card details.",itin_sub:"How the day flows — you pick the start time when you book.",itin_note:"⏱ <b>You choose your start time</b> from whatever is open on your date — morning, afternoon or evening. The steps below only show the order and rough pacing, and we shift things around on the day.",
     msg_title:"Message templates",msg_sub:"These are the emails guests receive. Edit the wording to sound like you.",
     msg_approved:"When you approve a booking",msg_declined:"When you decline",msg_bumped:"When someone else got the slot",msg_bumpedCta:"Button text on that email",
     msg_wlopen:"When a spot opens (waitlist)",msg_deposit:"When you mark the deposit paid",msg_subject:"Subject",msg_body:"Message",ab_msgs:"Messages",msg_reset:"Reset to default",
@@ -955,7 +979,7 @@ const I18N={
     reset_confirm:"\"{x}\"을(를) 처음 상태로 되돌릴까요? 먼저 백업돼요.",reset_done:"초기화했어요.",
     wl_full:"이 날짜는 예약이 마감됐어요.",wl_cta:"자리 나면 알림 받기",wl_title:"자리 알림 신청",
     wl_sub:"이 날짜에 취소가 생기면 바로 이메일로 알려드려요. 예약 의무는 없어요.",
-    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",pay_title:"예약금 결제",pay_deposit:"결제할 예약금",pay_method:"어떻게 결제하시겠어요?",pay_global:"해외 카드 / Apple Pay / Alipay",pay_domestic:"국내 카드 / 네이버페이 / 카카오페이",pay_agree:"취소 및 환불 규정을 읽고 동의합니다.",pay_go:"안전하게 예약금 결제하기 →",pay_pick_err:"결제 수단을 선택해주세요.",pay_opening:"결제창을 여는 중…",pay_verifying:"결제를 확인하는 중…",pay_failed:"결제가 완료되지 않았어요.",pay_verify_fail:"결제 확인에 실패했어요. 출금이 되었다면 연락 주세요, 바로 확인할게요.",pay_done:"예약금 결제 완료",pay_done_sub:"자리가 확정됐어요. 곧 뵙겠습니다!",pay_now:"예약금 {a} 결제하기",pay_note:"결제는 포트원(PortOne)을 통해 안전하게 처리되며, 카드 정보는 저장되지 않아요.",itin_sub:"하루가 어떻게 흘러가는지 — 시작 시간은 예약할 때 직접 고르세요.",itin_note:"⏱ <b>시작 시간은 원하는 대로 고르실 수 있어요</b> — 그날 열려 있는 시간 중에서 오전·오후·저녁 아무 때나요. 아래는 순서와 대략적인 흐름만 보여주는 거예요.",
+    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",os_title:"당일 결제 안내",os_sub:"잔금은 만나서 결제해요 — 방법은 여러 가지예요.",os_modal_sub:"당일 잔금 결제 시 이용 가능한 수단이에요.",os_card:"신용/체크카드 — NFC, 애플페이, 구글페이",os_qr:"QR 결제 — 알리페이, 위챗페이",os_cash:"현금 ",os_flex_badge:"거스름돈 선택",os_flex:"달러나 유로 현금으로 내시나요? 거스름돈을 원하는 통화로 받으실 수 있어요 — 남은 여행 일정에 맞춰서요.",os_flex_note:"외화 거스름돈은 지폐로만 드리며, 달러/유로 단위로 반올림됩니다.",os_link:"당일 결제 방법 보기",pay_title:"예약금 결제",pay_deposit:"결제할 예약금",pay_method:"어떻게 결제하시겠어요?",pay_global:"해외 카드 / Apple Pay / Alipay",pay_domestic:"국내 카드 / 네이버페이 / 카카오페이",pay_agree:"취소 및 환불 규정을 읽고 동의합니다.",pay_go:"안전하게 예약금 결제하기 →",pay_pick_err:"결제 수단을 선택해주세요.",pay_opening:"결제창을 여는 중…",pay_verifying:"결제를 확인하는 중…",pay_failed:"결제가 완료되지 않았어요.",pay_verify_fail:"결제 확인에 실패했어요. 출금이 되었다면 연락 주세요, 바로 확인할게요.",pay_done:"예약금 결제 완료",pay_done_sub:"자리가 확정됐어요. 곧 뵙겠습니다!",pay_now:"예약금 {a} 결제하기",pay_note:"결제는 포트원(PortOne)을 통해 안전하게 처리되며, 카드 정보는 저장되지 않아요.",itin_sub:"하루가 어떻게 흘러가는지 — 시작 시간은 예약할 때 직접 고르세요.",itin_note:"⏱ <b>시작 시간은 원하는 대로 고르실 수 있어요</b> — 그날 열려 있는 시간 중에서 오전·오후·저녁 아무 때나요. 아래는 순서와 대략적인 흐름만 보여주는 거예요.",
     msg_title:"메시지 문구",msg_sub:"고객에게 나가는 이메일 문구예요. 내 말투로 바꿔보세요.",
     msg_approved:"예약을 승인했을 때",msg_declined:"거절했을 때",msg_bumped:"다른 분이 먼저 확정됐을 때",msg_bumpedCta:"그 메일의 버튼 문구",
     msg_wlopen:"자리가 났을 때 (대기자)",msg_deposit:"예약금 입금 확인했을 때",msg_subject:"제목",msg_body:"내용",ab_msgs:"메시지 문구",msg_reset:"기본 문구로 되돌리기",
@@ -1031,6 +1055,7 @@ I18N.zhHant = Object.assign({}, I18N.en, {
   rev_edit:"修改",rev_del:"刪除",rev_pw_ask:"請輸入你設定的密碼：",rev_pw_wrong:"密碼錯誤。",
   disclaimer:"Zeneverse 是個人美妝諮詢與購物導覽服務，不提供醫療行為，亦不安排、仲介或代訂任何醫療療程與診所預約。",
   priv_link:"隱私權政策",terms_link:"取消規定",float_label:"聯絡我",
+  os_title:"當天付款方式",os_sub:"餘款於見面時結清 — 有多種方式。",os_modal_sub:"支付餘款時可使用的方式。",os_card:"信用卡／金融卡 — NFC、Apple Pay、Google Pay",os_qr:"QR 支付 — 支付寶、微信支付",os_cash:"現金 ",os_flex_badge:"找零可選",os_flex:"以美金或歐元現金付款嗎？找零幣別由你選擇 — 依你接下來的行程需求。",os_flex_note:"外幣找零僅提供紙鈔，並四捨五入至整數。",os_link:"查看當天付款方式",
   pay_title:"支付訂金",pay_deposit:"應付訂金",pay_method:"你想如何付款？",pay_global:"國際信用卡 / Apple Pay / 支付寶",pay_domestic:"韓國信用卡 / Naver Pay / Kakao Pay",pay_agree:"我已閱讀並同意取消與退款規定。",pay_go:"安全支付訂金 →",pay_pick_err:"請選擇付款方式。",pay_opening:"正在開啟付款視窗…",pay_verifying:"確認付款中…",pay_failed:"付款未完成。",pay_done:"訂金已收到",pay_done_sub:"你的名額已確認，首爾見！",pay_now:"支付訂金 {a}",
   itin_sub:"當天的流程 — 開始時間由你預約時選擇。",itin_note:"⏱ <b>開始時間可自由選擇</b> — 從當天有空的時段中挑選，早上、下午或傍晚都可以。以下僅顯示順序與大致節奏。",
   need_other:"其他（自行填寫）",need_other_ph:"請告訴我你想了解什麼…",f_people_err:"此方案最多 {n} 位。",
@@ -1277,6 +1302,11 @@ const DEFAULT_FAQ=[
      ko:"'내 예약 조회'에서 예약 코드로 언제든 취소하거나 다른 시간을 요청할 수 있어요. 다른 분께 자리를 드릴 수 있도록 가능한 한 미리 알려주시면 감사하겠습니다.",
      zhHant:"你可以在「查詢我的預約」中使用預約代碼隨時取消或申請更改時段。請盡早告知，讓我能把名額留給其他客人。",
      zhHans:"你可以在\"查询我的预约\"中使用预约代码随时取消或申请更改时段。请尽早告知，让我能把名额留给其他客人。"}},
+ {q:{en:"How do I pay the balance on the day?",ko:"당일 잔금은 어떻게 결제하나요?",zhHant:"當天餘款如何支付？",zhHans:"当天余款如何支付？"},
+  a:{en:"On the day you can pay by card (NFC, Apple Pay, Google Pay), QR (Alipay, WeChat Pay), or cash in KRW, USD or EUR. If you pay in USD or EUR cash, you can choose to get your change back in Korean Won, USD or EUR — whichever suits the rest of your trip. Foreign change is given in notes only, rounded to the nearest dollar or euro.",
+     ko:"당일에는 카드(NFC·애플페이·구글페이), QR 결제(알리페이·위챗페이), 또는 원화·달러·유로 현금으로 결제하실 수 있어요. 달러나 유로 현금으로 내시면 거스름돈을 원화·달러·유로 중 원하시는 통화로 받으실 수 있습니다. 외화 거스름돈은 지폐로만 드리며 달러/유로 단위로 반올림돼요.",
+     zhHant:"當天可使用信用卡（NFC、Apple Pay、Google Pay）、QR 支付（支付寶、微信支付），或韓元、美金、歐元現金付款。若以美金或歐元現金支付，找零可選擇韓元、美金或歐元。外幣找零僅提供紙鈔，並四捨五入至整數。",
+     zhHans:"当天可使用信用卡（NFC、Apple Pay、Google Pay）、QR 支付（支付宝、微信支付），或韩元、美元、欧元现金付款。若以美元或欧元现金支付，找零可选择韩元、美元或欧元。外币找零仅提供纸币，并四舍五入至整数。"}},
  {q:{en:"When in my trip should I book this?",ko:"여행 중 언제 예약하는 게 좋나요?",zhHant:"行程中哪一天預約最合適？",zhHans:"行程中哪一天预约最合适？"},
   a:{en:"Day 2–3 works best. You'll still have days left to actually use what we find, and you won't be jet-lagged on day one.",
      ko:"여행 2~3일차가 가장 좋아요. 찾은 제품을 써볼 날이 남아있고, 첫날의 시차 피로도 피할 수 있거든요.",
@@ -2099,6 +2129,7 @@ function openBooking(preselect){
           <div class="tip-line">🕘 ${t.kst_note}</div>
           <div class="tip-line">💡 ${t.trip_tip}</div>
           <div class="tip-line">💳 ${t.dep_note.replace("{pct}",(STATE.pay&&STATE.pay.depositPct)||30)} ${t.dep_after}</div>
+          <button type="button" class="os-link" onclick="openOnsiteInfo()">💵 ${t.os_link} →</button>
         </div>
         <label class="agree-check"><input type="checkbox" id="bk_agree"> <span>${t.f_agree}
           <a onclick="event.stopPropagation();openPolicy('terms')" class="agree-link">${t.terms_link}</a></span></label>
@@ -2241,6 +2272,7 @@ function showCode(code,queueAhead,channel){
         <div class="code-sub">${t.code_sub}</div>
         <div class="queue-pill">${q}</div>
         ${channelStep(channel)}
+        ${onsiteCard(true)}
         <button class="submit" onclick="closeModal()">${ko?"확인":"Done"}</button>
       </div>
     </div>`;
@@ -2392,6 +2424,55 @@ async function refreshNewCount(){
   if(!adminToken)return;
   try{const r=await API.get("/api/admin/bookings");newCount=r.newCount||0;renderAdminBar();}catch(e){}
 }
+/* ============ ON-SITE PAYMENT INFO CARD ============ */
+function onsiteCard(compact){
+  const t=I18N[lang];
+  return `
+  <div class="onsite-card${compact?" compact":""}">
+    <div class="onsite-head">
+      <span class="onsite-ic">💵</span>
+      <div>
+        <b>${t.os_title}</b>
+        <i>${t.os_sub}</i>
+      </div>
+    </div>
+
+    <div class="onsite-methods">
+      <div class="os-row"><span class="os-ic">💳</span><span>${t.os_card}</span></div>
+      <div class="os-row"><span class="os-ic">📱</span><span>${t.os_qr}</span></div>
+      <div class="os-row"><span class="os-ic">💵</span><span>${t.os_cash}
+        <b class="os-cur">KRW · USD $ · EUR €</b></span></div>
+    </div>
+
+    <div class="onsite-change">
+      <div class="oc-badge mono">${t.os_flex_badge}</div>
+      <p>${t.os_flex}</p>
+      <div class="oc-picks">
+        <span class="oc-pick">₩ KRW</span>
+        <span class="oc-arrow">or</span>
+        <span class="oc-pick">$ USD</span>
+        <span class="oc-arrow">or</span>
+        <span class="oc-pick">€ EUR</span>
+      </div>
+      <div class="oc-note">${t.os_flex_note}</div>
+    </div>
+  </div>`;
+}
+function openOnsiteInfo(){
+  const t=I18N[lang];
+  document.getElementById("modalRoot2").innerHTML=`
+    <div class="modal-bg layer2" onclick="if(event.target===this)closeOnsite()">
+      <div class="modal" style="max-width:480px">
+        <button class="close" onclick="closeOnsite()">&times;</button>
+        <h3>${t.os_title}</h3>
+        <div class="sub">${t.os_modal_sub}</div>
+        ${onsiteCard(false)}
+        <button class="submit" onclick="closeOnsite()">${lang==="ko"?"확인":"Got it"}</button>
+      </div>
+    </div>`;
+}
+function closeOnsite(){document.getElementById("modalRoot2").innerHTML="";}
+
 /* ============ PORTONE PAYMENT ============ */
 let PAYCFG=null;
 async function loadPayConfig(){
