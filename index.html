@@ -405,6 +405,29 @@
   .saved-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:30px;font-size:.82rem;z-index:210;opacity:0;pointer-events:none;transition:.25s;font-family:'Space Mono',monospace;letter-spacing:.06em}
   .saved-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* ===== itinerary ===== */
+  .itin-link{width:100%;margin-top:12px;background:none;border:1px dashed var(--line);border-radius:30px;padding:11px;font-family:inherit;font-size:.85rem;color:var(--sage);cursor:pointer;transition:.2s}
+  .itin-link:hover{border-color:var(--clay);color:var(--clay);border-style:solid}
+  .pack.feature .itin-link{border-color:#3a4b4b;color:#9fb0ab}
+  .pack.feature .itin-link:hover{border-color:var(--gold);color:var(--gold)}
+  .it-head{margin-bottom:18px}
+  .it-kicker{color:var(--clay);font-size:.66rem;display:block;margin-bottom:6px}
+  .it-list{display:flex;flex-direction:column;gap:2px;margin-bottom:18px}
+  .it-item{display:flex;gap:16px;padding:14px 0;border-bottom:1px dashed var(--mist);position:relative}
+  .it-item:last-of-type{border-bottom:none}
+  .it-time{font-family:'Space Mono',monospace;font-size:.82rem;color:var(--clay);flex:0 0 58px;padding-top:2px;font-weight:600}
+  .it-body{flex:1}
+  .it-body b{display:block;font-size:.98rem;margin-bottom:4px}
+  .it-body p{font-size:.88rem;color:#54615f;line-height:1.65}
+  .it-note{background:var(--paper-2);border-radius:12px;padding:13px 15px;font-size:.82rem;color:#4a5654;line-height:1.6;margin-bottom:18px}
+  .it-edit{outline:1px dashed rgba(201,111,82,.4);outline-offset:2px;border-radius:3px;cursor:text}
+  .it-edit:hover{background:rgba(201,111,82,.07)}
+  .it-edit:focus{background:rgba(201,111,82,.05);outline:2px solid var(--clay)}
+  @media (max-width:520px){
+    .it-item{flex-direction:column;gap:5px}
+    .it-time{flex:none}
+  }
+
   /* ===== message templates ===== */
   .msg-block{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:#fff}
   .msg-label{color:var(--clay);display:block;margin-bottom:9px;font-size:.64rem}
@@ -813,7 +836,7 @@ const I18N={
     reset_confirm:"Reset \"{x}\" to the original? A backup is saved first.",reset_done:"Reset done.",
     wl_full:"This date is fully booked.",wl_cta:"Notify me if a spot opens",wl_title:"Get notified",
     wl_sub:"If someone cancels on this date, I'll email you right away. No obligation.",
-    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",
+    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",itin_sub:"How the day flows — you pick the start time when you book.",itin_note:"⏱ <b>You choose your start time</b> from whatever is open on your date — morning, afternoon or evening. The steps below only show the order and rough pacing, and we shift things around on the day.",
     msg_title:"Message templates",msg_sub:"These are the emails guests receive. Edit the wording to sound like you.",
     msg_approved:"When you approve a booking",msg_declined:"When you decline",msg_bumped:"When someone else got the slot",msg_bumpedCta:"Button text on that email",
     msg_wlopen:"When a spot opens (waitlist)",msg_deposit:"When you mark the deposit paid",msg_subject:"Subject",msg_body:"Message",ab_msgs:"Messages",msg_reset:"Reset to default",
@@ -904,7 +927,7 @@ const I18N={
     reset_confirm:"\"{x}\"을(를) 처음 상태로 되돌릴까요? 먼저 백업돼요.",reset_done:"초기화했어요.",
     wl_full:"이 날짜는 예약이 마감됐어요.",wl_cta:"자리 나면 알림 받기",wl_title:"자리 알림 신청",
     wl_sub:"이 날짜에 취소가 생기면 바로 이메일로 알려드려요. 예약 의무는 없어요.",
-    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",
+    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",itin_sub:"하루가 어떻게 흘러가는지 — 시작 시간은 예약할 때 직접 고르세요.",itin_note:"⏱ <b>시작 시간은 원하는 대로 고르실 수 있어요</b> — 그날 열려 있는 시간 중에서 오전·오후·저녁 아무 때나요. 아래는 순서와 대략적인 흐름만 보여주는 거예요.",
     msg_title:"메시지 문구",msg_sub:"고객에게 나가는 이메일 문구예요. 내 말투로 바꿔보세요.",
     msg_approved:"예약을 승인했을 때",msg_declined:"거절했을 때",msg_bumped:"다른 분이 먼저 확정됐을 때",msg_bumpedCta:"그 메일의 버튼 문구",
     msg_wlopen:"자리가 났을 때 (대기자)",msg_deposit:"예약금 입금 확인했을 때",msg_subject:"제목",msg_body:"내용",ab_msgs:"메시지 문구",msg_reset:"기본 문구로 되돌리기",
@@ -980,6 +1003,7 @@ I18N.zhHant = Object.assign({}, I18N.en, {
   rev_edit:"修改",rev_del:"刪除",rev_pw_ask:"請輸入你設定的密碼：",rev_pw_wrong:"密碼錯誤。",
   disclaimer:"Zeneverse 是個人美妝諮詢與購物導覽服務，不提供醫療行為，亦不安排、仲介或代訂任何醫療療程與診所預約。",
   priv_link:"隱私權政策",terms_link:"取消規定",float_label:"聯絡我",
+  itin_sub:"當天的流程 — 開始時間由你預約時選擇。",itin_note:"⏱ <b>開始時間可自由選擇</b> — 從當天有空的時段中挑選，早上、下午或傍晚都可以。以下僅顯示順序與大致節奏。",
   need_other:"其他（自行填寫）",need_other_ph:"請告訴我你想了解什麼…",f_people_err:"此方案最多 {n} 位。",
   host_more:"更多介紹",host_bio:"關於我",
   vid_soon:"影片 1 · 即將推出",vid_soon2:"影片 2 · 即將推出",vid_soon3:"影片 3 · 即將推出"
@@ -1015,6 +1039,7 @@ I18N.zhHans = Object.assign({}, I18N.zhHant, {
   faq_title:"常被问到的问题。",rev_title:"客人怎么说。",rev_write:"撰写评价",
   disclaimer:"Zeneverse 是个人美妆咨询与购物导览服务，不提供医疗行为，也不安排、中介或代订任何医疗疗程与诊所预约。",
   f_contact:"我该如何联系你？",ch_pick_first:"请先选择上方的通讯软件",ch_err:"请选择联系方式。",
+  itin_sub:"当天的流程 — 开始时间由你预约时选择。",itin_note:"⏱ <b>开始时间可自由选择</b> — 从当天有空的时段中挑选，早上、下午或傍晚都可以。以下仅显示顺序与大致节奏。",
   need_other:"其他（自行填写）",need_other_ph:"请告诉我你想了解什么…",f_people_err:"此方案最多 {n} 位。",
   host_more:"更多介绍",host_bio:"关于我",
   priv_link:"隐私政策",terms_link:"取消规定",float_label:"联系我"
@@ -1032,6 +1057,12 @@ const DEFAULT_PACKS=[
           ko:["1:1 맞춤 피부 분석 &amp; 솔직한 조언","올리브영 & 매장 쇼핑 가이드","검증된 눈썹/속눈썹/헤어샵 매칭","퍼스널 의류 & 스타일링 추천"]},
    addons:[{name:{en:"Brow tattoo consult & booking",ko:"눈썹 문신 상담 & 예약"},price:50000},
            {name:{en:"Hair salon accompaniment",ko:"헤어샵 동행"},price:50000}],
+   itinerary:[
+     {t:{en:"Start",ko:"시작"},title:{en:"Meet & skin consultation",ko:"만남 & 피부 분석"},d:{en:"Coffee first, then a proper look at your skin — what it needs, what it doesn't.",ko:"먼저 커피 한 잔, 그다음 피부를 제대로 살펴봐요 — 뭐가 필요하고 뭐가 필요 없는지."}},
+     {t:{en:"+1 hr",ko:"1시간 후"},title:{en:"Olive Young, decoded",ko:"올리브영 완전 정복"},d:{en:"We shop together. I read the ingredient lists so you don't buy the wrong thing.",ko:"함께 쇼핑해요. 제가 성분표를 읽어드려서 잘못된 제품을 사지 않게 해요."}},
+     {t:{en:"+3 hrs",ko:"3시간 후"},title:{en:"Lunch break",ko:"점심"},d:{en:"A local spot near where we are — nothing touristy.",ko:"근처 로컬 맛집으로 — 관광지 말고요."}},
+     {t:{en:"+4 hrs",ko:"4시간 후"},title:{en:"Salon or styling",ko:"살롱 또는 스타일링"},d:{en:"Brow, lash or hair at a vetted salon — or personal styling if you'd rather shop.",ko:"검증된 샵에서 눈썹·속눈썹·헤어 — 쇼핑을 원하시면 퍼스널 스타일링으로."}}
+   ],
    pricing:{regular:500000,launch:400000}},
   {id:"layover",max_people:4,feature:false,tag:"",dur_h:2,last_start:19,max_per_day:3,
    kicker:{en:"Short & sharp",ko:"짧고 굵게"},
@@ -1041,6 +1072,11 @@ const DEFAULT_PACKS=[
    items:{en:["Quick skin consultation & priorities","One curated shopping stop","Brow / lash / styling match","Product shortlist to take home"],
           ko:["빠른 피부 분석 &amp; 우선순위","엄선된 쇼핑 한 곳","눈썹/속눈썹/스타일링 매칭","집에 가져갈 제품 리스트"]},
    addons:[{name:{en:"Extra shopping stop (+1h)",ko:"쇼핑 한 곳 추가 (+1시간)"},price:60000}],
+   itinerary:[
+     {t:{en:"Start",ko:"시작"},title:{en:"Quick skin read",ko:"빠른 피부 분석"},d:{en:"Straight to it — your skin type and the two or three things that matter.",ko:"바로 시작해요 — 피부 타입과 정말 중요한 두세 가지."}},
+     {t:{en:"+30 min",ko:"30분 후"},title:{en:"One focused shopping stop",ko:"핵심 쇼핑 한 곳"},d:{en:"A tight list, no wandering. You leave with what actually works.",ko:"짧은 리스트로 헤매지 않아요. 진짜 맞는 것만 들고 나와요."}},
+     {t:{en:"+1.5 hrs",ko:"1시간 반 후"},title:{en:"Wrap up",ko:"마무리"},d:{en:"A written shortlist to take home, plus where to buy it later.",ko:"집에 가져갈 제품 리스트와 나중에 살 수 있는 곳까지."}}
+   ],
    pricing:{regular:250000,launch:200000}},
   {id:"reset",max_people:4,feature:false,tag:"",dur_h:4,last_start:17,max_per_day:2,
    kicker:{en:"Stay longer",ko:"길게 머물기"},
@@ -1050,6 +1086,13 @@ const DEFAULT_PACKS=[
    items:{en:["Everything in the Makeover day","Custom skincare blend, mixed for you","Routine plan for your skin","One follow-up review during your stay"],
           ko:["메이크오버 데이 전체 포함","당신을 위한 맞춤 스킨케어 조제","내 피부 맞춤 루틴 플랜","체류 중 1회 후속 점검"]},
    addons:[{name:{en:"Extra custom blend refill",ko:"맞춤 조제 리필 추가"},price:80000}],
+   itinerary:[
+     {t:{en:"Start",ko:"시작"},title:{en:"Deep skin consultation",ko:"심층 피부 분석"},d:{en:"A longer look — your history, your routine, what's actually going on.",ko:"더 깊이 봐요 — 피부 이력, 현재 루틴, 실제로 무슨 일이 일어나는지."}},
+     {t:{en:"+1 hr",ko:"1시간 후"},title:{en:"Custom blend, made for you",ko:"나만의 맞춤 조제"},d:{en:"We mix a skincare formula for your skin, right there.",ko:"그 자리에서 당신 피부에 맞는 스킨케어를 직접 조제해요."}},
+     {t:{en:"+2.5 hrs",ko:"2시간 반 후"},title:{en:"Lunch & routine plan",ko:"점심 & 루틴 설계"},d:{en:"Over lunch we map out a routine you'll actually keep.",ko:"점심 먹으며 실제로 지킬 수 있는 루틴을 함께 짜요."}},
+     {t:{en:"+4 hrs",ko:"4시간 후"},title:{en:"Guided shopping",ko:"동행 쇼핑"},d:{en:"Fill the gaps in your routine with the right products.",ko:"루틴에서 빠진 부분을 맞는 제품으로 채워요."}},
+     {t:{en:"Later",ko:"체류 중"},title:{en:"Follow-up check-in",ko:"후속 점검"},d:{en:"One review during your stay — how's the skin responding?",ko:"체류 중 1회 점검 — 피부가 어떻게 반응하는지 확인해요."}}
+   ],
    pricing:{regular:800000,launch:650000}}
 ];
 
@@ -1111,7 +1154,7 @@ function backfillPacks(p){
     if(pk.last_start==null)pk.last_start=d.last_start;
     if(pk.pricing==null)pk.pricing=structuredClone(d.pricing);
     if(pk.max_per_day==null)pk.max_per_day=d.max_per_day;
-    if(pk.addons==null)pk.addons=structuredClone(d.addons||[]);if(pk.max_people==null)pk.max_people=d.max_people||4;
+    if(pk.addons==null)pk.addons=structuredClone(d.addons||[]);if(pk.max_people==null)pk.max_people=d.max_people||4;if(pk.itinerary==null)pk.itinerary=structuredClone(d.itinerary||[]);
   }});
 }
 async function saveAll(){
@@ -1910,6 +1953,7 @@ function renderPacks(){
       <div class="sep-note">${lang==="ko"?"※ 눈썹·헤어샵 등 파트너 시술·서비스 비용은 현장에서 별도 결제됩니다.":"Note: brow, lash, hair salon and other partner services are paid separately on site."}</div>
       <div class="foot">
         <div class="price">${priceHTML(p)}</div>
+        ${!editMode&&(p.itinerary&&p.itinerary.length)?`<button class="itin-link" onclick="openItinerary('${p.id}')">${lang==="ko"?"이 날의 흐름 보기":"See how the day goes"} →</button>`:""}
         ${editMode?`<div class="pack-timing">
             <label>${lang==="ko"?"정가":"Regular"} ₩<input type="number" min="0" step="10000" value="${p.pricing.regular||0}" onchange="setPrice(${i},'regular',this.value)"></label>
             <label>${lang==="ko"?"런칭가":"Launch"} ₩<input type="number" min="0" step="10000" value="${p.pricing.launch||0}" onchange="setPrice(${i},'launch',this.value)"></label>
@@ -2315,6 +2359,67 @@ async function refreshNewCount(){
   if(!adminToken)return;
   try{const r=await API.get("/api/admin/bookings");newCount=r.newCount||0;renderAdminBar();}catch(e){}
 }
+/* ============ ITINERARY (sample day) ============ */
+function openItinerary(pkgId){
+  if(textEditMode)return;
+  const t=I18N[lang],ko=lang==="ko";
+  const i=PACKS.findIndex(x=>x.id===pkgId);if(i<0)return;
+  const p=PACKS[i];
+  const list=p.itinerary||[];
+  const ed=adminMode?' contenteditable="true" class="it-edit"':'';
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:520px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <div class="it-head">
+          <div class="mono it-kicker">${esc(p.dur[lang]||"")}</div>
+          <h3>${esc(p.title[lang]||"")}</h3>
+          <div class="sub">${t.itin_sub}</div>
+        </div>
+        ${adminMode?`<div class="hp-editnote">${ko?"✏️ 시간·제목·설명을 클릭해서 바로 수정하세요":"✏️ Click any time, title or line to edit"}</div>`:""}
+        <div class="it-list">
+          ${list.map((it,j)=>`
+            <div class="it-item">
+              <div class="it-time"${ed} data-it="${i}.${j}.t">${esc(typeof it.t==="string"?it.t:tx(it.t))}</div>
+              <div class="it-body">
+                <b${ed} data-it="${i}.${j}.title">${esc(tx(it.title))}</b>
+                <p${ed} data-it="${i}.${j}.d">${esc(tx(it.d))}</p>
+              </div>
+              ${adminMode?`<button class="hp-x" onclick="delItin(${i},${j})">&times;</button>`:""}
+            </div>`).join("")}
+          ${adminMode?`<button class="hp-add wide" onclick="addItin(${i})">+ ${ko?"단계 추가":"Add step"}</button>`:""}
+        </div>
+        <div class="it-note">${t.itin_note}</div>
+        <button class="submit" onclick="closeModal();setTimeout(()=>openBooking('${p.id}'),150)">${ko?"이 패키지 예약하기 →":"Book this package →"}</button>
+      </div>
+    </div>`;
+  if(adminMode)wireItinEdit();
+}
+function wireItinEdit(){
+  document.querySelectorAll("[data-it]").forEach(el=>{
+    el.addEventListener("blur",()=>{
+      const [i,j,f]=el.getAttribute("data-it").split(".");
+      const txt=el.innerText.trim();
+      const p=PACKS[+i];if(!p.itinerary)p.itinerary=[];
+      if(f==="t"){
+        if(typeof p.itinerary[+j].t!=="object")p.itinerary[+j].t={};
+        p.itinerary[+j].t[lang]=txt;
+      } else {p.itinerary[+j][f]=p.itinerary[+j][f]||{};p.itinerary[+j][f][lang]=txt;}
+      savePacks(PACKS);flashSaved();
+    });
+    el.addEventListener("mouseup",()=>setTimeout(showToolbarIfSelection,10));
+    el.addEventListener("keydown",e=>{if(e.key==="Escape")el.blur();});
+  });
+}
+function addItin(i){
+  const p=PACKS[i];p.itinerary=p.itinerary||[];
+  p.itinerary.push({t:{[lang]:lang==="ko"?"이후":"Later"},title:{[lang]:lang==="ko"?"새 단계":"New step"},d:{[lang]:lang==="ko"?"설명":"Description"}});
+  savePacks(PACKS);openItinerary(p.id);
+}
+function delItin(i,j){
+  const p=PACKS[i];p.itinerary.splice(j,1);savePacks(PACKS);openItinerary(p.id);
+}
+
 /* ============ ADMIN: message templates ============ */
 function openMsgs(){
   const t=I18N[lang],ko=lang==="ko";
