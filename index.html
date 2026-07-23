@@ -371,6 +371,19 @@
   .ch-id-box .code-copy{color:var(--clay);border-color:var(--clay)}
   .ch-warn{color:var(--clay);margin-top:8px;font-size:.8rem}
 
+  /* ===== meeting area picker ===== */
+  .area-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .area-opt{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:12px 13px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;transition:.15s;min-height:70px}
+  .area-opt:hover{border-color:var(--clay)}
+  .area-opt.on{background:var(--ink);border-color:var(--ink)}
+  .area-opt b{font-size:.9rem;color:var(--ink)}
+  .area-opt.on b{color:var(--paper)}
+  .area-opt i{font-style:normal;font-size:.72rem;color:var(--sage);line-height:1.45}
+  .area-opt.on i{color:#9fb0ab}
+  .area-spot{margin-top:9px;background:var(--paper-2);border-radius:10px;padding:10px 13px;font-size:.8rem;color:#3c4a48;line-height:1.5}
+  .area-spot a{color:var(--clay);text-decoration:underline}
+  @media (max-width:520px){.area-grid{grid-template-columns:1fr}}
+
   /* ===== contact channel picker ===== */
   .ch-picker{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:9px}
   .ch-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:12px 10px;border:1px solid var(--line);border-radius:11px;background:#fff;font-family:inherit;font-size:.86rem;cursor:pointer;color:var(--ink);transition:.15s;min-height:46px}
@@ -1032,7 +1045,7 @@ const I18N={
     ch_kakao_t:"One quick step: add me on KakaoTalk",ch_kakao_d:"KakaoTalk doesn't let me message you first. Search my ID below and add me, then I'll confirm there.",
     ch_wechat_t:"One quick step: add me on WeChat",ch_wechat_d:"WeChat doesn't let me message you first. Search my ID below and add me, then I'll confirm there.",
     ch_add:"Add me on {x}",ch_copied:"copied — search it in the app to add me",ch_soon:"⚠️ My ID isn't listed yet — I'll email you instead.",
-    f_needs:"What are you most interested in?",
+    f_area:"Which part of Seoul suits you?",f_area_hint:"Pick the area you want to explore and I will build the day around it.",f_area_err:"Please choose an area.",f_needs:"What are you most interested in?",
     need1:"Olive Young ingredient-smart shopping",need2:"Korean pharmacy beauty picks",need3:"Brow / lash / hair salon matching",need4:"Personal styling",need_other:"Something else",need_other_ph:"Tell me what you're looking for…",
     f_people_err:"Max {n} guests for this package.",
     ed_title:"Edit text",ed_save:"Save",ed_cancel:"Cancel",ed_hint:"Click any text on the page to edit it.",
@@ -1123,7 +1136,7 @@ const I18N={
     ch_kakao_t:"한 가지만 해주세요: 카카오톡 친구추가",ch_kakao_d:"카카오톡은 제가 먼저 메시지를 보낼 수 없어요. 아래 ID를 검색해서 추가해주시면 거기서 안내드릴게요.",
     ch_wechat_t:"한 가지만 해주세요: 위챗 친구추가",ch_wechat_d:"위챗은 제가 먼저 메시지를 보낼 수 없어요. 아래 ID를 검색해서 추가해주시면 거기서 안내드릴게요.",
     ch_add:"{x}에서 추가하기",ch_copied:"복사됐어요 — 앱에서 검색해 추가해주세요",ch_soon:"⚠️ 아직 ID가 등록되지 않았어요 — 이메일로 안내드릴게요.",
-    f_needs:"어떤 게 가장 궁금하세요?",
+    f_area:"서울 어느 동네가 좋으세요?",f_area_hint:"둘러보고 싶은 동네를 고르시면 그 지역 중심으로 하루를 짜드려요.",f_area_err:"동네를 선택해주세요.",f_needs:"어떤 게 가장 궁금하세요?",
     need1:"올리브영 성분 분석 쇼핑",need2:"한국 약국 뷰티 꿀조합",need3:"눈썹/속눈썹/헤어샵 매칭",need4:"퍼스널 스타일링",need_other:"기타 (직접 입력)",need_other_ph:"어떤 게 궁금하신지 적어주세요…",
     f_people_err:"이 패키지는 최대 {n}명까지 가능해요.",
     ed_title:"텍스트 수정",ed_save:"저장",ed_cancel:"취소",ed_hint:"페이지의 아무 글자나 클릭하면 수정할 수 있어요.",
@@ -1190,7 +1203,7 @@ I18N.zhHant = Object.assign({}, I18N.en, {
   ch_kakao_t:"只需一步：加我 KakaoTalk",ch_kakao_d:"KakaoTalk 無法讓我主動傳訊息，請搜尋下方 ID 加我。",
   ch_wechat_t:"只需一步：加我微信",ch_wechat_d:"微信無法讓我主動傳訊息，請搜尋下方 ID 加我。",
   ch_add:"在 {x} 加我",ch_copied:"已複製 — 請在 App 中搜尋加我",ch_soon:"⚠️ 我的 ID 尚未設定 — 我會改用電子郵件聯絡你。",
-  f_needs:"你最感興趣的是？",need1:"Olive Young 成分解析採買",need2:"韓國藥妝店必買組合",need3:"美睫／美眉／髮廊配對",need4:"個人穿搭造型",
+  f_area:"想逛首爾哪一區？",f_area_hint:"選擇你想探索的區域，我會以此安排當天行程。",f_area_err:"請選擇區域。",f_needs:"你最感興趣的是？",need1:"Olive Young 成分解析採買",need2:"韓國藥妝店必買組合",need3:"美睫／美眉／髮廊配對",need4:"個人穿搭造型",
   f_agree:"我已閱讀並同意取消規定與免責聲明。",f_agree_err:"請先同意才能繼續。",f_contact_err:"請留下可聯絡的通訊軟體 ID 或號碼。",
   kst_note:"所有時間皆為韓國標準時間（KST, GMT+9）。",
   trip_tip:"小提醒：安排在行程第 2～3 天最理想 — 才有時間試用我們挑的產品。",
@@ -1240,7 +1253,7 @@ I18N.zhHans = Object.assign({}, I18N.zhHant, {
   join_title:"告诉我你的日期 — 我来保留位置。",join_sub:"私人服务名额有限，很快就会满。提交申请，我会尽快确认可预约时间。",join_cta:"提交预约申请 &rarr;",
   book_title:"预约申请",book_sub:"填写资料后，我会通过电子邮件确认可预约时间。",
   f_name:"姓名",f_email:"电子邮箱",f_pkg:"方案",f_addons:"加购项目（选填）",f_date:"希望日期",f_people:"人数",f_note:"有什么想先让我知道的吗？（选填）",
-  f_needs:"你最感兴趣的是？",need1:"Olive Young 成分解析采买",need2:"韩国药妆店必买组合",need3:"美睫／美眉／发廊配对",need4:"个人穿搭造型",
+  f_area:"想逛首尔哪一区？",f_area_hint:"选择你想探索的区域，我会以此安排当天行程。",f_area_err:"请选择区域。",f_needs:"你最感兴趣的是？",need1:"Olive Young 成分解析采买",need2:"韩国药妆店必买组合",need3:"美睫／美眉／发廊配对",need4:"个人穿搭造型",
   f_agree:"我已阅读并同意取消规定与免责声明。",f_agree_err:"请先同意才能继续。",f_contact_err:"请留下可联系的通讯软件 ID 或号码。",
   kst_note:"所有时间均为韩国标准时间（KST, GMT+9）。",
   trip_tip:"小提醒：安排在行程第 2～3 天最理想 — 才有时间试用我们挑的产品。",
@@ -1342,7 +1355,7 @@ function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
 
 let adminToken = sessionStorage.getItem("zv_token") || "";
 const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false,
-  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, msgs:null, msgsDefault:null, biz:null, reward:null, loaded:false };
+  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, msgs:null, msgsDefault:null, biz:null, reward:null, areas:null, loaded:false };
 
 async function loadConfig(){
   try{
@@ -1366,6 +1379,7 @@ async function loadConfig(){
     STATE.pay = c.pay || {depositPct:30,usdRate:1350,eurRate:1450,defaultCurrency:"USD",refund:{fullDays:7,halfDays:3}};
     STATE.biz = c.biz || null;
     STATE.reward = c.reward || null;
+    STATE.areas = c.areas || null;
     STATE.msgs = c.msgs || null;
     STATE.msgsDefault = c.msgsDefault || null;
     STATE.copy = c.copy || null;
@@ -1396,7 +1410,7 @@ async function saveAll(){
       packages:PACKS, hours:STATE.hours, dayhours:STATE.dayhours,
       closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh,
       feats:loadFeats(), host:STATE.host||DEFAULT_HOST, contact:STATE.contact||DEFAULT_CONTACT,
-      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay, msgs:STATE.msgs, biz:STATE.biz, reward:STATE.reward
+      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay, msgs:STATE.msgs, biz:STATE.biz, reward:STATE.reward, areas:loadAreas()
     });
   }catch(e){ alert("저장 실패 / Save failed: "+e.message); }
 }
@@ -2321,6 +2335,17 @@ function openBooking(preselect){
           <input id="bk_contact" type="text" placeholder="${t.ch_pick_first}" disabled>
           <div class="ch-hint" id="ch_hint"></div>
         </div>
+        <div class="field"><label>${t.f_area}</label>
+          <div class="area-grid">
+            ${loadAreas().map(a=>`
+              <button type="button" class="area-opt" data-area="${a.id}" onclick="pickArea('${a.id}',this)">
+                <b>${esc(tx(a.name))}</b>
+                <i>${esc(tx(a.vibe))}</i>
+              </button>`).join("")}
+          </div>
+          <div class="area-spot" id="areaSpot" style="display:none"></div>
+          <div class="ch-hint">${t.f_area_hint}</div>
+        </div>
         <div class="field"><label>${t.f_needs}</label>
           <div class="needs-wrap">
             ${[1,2,3,4].map(n=>`<label class="need-check"><input type="checkbox" data-need="${t["need"+n]}"> <span>${t["need"+n]}</span></label>`).join("")}
@@ -2342,7 +2367,7 @@ function openBooking(preselect){
     </div>`;
   refreshAddons();
   clampPeople();
-  pickedChannel="";
+  pickedChannel="";pickedArea="";
 }
 const CH_INFO={
   whatsapp:{ph:{en:"+886 912 345 678",ko:"+886 912 345 678"},hint:{en:"Include your country code",ko:"국가번호를 포함해주세요"},type:"tel"},
@@ -2428,6 +2453,7 @@ async function submitBooking(){
   const contactId=document.getElementById("bk_contact").value.trim();
   const contact=pickedChannel?`${CH_LABEL[pickedChannel]}: ${contactId}`:contactId;
   if(!name||!email||!date){msg.style.color="#c96f52";msg.textContent=t.book_err;return;}
+  if(!pickedArea){msg.style.color="#c96f52";msg.textContent=t.f_area_err;return;}
   if(!pickedChannel){msg.style.color="#c96f52";msg.textContent=t.ch_err;return;}
   if(!contactId){msg.style.color="#c96f52";msg.textContent=t.f_contact_err;return;}
   if(!selectedSlot){msg.style.color="#c96f52";msg.textContent=t.slot_choose;return;}
@@ -2443,7 +2469,7 @@ async function submitBooking(){
     const r=await API.post("/api/book",{
       name,email,pkg:pk.id,date,time:selectedSlot,
       people:document.getElementById("bk_people").value,
-      contact, contact_channel:pickedChannel, contact_id:contactId, needs,
+      contact, contact_channel:pickedChannel, contact_id:contactId, area:pickedArea, needs,
       note:document.getElementById("bk_note").value.trim(),
       addons:selectedAddons()
     });
@@ -2627,6 +2653,59 @@ async function refreshNewCount(){
   if(!adminToken)return;
   try{const r=await API.get("/api/admin/bookings");newCount=r.newCount||0;renderAdminBar();}catch(e){}
 }
+/* ============ MEETING AREAS ============ */
+const DEFAULT_AREAS=[
+ {id:"myeongdong",
+  name:{en:"Myeongdong",ko:"명동",zhHant:"明洞",zhHans:"明洞"},
+  vibe:{en:"Big beauty stores, tax-free, everything in walking distance",
+        ko:"대형 뷰티 매장·택스리프리, 도보권에 다 모여 있어요",
+        zhHant:"大型美妝店、退稅方便，步行即可逛完",
+        zhHans:"大型美妆店、退税方便，步行即可逛完"},
+  spot:{en:"Myeongdong Stn. Exit 6, in front of Olive Young",ko:"명동역 6번 출구, 올리브영 앞",
+        zhHant:"明洞站 6 號出口，Olive Young 前",zhHans:"明洞站 6 号出口，Olive Young 前"},
+  map:"https://maps.google.com/?q=Myeongdong+Station+Exit+6+Seoul"},
+ {id:"hongdae",
+  name:{en:"Hongdae",ko:"홍대",zhHant:"弘大",zhHans:"弘大"},
+  vibe:{en:"Brow & lash salons, hair studios, younger indie brands",
+        ko:"눈썹·속눈썹샵, 헤어살롱, 젊은 인디 브랜드",
+        zhHant:"美眉美睫沙龍、髮廊、年輕獨立品牌",
+        zhHans:"美眉美睫沙龙、发廊、年轻独立品牌"},
+  spot:{en:"Hongik Univ. Stn. Exit 3, in front of Starbucks",ko:"홍대입구역 3번 출구, 스타벅스 앞",
+        zhHant:"弘大入口站 3 號出口，星巴克前",zhHans:"弘大入口站 3 号出口，星巴克前"},
+  map:"https://maps.google.com/?q=Hongik+University+Station+Exit+3+Seoul"},
+ {id:"seongsu",
+  name:{en:"Seongsu",ko:"성수",zhHant:"聖水",zhHans:"圣水"},
+  vibe:{en:"Pop-up stores, fashion, café hopping — the trend district",
+        ko:"팝업스토어·패션·카페 투어, 요즘 뜨는 동네",
+        zhHant:"快閃店、時尚、咖啡廳巡禮 — 最潮的一區",
+        zhHans:"快闪店、时尚、咖啡厅巡礼 — 最潮的一区"},
+  spot:{en:"Seongsu Stn. Exit 3",ko:"성수역 3번 출구",zhHant:"聖水站 3 號出口",zhHans:"圣水站 3 号出口"},
+  map:"https://maps.google.com/?q=Seongsu+Station+Exit+3+Seoul"},
+ {id:"gangnam",
+  name:{en:"Gangnam / Sinsa",ko:"강남·신사",zhHant:"江南／新沙",zhHans:"江南／新沙"},
+  vibe:{en:"Higher-end salons and skincare, calmer and more polished",
+        ko:"고급 살롱·스킨케어, 여유롭고 정돈된 분위기",
+        zhHant:"高級沙龍與保養，氛圍從容精緻",
+        zhHans:"高级沙龙与护肤，氛围从容精致"},
+  spot:{en:"Sinsa Stn. Exit 8 (Garosu-gil)",ko:"신사역 8번 출구 (가로수길)",
+        zhHant:"新沙站 8 號出口（林蔭道）",zhHans:"新沙站 8 号出口（林荫道）"},
+  map:"https://maps.google.com/?q=Sinsa+Station+Exit+8+Seoul"}
+];
+function loadAreas(){return (STATE.areas&&STATE.areas.length)?STATE.areas:DEFAULT_AREAS;}
+let pickedArea="";
+function pickArea(id,btn){
+  pickedArea=id;
+  document.querySelectorAll(".area-opt").forEach(b=>b.classList.remove("on"));
+  btn.classList.add("on");
+  const a=loadAreas().find(x=>x.id===id);
+  const box=document.getElementById("areaSpot");
+  if(box&&a){
+    box.innerHTML=`📍 <b>${esc(tx(a.spot))}</b>
+      ${a.map?` · <a href="${esc(a.map)}" target="_blank" rel="noopener">${I18N[lang].meet_map}</a>`:""}`;
+    box.style.display="";
+  }
+}
+
 /* ============ CURRENCY DISPLAY ============
    KRW is always the billing currency. This only changes what the guest sees. */
 const CURRENCIES={
@@ -3825,6 +3904,7 @@ async function viewBookings(filter){
       <div class="meta">${esc(x.email)} &middot; ${t.bk_code}: <code>${esc(x.code||"")}</code></div>
       ${x.contact?`<div class="meta ch-row">💬 <b>${esc(x.contact)}</b>
         ${contactBtns(x)}</div>`:""}
+      ${x.area?`<div class="meta">📍 ${esc(areaName(x.area))}</div>`:""}
       ${(()=>{const n=safeNeeds(x.needs);return n.length?`<div class="meta">🎯 ${n.map(esc).join(" · ")}</div>`:"";})()}
       ${x.addons&&x.addons.length?`<div class="meta">+ ${x.addons.map(a=>esc(lang==="ko"&&a.name_ko?a.name_ko:a.name)+" ("+wonFmt(a.price||0)+")").join(", ")}</div>`:""}
       ${x.note?`<div class="meta">📝 ${esc(x.note)}</div>`:""}
@@ -3919,6 +3999,7 @@ async function delBooking(id){
   try{ await API.post("/api/admin/bookings/del",{id}); viewBookings(); }
   catch(e){ alert("삭제 실패 / Delete failed"); }
 }
+function areaName(id){const a=loadAreas().find(x=>x.id===id);return a?tx(a.name):id;}
 function safeNeeds(v){try{return typeof v==="string"?JSON.parse(v):(v||[]);}catch(e){return [];}}
 function esc(s){return(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 

@@ -309,7 +309,7 @@ export async function onRequest(context) {
   try {
     /* ---------------- public: config ---------------- */
     if (route === "/config" && request.method === "GET") {
-      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, pay, msgsCfg, biz, reward] = await Promise.all([
+      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, pay, msgsCfg, biz, reward, areas] = await Promise.all([
         getSetting(db, "packages", null),
         getSetting(db, "hours", { open: 10, close: 21 }),
         getSetting(db, "dayhours", {}),
@@ -331,6 +331,7 @@ export async function onRequest(context) {
         getSetting(db, "msgs", null),
         getSetting(db, "biz", null),
         getSetting(db, "reward", null),
+        getSetting(db, "areas", null),
       ]);
       let reviews = [];
       try {
@@ -345,7 +346,7 @@ export async function onRequest(context) {
                eurRate: (pay && pay.eurRate) || DEFAULT_PAY.eurRate,
                defaultCurrency: (pay && pay.defaultCurrency) || DEFAULT_PAY.defaultCurrency,
                refund: (pay && pay.refund) || DEFAULT_PAY.refund },
-        msgs: msgsCfg, msgsDefault: DEFAULT_MSGS, biz, reward: Object.assign({}, DEFAULT_REWARD, reward || {}) });
+        msgs: msgsCfg, msgsDefault: DEFAULT_MSGS, biz, reward: Object.assign({}, DEFAULT_REWARD, reward || {}), areas });
     }
 
     /* ---------------- public: slots (+ queue counts) ---------------- */
@@ -391,7 +392,7 @@ export async function onRequest(context) {
     /* ---------------- public: create request ---------------- */
     if (route === "/book" && request.method === "POST") {
       const body = await request.json();
-      const { name, email, pkg, date, time, people, note, addons, contact, contact_channel, contact_id, needs } = body || {};
+      const { name, email, pkg, date, time, people, note, addons, contact, contact_channel, contact_id, area, needs } = body || {};
       if (!name || !email || !pkg || !date || !time) return json({ error: "missing fields" }, 400);
 
       const [packages, hours, dayhours, closed, blocked] = await Promise.all([
@@ -429,8 +430,8 @@ export async function onRequest(context) {
 
       await db
         .prepare(
-          `INSERT INTO bookings (code,customer_id,visit_no,name,email,contact,contact_channel,contact_id,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at,deposit_amount,total_amount)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?,?,?)`
+          `INSERT INTO bookings (code,customer_id,visit_no,name,email,contact,contact_channel,contact_id,area,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at,deposit_amount,total_amount)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?,?,?)`
         )
         .bind(
           code,
@@ -441,6 +442,7 @@ export async function onRequest(context) {
           String(contact || "").slice(0, 160),
           String(contact_channel || "").slice(0, 20),
           String(contact_id || "").slice(0, 120),
+          String(area || "").slice(0, 40),
           JSON.stringify(needs || []),
           pkg,
           (pk.title && pk.title.en) || pkg,
@@ -501,6 +503,7 @@ export async function onRequest(context) {
         (contact_channel === "whatsapp" && contact_id
           ? `👉 https://wa.me/${String(contact_id).replace(/[^0-9]/g, "")}\n` : "") +
         `📧 ${email}\n` +
+        (area ? `📍 ${area}\n` : "") +
         (needTxt ? `🎯 ${needTxt}\n` : "") +
         (addonTxt ? `➕ ${addonTxt}\n` : "") +
         (note ? `📝 ${note}\n` : "") +
@@ -960,7 +963,7 @@ export async function onRequest(context) {
     if (route === "/admin/save" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
       const body = await request.json();
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz", "reward"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz", "reward", "areas"];
 
       /* keep a snapshot of the current state before overwriting it */
       const label = body.__label || "";
@@ -1015,7 +1018,7 @@ export async function onRequest(context) {
       const snap = await db.prepare("SELECT * FROM snapshots WHERE id = ?").bind(id).first();
       if (!snap) return json({ error: "not found" }, 404);
       const data = safeParseObj(snap.data);
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz", "reward"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz", "reward", "areas"];
 
       /* snapshot the current state too, so a restore is itself undoable */
       try {
