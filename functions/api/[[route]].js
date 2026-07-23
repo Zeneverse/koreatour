@@ -181,6 +181,42 @@ function depositFor(pay, pk, people) {
   return { total, deposit: dep };
 }
 
+/* ============ CUSTOMERS ============
+   Every booking is linked to a customer row, whether or not they registered.
+   That's what makes new-vs-returning stats possible from day one. */
+async function upsertCustomer(db, { email, name, contact, contact_channel }) {
+  const mail = String(email || "").trim().toLowerCase();
+  if (!mail) return null;
+  const existing = await db.prepare("SELECT * FROM customers WHERE email = ?").bind(mail).first();
+  if (existing) {
+    await db
+      .prepare("UPDATE customers SET name=COALESCE(NULLIF(?,''),name), contact=COALESCE(NULLIF(?,''),contact), contact_channel=COALESCE(NULLIF(?,''),contact_channel), booking_count=booking_count+1, last_seen=? WHERE id=?")
+      .bind(String(name || ""), String(contact || ""), String(contact_channel || ""), nowISO(), existing.id)
+      .run();
+    return { id: existing.id, isReturning: true, bookingNo: (existing.booking_count || 0) + 1, points: existing.points || 0 };
+  }
+  await db
+    .prepare("INSERT INTO customers (email,name,contact,contact_channel,points,visit_count,booking_count,first_seen,last_seen,created_at) VALUES (?,?,?,?,0,0,1,?,?,?)")
+    .bind(mail, String(name || ""), String(contact || ""), String(contact_channel || ""), nowISO(), nowISO(), nowISO())
+    .run();
+  const row = await db.prepare("SELECT last_insert_rowid() AS id").first();
+  return { id: row.id, isReturning: false, bookingNo: 1, points: 0 };
+}
+async function addPoints(db, customerId, delta, reason, bookingId) {
+  if (!customerId || !delta) return;
+  await db.prepare("UPDATE customers SET points = points + ? WHERE id = ?").bind(delta, customerId).run();
+  await db
+    .prepare("INSERT INTO point_log (customer_id,delta,reason,booking_id,created_at) VALUES (?,?,?,?,?)")
+    .bind(customerId, delta, String(reason || ""), bookingId || null, nowISO())
+    .run();
+}
+function makeCoupon() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let s = "";
+  for (let i = 0; i < 6; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return "ZV" + s;
+}
+
 /* ---- waitlist: tell everyone waiting that a spot opened ---- */
 async function notifyWaitlist(env, db, date, reasonLabel) {
   try {
@@ -345,6 +381,7 @@ export async function onRequest(context) {
       const ok = bookableStarts(date, pk.dur_h, pk.last_start, hours, dayhours, blocked, confirmed);
       if (!ok.includes(time)) return json({ error: "taken" }, 409);
 
+      const cust = await upsertCustomer(db, { email, name, contact, contact_channel });
       const pay = (await getSetting(db, "pay", null)) || DEFAULT_PAY;
       const amounts = depositFor(pay, pk, parseInt(people) || 1);
       const code = makeCode();
@@ -354,11 +391,13 @@ export async function onRequest(context) {
 
       await db
         .prepare(
-          `INSERT INTO bookings (code,name,email,contact,contact_channel,contact_id,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at,deposit_amount,total_amount)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?,?,?)`
+          `INSERT INTO bookings (code,customer_id,visit_no,name,email,contact,contact_channel,contact_id,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at,deposit_amount,total_amount)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?,?,?)`
         )
         .bind(
           code,
+          cust ? cust.id : null,
+          cust ? cust.bookingNo : 1,
           String(name).slice(0, 120),
           String(email).slice(0, 160),
           String(contact || "").slice(0, 160),
@@ -413,7 +452,9 @@ export async function onRequest(context) {
         </table>`;
       const endT = String(parseInt(time) + (pk.dur_h || 1)).padStart(2, "0") + ":00";
       const tgNew =
-        `🔔 <b>새 예약 신청</b>\n\n` +
+        (cust && cust.isReturning
+          ? `🔄 <b>재방문 예약</b> (${cust.bookingNo}번째)\n\n`
+          : `✨ <b>신규 예약 신청</b>\n\n`) +
         `👤 ${name}\n` +
         `📦 ${(pk.title && pk.title.en) || pkg}\n` +
         `📅 ${date}  ⏰ ${time}–${endT}\n` +
@@ -430,7 +471,7 @@ export async function onRequest(context) {
         `➡️ 사이트에서 승인/거절하세요`;
       await notifyOwner(env, `New booking request — ${name} (${date} ${time})`, adminBody, tgNew);
 
-      return json({ ok: true, code, queueAhead, deposit: amounts.deposit, total: amounts.total });
+      return json({ ok: true, code, queueAhead, deposit: amounts.deposit, total: amounts.total, returning: !!(cust && cust.isReturning), visitNo: cust ? cust.bookingNo : 1 });
     }
 
     /* ---------------- public: look up my booking ---------------- */
@@ -558,6 +599,138 @@ export async function onRequest(context) {
       return json({ ok: true, notified: n });
     }
 
+    /* ============ ACCOUNTS (optional membership) ============ */
+
+    /* register — works even if they already booked as a guest */
+    if (route === "/account/register" && request.method === "POST") {
+      const { email, password, name } = await request.json();
+      const mail = String(email || "").trim().toLowerCase();
+      if (!mail || !password) return json({ error: "email and password required" }, 400);
+      if (String(password).length < 6) return json({ error: "password too short" }, 400);
+
+      const hash = await sha256(password);
+      const existing = await db.prepare("SELECT * FROM customers WHERE email = ?").bind(mail).first();
+      if (existing && existing.pw_hash) return json({ error: "already registered" }, 409);
+
+      if (existing) {
+        await db.prepare("UPDATE customers SET pw_hash=?, name=COALESCE(NULLIF(?,''),name), last_seen=? WHERE id=?")
+          .bind(hash, String(name || ""), nowISO(), existing.id).run();
+      } else {
+        await db.prepare("INSERT INTO customers (email,name,pw_hash,points,visit_count,booking_count,first_seen,last_seen,created_at) VALUES (?,?,?,0,0,0,?,?,?)")
+          .bind(mail, String(name || ""), hash, nowISO(), nowISO(), nowISO()).run();
+      }
+      const c = await db.prepare("SELECT * FROM customers WHERE email = ?").bind(mail).first();
+
+      /* welcome bonus, once */
+      const already = await db.prepare("SELECT id FROM point_log WHERE customer_id=? AND reason='signup'").bind(c.id).first();
+      if (!already) await addPoints(db, c.id, 1000, "signup", null);
+
+      const fresh = await db.prepare("SELECT * FROM customers WHERE id = ?").bind(c.id).first();
+      return json({ ok: true, token: hash, customer: { email: fresh.email, name: fresh.name, points: fresh.points, visits: fresh.booking_count } });
+    }
+
+    if (route === "/account/login" && request.method === "POST") {
+      const { email, password } = await request.json();
+      const mail = String(email || "").trim().toLowerCase();
+      const c = await db.prepare("SELECT * FROM customers WHERE email = ?").bind(mail).first();
+      if (!c || !c.pw_hash) return json({ error: "no account" }, 404);
+      if (c.pw_hash !== (await sha256(password))) return json({ error: "wrong password" }, 401);
+      await db.prepare("UPDATE customers SET last_seen=? WHERE id=?").bind(nowISO(), c.id).run();
+      return json({ ok: true, token: c.pw_hash, customer: { email: c.email, name: c.name, points: c.points, visits: c.booking_count } });
+    }
+
+    /* my account: bookings, points, coupons */
+    if (route === "/account/me" && request.method === "GET") {
+      const email = (url.searchParams.get("email") || "").trim().toLowerCase();
+      const token = request.headers.get("x-account-token") || "";
+      if (!email || !token) return json({ error: "auth required" }, 401);
+      const c = await db.prepare("SELECT * FROM customers WHERE email = ?").bind(email).first();
+      if (!c || c.pw_hash !== token) return json({ error: "unauthorized" }, 401);
+
+      const { results: bookings } = await db
+        .prepare("SELECT code,pkg_name,date,time,dur_h,people,status,deposit_amount,deposit_status,visit_no FROM bookings WHERE customer_id = ? ORDER BY date DESC LIMIT 50")
+        .bind(c.id).all();
+      const { results: points } = await db
+        .prepare("SELECT delta,reason,created_at FROM point_log WHERE customer_id = ? ORDER BY id DESC LIMIT 30")
+        .bind(c.id).all();
+      const { results: coupons } = await db
+        .prepare("SELECT code,kind,value,min_amount,reason,used_at,expires_at FROM coupons WHERE customer_id = ? ORDER BY id DESC LIMIT 20")
+        .bind(c.id).all();
+
+      return json({
+        customer: { email: c.email, name: c.name, points: c.points, visits: c.booking_count, since: c.first_seen },
+        bookings: bookings || [], points: points || [], coupons: coupons || [],
+      });
+    }
+
+    /* check a coupon before booking */
+    if (route === "/coupon/check" && request.method === "GET") {
+      const code = (url.searchParams.get("code") || "").trim().toUpperCase();
+      const amount = parseInt(url.searchParams.get("amount")) || 0;
+      if (!code) return json({ error: "code required" }, 400);
+      const cp = await db.prepare("SELECT * FROM coupons WHERE code = ?").bind(code).first();
+      if (!cp) return json({ valid: false, reason: "not_found" });
+      if (cp.used_at) return json({ valid: false, reason: "used" });
+      if (cp.expires_at && cp.expires_at < nowISO()) return json({ valid: false, reason: "expired" });
+      if (cp.min_amount && amount < cp.min_amount) return json({ valid: false, reason: "min_amount", min: cp.min_amount });
+      const discount = cp.kind === "amount" ? cp.value : Math.round((amount * cp.value) / 100 / 1000) * 1000;
+      return json({ valid: true, kind: cp.kind, value: cp.value, discount });
+    }
+
+    /* ---------------- admin: customers ---------------- */
+    if (route === "/admin/customers" && request.method === "GET") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { results } = await db
+        .prepare("SELECT * FROM customers ORDER BY booking_count DESC, last_seen DESC LIMIT 300")
+        .all();
+      const list = results || [];
+      const total = list.length;
+      const returning = list.filter((c) => (c.booking_count || 0) > 1).length;
+      const registered = list.filter((c) => !!c.pw_hash).length;
+      return json({
+        customers: list.map((c) => ({ ...c, pw_hash: undefined, registered: !!c.pw_hash })),
+        stats: {
+          total, returning, newOnes: total - returning, registered,
+          returnRate: total ? Math.round((returning / total) * 100) : 0,
+        },
+      });
+    }
+
+    /* ---------------- admin: issue a coupon ---------------- */
+    if (route === "/admin/coupon" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { email, kind, value, reason, days } = await request.json();
+      let custId = null;
+      if (email) {
+        const c = await db.prepare("SELECT id FROM customers WHERE email = ?").bind(String(email).toLowerCase()).first();
+        custId = c ? c.id : null;
+      }
+      const code = makeCoupon();
+      const exp = days ? new Date(Date.now() + days * 864e5).toISOString() : null;
+      await db.prepare("INSERT INTO coupons (code,customer_id,kind,value,reason,expires_at,created_at) VALUES (?,?,?,?,?,?,?)")
+        .bind(code, custId, kind === "amount" ? "amount" : "percent", parseInt(value) || 10,
+              String(reason || ""), exp, nowISO()).run();
+      return json({ ok: true, code });
+    }
+
+    if (route === "/admin/coupons" && request.method === "GET") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { results } = await db
+        .prepare("SELECT c.*, cu.email AS owner_email FROM coupons c LEFT JOIN customers cu ON cu.id=c.customer_id ORDER BY c.id DESC LIMIT 100")
+        .all();
+      return json({ coupons: results || [] });
+    }
+
+    /* ---------------- admin: adjust points ---------------- */
+    if (route === "/admin/points" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { email, delta, reason } = await request.json();
+      const c = await db.prepare("SELECT id FROM customers WHERE email = ?").bind(String(email).toLowerCase()).first();
+      if (!c) return json({ error: "customer not found" }, 404);
+      await addPoints(db, c.id, parseInt(delta) || 0, reason || "manual", null);
+      return json({ ok: true });
+    }
+
     /* ---------------- admin: login ---------------- */
     if (route === "/admin/login" && request.method === "POST") {
       const { password } = await request.json();
@@ -570,7 +743,10 @@ export async function onRequest(context) {
     if (route === "/admin/bookings" && request.method === "GET") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
       const { results } = await db
-        .prepare("SELECT * FROM bookings ORDER BY (status='pending') DESC, date ASC, time ASC, id DESC LIMIT 500")
+        .prepare(`SELECT b.*, c.booking_count AS cust_bookings, c.points AS cust_points,
+                         c.pw_hash IS NOT NULL AS cust_registered, c.first_seen AS cust_since
+                  FROM bookings b LEFT JOIN customers c ON c.id = b.customer_id
+                  ORDER BY (b.status='pending') DESC, b.date ASC, b.time ASC, b.id DESC LIMIT 500`)
         .all();
       const rows = (results || []).map((r) => ({
         ...r,
@@ -650,8 +826,14 @@ export async function onRequest(context) {
       const st = status === "paid" ? "paid" : status === "refunded" ? "refunded" : "unpaid";
       await db.prepare("UPDATE bookings SET deposit_status=?, deposit_method=?, deposit_paid_at=?, updated_at=? WHERE id=?")
         .bind(st, String(method || ""), st === "paid" ? nowISO() : null, nowISO(), id).run();
-      const b = await db.prepare("SELECT email, code, name, deposit_amount FROM bookings WHERE id=?").bind(id).first();
+      const b = await db.prepare("SELECT * FROM bookings WHERE id=?").bind(id).first();
       if (b && st === "paid") {
+        /* count the visit and award points — 1 point per 100 KRW of the package */
+        if (b.customer_id) {
+          await db.prepare("UPDATE customers SET visit_count = visit_count + 1 WHERE id = ?").bind(b.customer_id).run();
+          const earned = Math.round((b.total_amount || 0) / 100);
+          if (earned > 0) await addPoints(db, b.customer_id, earned, "visit", b.id);
+        }
         const MP = await msgs(db);
         await sendMail(env, b.email, `Zeneverse — ${MP.depositReceived.subject} (${b.code})`,
           mailShell(MP.depositReceived.subject, `<p style="color:#3c4a48;font-size:14px;line-height:1.7">${nl2br(MP.depositReceived.body)}</p>`));
