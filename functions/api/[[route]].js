@@ -452,6 +452,7 @@ export async function onRequest(context) {
           code: row.code, name: row.name, pkg_name: row.pkg_name, date: row.date, time: row.time,
           dur_h: row.dur_h, people: row.people, status: row.status, reason: row.reason,
           change_req: row.change_req, addons: safeParse(row.addons),
+          deposit_amount: row.deposit_amount || 0, deposit_status: row.deposit_status || "unpaid",
         },
         queueAhead,
       });

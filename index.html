@@ -405,6 +405,26 @@
   .saved-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:30px;font-size:.82rem;z-index:210;opacity:0;pointer-events:none;transition:.25s;font-family:'Space Mono',monospace;letter-spacing:.06em}
   .saved-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* ===== payment ===== */
+  .pay-amount{display:flex;justify-content:space-between;align-items:center;background:var(--ink);color:var(--paper);border-radius:14px;padding:18px 20px;margin:16px 0 20px}
+  .pay-amount .mono{font-size:.64rem;color:var(--gold)}
+  .pay-amount b{font-family:'Fraunces',serif;font-size:1.6rem}
+  .pay-label{color:var(--sage);display:block;margin-bottom:10px;font-size:.64rem}
+  .pay-opt{display:flex;align-items:flex-start;gap:11px;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:9px;cursor:pointer;background:#fff;transition:.15s}
+  .pay-opt:hover{border-color:var(--clay)}
+  .pay-opt:has(input:checked){border-color:var(--clay);background:#fdf7f4;box-shadow:0 0 0 2px rgba(201,111,82,.12)}
+  .pay-opt.off{opacity:.4;cursor:not-allowed}
+  .pay-opt input{width:17px !important;min-width:17px;height:17px;margin:2px 0 0;flex:0 0 17px;accent-color:var(--clay)}
+  .pay-opt span{flex:1}
+  .pay-opt b{display:block;font-size:.92rem;margin-bottom:3px}
+  .pay-opt i{font-style:normal;font-size:.76rem;color:var(--sage);line-height:1.5}
+  .pay-note{margin-top:14px;font-size:.74rem;color:var(--sage);text-align:center;line-height:1.5}
+  .lk-pay{width:100%;margin-top:14px;padding:14px;border-radius:30px;border:none;background:var(--clay);color:#fff;font-family:inherit;font-weight:600;font-size:.95rem;cursor:pointer;transition:.2s}
+  .lk-pay:hover{transform:translateY(-2px);box-shadow:0 10px 24px -8px rgba(201,111,82,.5)}
+  .lk-paid{margin-top:14px;background:#eaf3ec;border:1px solid #cfe2d5;border-radius:11px;padding:11px;text-align:center;font-size:.86rem;color:#3d6b4d;font-weight:600}
+  @keyframes shakeX{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .agree-check.shake{animation:shakeX .4s}
+
   /* ===== itinerary ===== */
   .itin-link{width:100%;margin-top:12px;background:none;border:1px dashed var(--line);border-radius:30px;padding:11px;font-family:inherit;font-size:.85rem;color:var(--sage);cursor:pointer;transition:.2s}
   .itin-link:hover{border-color:var(--clay);color:var(--clay);border-style:solid}
@@ -568,6 +588,7 @@
   @media (max-width:520px){.inc-grid{grid-template-columns:1fr}.signup{padding:40px 22px}.credibility{gap:24px}.modal{padding:28px 22px}}
   @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}.reveal{opacity:1;transform:none}}
 </style>
+<script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
 </head>
 <body class="lang-en">
 
@@ -836,7 +857,7 @@ const I18N={
     reset_confirm:"Reset \"{x}\" to the original? A backup is saved first.",reset_done:"Reset done.",
     wl_full:"This date is fully booked.",wl_cta:"Notify me if a spot opens",wl_title:"Get notified",
     wl_sub:"If someone cancels on this date, I'll email you right away. No obligation.",
-    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",itin_sub:"How the day flows — you pick the start time when you book.",itin_note:"⏱ <b>You choose your start time</b> from whatever is open on your date — morning, afternoon or evening. The steps below only show the order and rough pacing, and we shift things around on the day.",
+    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",pay_title:"Pay your deposit",pay_deposit:"Deposit due",pay_method:"How would you like to pay?",pay_global:"International card / Apple Pay / Alipay",pay_domestic:"Korean card / Naver Pay / Kakao Pay",pay_agree:"I have read and agree to the cancellation and refund policy.",pay_go:"Pay deposit securely →",pay_pick_err:"Please choose a payment method.",pay_opening:"Opening secure payment…",pay_verifying:"Confirming your payment…",pay_failed:"Payment was not completed.",pay_verify_fail:"We could not confirm the payment. If money left your account, contact me and I will check.",pay_done:"Deposit received",pay_done_sub:"Your spot is secured. See you in Seoul!",pay_now:"Pay deposit {a}",pay_note:"Payments are processed by PortOne. We never see or store your card details.",itin_sub:"How the day flows — you pick the start time when you book.",itin_note:"⏱ <b>You choose your start time</b> from whatever is open on your date — morning, afternoon or evening. The steps below only show the order and rough pacing, and we shift things around on the day.",
     msg_title:"Message templates",msg_sub:"These are the emails guests receive. Edit the wording to sound like you.",
     msg_approved:"When you approve a booking",msg_declined:"When you decline",msg_bumped:"When someone else got the slot",msg_bumpedCta:"Button text on that email",
     msg_wlopen:"When a spot opens (waitlist)",msg_deposit:"When you mark the deposit paid",msg_subject:"Subject",msg_body:"Message",ab_msgs:"Messages",msg_reset:"Reset to default",
@@ -927,7 +948,7 @@ const I18N={
     reset_confirm:"\"{x}\"을(를) 처음 상태로 되돌릴까요? 먼저 백업돼요.",reset_done:"초기화했어요.",
     wl_full:"이 날짜는 예약이 마감됐어요.",wl_cta:"자리 나면 알림 받기",wl_title:"자리 알림 신청",
     wl_sub:"이 날짜에 취소가 생기면 바로 이메일로 알려드려요. 예약 의무는 없어요.",
-    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",itin_sub:"하루가 어떻게 흘러가는지 — 시작 시간은 예약할 때 직접 고르세요.",itin_note:"⏱ <b>시작 시간은 원하는 대로 고르실 수 있어요</b> — 그날 열려 있는 시간 중에서 오전·오후·저녁 아무 때나요. 아래는 순서와 대략적인 흐름만 보여주는 거예요.",
+    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",pay_title:"예약금 결제",pay_deposit:"결제할 예약금",pay_method:"어떻게 결제하시겠어요?",pay_global:"해외 카드 / Apple Pay / Alipay",pay_domestic:"국내 카드 / 네이버페이 / 카카오페이",pay_agree:"취소 및 환불 규정을 읽고 동의합니다.",pay_go:"안전하게 예약금 결제하기 →",pay_pick_err:"결제 수단을 선택해주세요.",pay_opening:"결제창을 여는 중…",pay_verifying:"결제를 확인하는 중…",pay_failed:"결제가 완료되지 않았어요.",pay_verify_fail:"결제 확인에 실패했어요. 출금이 되었다면 연락 주세요, 바로 확인할게요.",pay_done:"예약금 결제 완료",pay_done_sub:"자리가 확정됐어요. 곧 뵙겠습니다!",pay_now:"예약금 {a} 결제하기",pay_note:"결제는 포트원(PortOne)을 통해 안전하게 처리되며, 카드 정보는 저장되지 않아요.",itin_sub:"하루가 어떻게 흘러가는지 — 시작 시간은 예약할 때 직접 고르세요.",itin_note:"⏱ <b>시작 시간은 원하는 대로 고르실 수 있어요</b> — 그날 열려 있는 시간 중에서 오전·오후·저녁 아무 때나요. 아래는 순서와 대략적인 흐름만 보여주는 거예요.",
     msg_title:"메시지 문구",msg_sub:"고객에게 나가는 이메일 문구예요. 내 말투로 바꿔보세요.",
     msg_approved:"예약을 승인했을 때",msg_declined:"거절했을 때",msg_bumped:"다른 분이 먼저 확정됐을 때",msg_bumpedCta:"그 메일의 버튼 문구",
     msg_wlopen:"자리가 났을 때 (대기자)",msg_deposit:"예약금 입금 확인했을 때",msg_subject:"제목",msg_body:"내용",ab_msgs:"메시지 문구",msg_reset:"기본 문구로 되돌리기",
@@ -1003,6 +1024,7 @@ I18N.zhHant = Object.assign({}, I18N.en, {
   rev_edit:"修改",rev_del:"刪除",rev_pw_ask:"請輸入你設定的密碼：",rev_pw_wrong:"密碼錯誤。",
   disclaimer:"Zeneverse 是個人美妝諮詢與購物導覽服務，不提供醫療行為，亦不安排、仲介或代訂任何醫療療程與診所預約。",
   priv_link:"隱私權政策",terms_link:"取消規定",float_label:"聯絡我",
+  pay_title:"支付訂金",pay_deposit:"應付訂金",pay_method:"你想如何付款？",pay_global:"國際信用卡 / Apple Pay / 支付寶",pay_domestic:"韓國信用卡 / Naver Pay / Kakao Pay",pay_agree:"我已閱讀並同意取消與退款規定。",pay_go:"安全支付訂金 →",pay_pick_err:"請選擇付款方式。",pay_opening:"正在開啟付款視窗…",pay_verifying:"確認付款中…",pay_failed:"付款未完成。",pay_done:"訂金已收到",pay_done_sub:"你的名額已確認，首爾見！",pay_now:"支付訂金 {a}",
   itin_sub:"當天的流程 — 開始時間由你預約時選擇。",itin_note:"⏱ <b>開始時間可自由選擇</b> — 從當天有空的時段中挑選，早上、下午或傍晚都可以。以下僅顯示順序與大致節奏。",
   need_other:"其他（自行填寫）",need_other_ph:"請告訴我你想了解什麼…",f_people_err:"此方案最多 {n} 位。",
   host_more:"更多介紹",host_bio:"關於我",
@@ -2285,6 +2307,10 @@ function renderLookup(b,queueAhead){
       ${b.status==="pending"?`<div class="queue-pill" style="margin-top:10px">${queueAhead>0?t.queue_ahead.replace("{n}",queueAhead):t.queue_none}</div>`:""}
       ${reason?`<div class="lk-reason"><b>${t.my_reason}:</b> ${esc(reason)}</div>`:""}
       ${b.change_req?`<div class="lk-reason">${t.bk_changereq}: ${esc((b.change_req.newDate||"")+" "+(b.change_req.newTime||""))}</div>`:""}
+      ${b.status==="confirmed"&&b.deposit_amount>0&&b.deposit_status!=="paid"
+        ? `<button class="lk-pay" onclick="openPayment('${b.code}')">💳 ${I18N[lang].pay_now.replace("{a}",wonFmt(b.deposit_amount))}</button>`
+        : ""}
+      ${b.deposit_status==="paid"?`<div class="lk-paid">✅ ${I18N[lang].dep_paid}</div>`:""}
       ${canAct?`<div class="lk-actions">
         <button class="lk-btn ghost" onclick="openChange('${b.code}')">${t.my_change}</button>
         <button class="lk-btn warn" onclick="doCancel('${b.code}')">${t.my_cancel}</button>
@@ -2359,6 +2385,141 @@ async function refreshNewCount(){
   if(!adminToken)return;
   try{const r=await API.get("/api/admin/bookings");newCount=r.newCount||0;renderAdminBar();}catch(e){}
 }
+/* ============ PORTONE PAYMENT ============ */
+let PAYCFG=null;
+async function loadPayConfig(){
+  if(PAYCFG)return PAYCFG;
+  try{ PAYCFG=await API.get("/api/payments/config"); }catch(e){ PAYCFG={enabled:false}; }
+  return PAYCFG;
+}
+/* Guests reach this from "Check my booking" once the deposit is due */
+async function openPayment(code){
+  const t=I18N[lang],ko=lang==="ko";
+  const cfg=await loadPayConfig();
+  if(!cfg.enabled){
+    alert(ko?"온라인 결제는 아직 준비 중이에요. 안내드린 방법으로 보내주세요.":"Online payment isn't live yet — please use the method in your confirmation.");
+    return;
+  }
+  let prep;
+  try{ prep=await API.post("/api/payments/prepare",{code}); }
+  catch(e){
+    alert(e.code==="already paid"?(ko?"이미 결제가 완료됐어요.":"This deposit is already paid."):t.book_fail);
+    return;
+  }
+  const won=n=>"₩"+Number(n||0).toLocaleString("en-US");
+  document.getElementById("modalRoot").innerHTML=`
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:460px">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h3>${t.pay_title}</h3>
+        <div class="sub">${esc(prep.orderName)}</div>
+
+        <div class="pay-amount">
+          <span class="mono">${t.pay_deposit}</span>
+          <b>${won(prep.amount)}</b>
+        </div>
+
+        <div class="pay-label mono">${t.pay_method}</div>
+        <label class="pay-opt${cfg.channels.global?"":" off"}">
+          <input type="radio" name="paych" value="global" ${cfg.channels.global?"checked":"disabled"}>
+          <span><b>${t.pay_global}</b><i>Visa · Mastercard · AMEX · Apple Pay · Alipay · WeChat Pay</i></span>
+        </label>
+        <label class="pay-opt${cfg.channels.domestic?"":" off"}">
+          <input type="radio" name="paych" value="domestic" ${!cfg.channels.global&&cfg.channels.domestic?"checked":""} ${cfg.channels.domestic?"":"disabled"}>
+          <span><b>${t.pay_domestic}</b><i>${ko?"국내 신용/체크카드 · 네이버페이 · 카카오페이":"Korean cards · Naver Pay · Kakao Pay"}</i></span>
+        </label>
+
+        <label class="agree-check" style="margin-top:16px">
+          <input type="checkbox" id="pay_agree">
+          <span>${t.pay_agree}
+            <a onclick="event.stopPropagation();openPolicy('terms')" class="agree-link">${t.terms_link}</a></span>
+        </label>
+
+        <button class="submit" onclick='startPayment(${JSON.stringify(prep)},${JSON.stringify(code)})'>${t.pay_go}</button>
+        <div class="msg" id="pay_msg"></div>
+        <div class="pay-note">${t.pay_note}</div>
+      </div>
+    </div>`;
+}
+async function startPayment(prep,code){
+  const t=I18N[lang],msg=document.getElementById("pay_msg");
+  /* terms gate — required before the payment window opens */
+  if(!document.getElementById("pay_agree").checked){
+    msg.style.color="#c96f52";msg.textContent=t.f_agree_err;
+    document.querySelector(".agree-check").classList.add("shake");
+    setTimeout(()=>document.querySelector(".agree-check")?.classList.remove("shake"),600);
+    return;
+  }
+  const cfg=await loadPayConfig();
+  const picked=document.querySelector('input[name="paych"]:checked');
+  if(!picked){msg.style.color="#c96f52";msg.textContent=t.pay_pick_err;return;}
+  const isGlobal=picked.value==="global";
+
+  const req={
+    storeId:cfg.storeId,
+    channelKey:isGlobal?cfg.channels.global:cfg.channels.domestic,
+    paymentId:prep.paymentId,
+    orderName:prep.orderName,
+    totalAmount:prep.amount,
+    currency:"CURRENCY_KRW",
+    payMethod:"CARD",
+    customer:{
+      fullName:prep.customer.fullName||"",
+      email:prep.customer.email||"",
+      phoneNumber:prep.customer.phoneNumber||""
+    },
+    redirectUrl:`${location.origin}${location.pathname}?paid=${encodeURIComponent(prep.paymentId)}&code=${encodeURIComponent(code)}`
+  };
+  /* Eximbay: let the guest choose card / Alipay / WeChat inside the PG window */
+  if(isGlobal){
+    req.bypass={eximbay_v2:{payment:{multi_payment_method:["CREDITCARD","ALIPAY","WECHATPAY"]}}};
+    req.locale="EN_US";
+  }
+
+  msg.style.color="#7d9488";msg.textContent=t.pay_opening;
+  try{
+    const res=await PortOne.requestPayment(req);
+    if(res && res.code){   // user cancelled or PG error
+      msg.style.color="#c96f52";
+      msg.textContent=`${t.pay_failed} (${res.message||res.code})`;
+      return;
+    }
+    await finishPayment(prep.paymentId,code,msg);
+  }catch(e){
+    console.error("payment error:",e);
+    msg.style.color="#c96f52";msg.textContent=t.pay_failed;
+  }
+}
+async function finishPayment(paymentId,code,msg){
+  const t=I18N[lang];
+  if(msg){msg.style.color="#7d9488";msg.textContent=t.pay_verifying;}
+  try{
+    await API.post("/api/payments/complete",{paymentId,code});
+    document.getElementById("modalRoot").innerHTML=`
+      <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+        <div class="modal" style="max-width:400px;text-align:center">
+          <button class="close" onclick="closeModal()">&times;</button>
+          <div class="ok-tick">✓</div>
+          <h3>${t.pay_done}</h3>
+          <div class="sub">${t.pay_done_sub}</div>
+          <button class="submit" onclick="closeModal()">${lang==="ko"?"확인":"Done"}</button>
+        </div>
+      </div>`;
+  }catch(e){
+    if(msg){msg.style.color="#c96f52";msg.textContent=t.pay_verify_fail;}
+  }
+}
+/* returning from a redirect-style PG window */
+async function checkPaymentRedirect(){
+  try{
+    const q=new URLSearchParams(location.search);
+    const pid=q.get("paid"),code=q.get("code");
+    if(!pid||!code)return;
+    history.replaceState({},"",location.pathname);
+    await finishPayment(pid,code,null);
+  }catch(e){}
+}
+
 /* ============ ITINERARY (sample day) ============ */
 function openItinerary(pkgId){
   if(textEditMode)return;
@@ -2986,6 +3147,7 @@ function observeReveals(){document.querySelectorAll(".reveal:not(.in)").forEach(
     const wd=q.get("waitlist");
     if(wd){ setTimeout(()=>openWaitlist(wd,q.get("e")||"",q.get("n")||""),400); }
   }catch(e){}
+  checkPaymentRedirect();
   renderLangMenu();
   applyFeats();
   renderNav();
