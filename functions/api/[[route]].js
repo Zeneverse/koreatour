@@ -437,7 +437,9 @@ export async function onRequest(context) {
       const pk = (packages || []).find((p) => p.id === pkgId);
       if (!pk) return json({ error: "unknown package" }, 400);
       const chosen = addonIdx.map((i) => (pk.addons || [])[parseInt(i)]).filter(Boolean);
-      const amounts = depositFor(pay || DEFAULT_PAY, pk, 1, chosen);
+      const areasQ = (await getSetting(db, "areas", null)) || [];
+      const aq = areasQ.find((x) => x && x.id === url.searchParams.get("area"));
+      const amounts = depositFor(pay || DEFAULT_PAY, pk, 1, chosen, (aq && aq.surcharge) || 0);
       return json({ ...amounts, depositPct: (pay || DEFAULT_PAY).depositPct });
     }
 
@@ -478,7 +480,10 @@ export async function onRequest(context) {
 
       const cust = await upsertCustomer(db, { email, name, contact, contact_channel });
       const pay = (await getSetting(db, "pay", null)) || DEFAULT_PAY;
-      const amounts = depositFor(pay, pk, parseInt(people) || 1, addons);
+      const areasCfg = (await getSetting(db, "areas", null)) || [];
+      const areaRow = areasCfg.find((x) => x && x.id === area);
+      const areaFee = (areaRow && areaRow.surcharge) || 0;
+      const amounts = depositFor(pay, pk, parseInt(people) || 1, addons, areaFee);
       const code = makeCode();
       const queueAhead = live.filter(
         (b) => b.status === "pending" && overlaps(time, pk.dur_h, b.time, b.dur_h || 1)
@@ -1080,6 +1085,41 @@ export async function onRequest(context) {
         .prepare("SELECT id, label, created_at, length(data) AS size FROM snapshots ORDER BY id DESC LIMIT 20")
         .all();
       return json({ snapshots: results || [] });
+    }
+
+    /* ---------------- admin: read one snapshot ---------------- */
+    if (route === "/admin/snapshot" && request.method === "GET") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const id = url.searchParams.get("id");
+      const snap = await db.prepare("SELECT * FROM snapshots WHERE id = ?").bind(id).first();
+      if (!snap) return json({ error: "not found" }, 404);
+      return json({ id: snap.id, label: snap.label, created_at: snap.created_at, data: safeParseObj(snap.data) });
+    }
+
+    /* ---------------- admin: restore only some keys ---------------- */
+    if (route === "/admin/restore-partial" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { id, keys } = await request.json();
+      const snap = await db.prepare("SELECT * FROM snapshots WHERE id = ?").bind(id).first();
+      if (!snap) return json({ error: "not found" }, 404);
+      const data = safeParseObj(snap.data);
+      const allowed = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host",
+        "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay",
+        "msgs", "biz", "reward", "areas", "ops"];
+      const picked = (keys || []).filter((k) => allowed.includes(k));
+      if (!picked.length) return json({ error: "no keys" }, 400);
+
+      /* snapshot current state first so this is undoable too */
+      try {
+        const before = {};
+        for (const k of allowed) before[k] = await getSetting(db, k, null);
+        await db.prepare("INSERT INTO snapshots (label, data, created_at) VALUES (?,?,?)")
+          .bind("before partial restore", JSON.stringify(before), nowISO()).run();
+      } catch (e) {}
+
+      for (const k of picked) if (data[k] !== undefined && data[k] !== null) await putSetting(db, k, data[k]);
+      await audit(db, "settings", id, "restore_partial", "admin", null, { keys: picked });
+      return json({ ok: true, restored: picked });
     }
 
     /* ---------------- admin: restore a snapshot ---------------- */
