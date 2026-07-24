@@ -2757,6 +2757,14 @@ function moveGroup(i,key,d){
   PACKS[i].addons=rest;
   savePacks(PACKS);renderPacks();manageGroups(i);
 }
+function groupLabelByKey(p,key){
+  const hit=(p.addons||[]).find(a=>gKey(a)===key);
+  return hit?(gLabelAdmin(hit)||key):key;
+}
+function groupObjByKey(p,key){
+  const hit=(p.addons||[]).find(a=>gKey(a)===key);
+  return hit&&typeof hit.group==="object"?structuredClone(hit.group):{__key:key,[adminLang]:key};
+}
 function setAddonGroup(i,j,v){
   const key=(v||"").trim();
   if(!key){ delete PACKS[i].addons[j].group; }
