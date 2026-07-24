@@ -35,19 +35,35 @@ function hoursFor(date, hours, dayhours) {
 
 /* Slots are blocked only by CONFIRMED bookings.
    Pending ones don't block — they queue. */
-function bookableStarts(date, dur, lastStart, hours, dayhours, blocked, confirmed) {
+/* A confirmed booking occupies its own hours PLUS a rest buffer afterwards,
+   unless the owner has switched that booking to back-to-back. */
+function occupiedRanges(confirmed, date, bufferH) {
+  return confirmed
+    .filter((b) => b.date === date && b.time)
+    .map((b) => {
+      const start = parseInt(b.time);
+      const dur = b.dur_h || 1;
+      const buf = b.no_buffer ? 0 : bufferH;
+      return { start, end: start + dur + buf, realEnd: start + dur };
+    });
+}
+function bookableStarts(date, dur, lastStart, hours, dayhours, blocked, confirmed, bufferH) {
   const h = hoursFor(date, hours, dayhours);
   const blk = blocked[date] || [];
-  const ranges = confirmed
-    .filter((b) => b.date === date && b.time)
-    .map((b) => ({ start: parseInt(b.time), end: parseInt(b.time) + (b.dur_h || 1) }));
+  const buf = bufferH == null ? 1 : bufferH;
+  const ranges = occupiedRanges(confirmed, date, buf);
+  /* the new booking also needs its own buffer to fit before closing time,
+     but we allow it to end exactly at closing (buffer can spill past hours) */
   const cap = lastStart != null ? Math.min(lastStart, h.close - dur) : h.close - dur;
   const out = [];
   for (let t = h.open; t <= cap; t++) {
     const slot = pad(t) + ":00";
     if (blk.includes(slot)) continue;
     let clash = false;
-    for (const r of ranges) if (t < r.end && t + dur > r.start) { clash = true; break; }
+    /* this booking, including the rest buffer it will create, must not overlap
+       anything already occupied (which already includes their buffers) */
+    const myEnd = t + dur + buf;
+    for (const r of ranges) if (t < r.end && myEnd > r.start) { clash = true; break; }
     if (!clash) for (let k = 0; k < dur; k++) if (blk.includes(pad(t + k) + ":00")) { clash = true; break; }
     if (!clash) out.push(slot);
   }
@@ -155,6 +171,14 @@ const row2 = (k, v) => `<tr><td style="padding:6px 0;color:#6b746f;font-size:13p
 /* ============ PAYMENTS ============
    Deposit is a % of the package price. Guests pay via PayPal or bank transfer,
    then the owner marks it received. Stripe can be added later. */
+const DEFAULT_OPS = {
+  bufferH: 1,           // rest hours blocked after each confirmed booking
+};
+async function opsCfg(db) {
+  const saved = await getSetting(db, "ops", null);
+  return Object.assign({}, DEFAULT_OPS, saved || {});
+}
+
 const DEFAULT_PAY = {
   depositPct: 30,
   currency: "KRW",
@@ -315,7 +339,7 @@ export async function onRequest(context) {
   try {
     /* ---------------- public: config ---------------- */
     if (route === "/config" && request.method === "GET") {
-      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, pay, msgsCfg, biz, reward, areas] = await Promise.all([
+      const [packages, hours, dayhours, closed, blocked, zh, feats, host, contact, faq, media, privacy, terms, igPosts, copy, nav, langs, pay, msgsCfg, biz, reward, areas, ops] = await Promise.all([
         getSetting(db, "packages", null),
         getSetting(db, "hours", { open: 10, close: 21 }),
         getSetting(db, "dayhours", {}),
@@ -338,6 +362,7 @@ export async function onRequest(context) {
         getSetting(db, "biz", null),
         getSetting(db, "reward", null),
         getSetting(db, "areas", null),
+        getSetting(db, "ops", null),
       ]);
       let reviews = [];
       try {
@@ -352,7 +377,7 @@ export async function onRequest(context) {
                eurRate: (pay && pay.eurRate) || DEFAULT_PAY.eurRate,
                defaultCurrency: (pay && pay.defaultCurrency) || DEFAULT_PAY.defaultCurrency,
                refund: (pay && pay.refund) || DEFAULT_PAY.refund },
-        msgs: msgsCfg, msgsDefault: DEFAULT_MSGS, biz, reward: Object.assign({}, DEFAULT_REWARD, reward || {}), areas });
+        msgs: msgsCfg, msgsDefault: DEFAULT_MSGS, biz, reward: Object.assign({}, DEFAULT_REWARD, reward || {}), areas, ops: Object.assign({}, DEFAULT_OPS, ops || {}) });
     }
 
     /* ---------------- public: slots (+ queue counts) ---------------- */
@@ -374,7 +399,7 @@ export async function onRequest(context) {
       if (!pk) return json({ error: "unknown package" }, 400);
 
       const { results } = await db
-        .prepare("SELECT pkg_id, date, time, dur_h, status FROM bookings WHERE date = ? AND status IN ('pending','confirmed')")
+        .prepare("SELECT pkg_id, date, time, dur_h, status, no_buffer FROM bookings WHERE date = ? AND status IN ('pending','confirmed')")
         .bind(date)
         .all();
       const live = results || [];
@@ -383,7 +408,13 @@ export async function onRequest(context) {
       const confirmedSame = confirmed.filter((b) => b.pkg_id === pkgId).length;
       if (pk.max_per_day && confirmedSame >= pk.max_per_day) return json({ slots: [], reason: "full" });
 
-      const slots = bookableStarts(date, pk.dur_h, pk.last_start, hours, dayhours, blocked, confirmed);
+      const ops = await opsCfg(db);
+      const slots = bookableStarts(date, pk.dur_h, pk.last_start, hours, dayhours, blocked, confirmed, ops.bufferH);
+      /* which of these slots would still work if the guest adds an extra hour */
+      const extendable = {};
+      for (const sl of bookableStarts(date, pk.dur_h + 1, pk.last_start, hours, dayhours, blocked, confirmed, ops.bufferH)) {
+        extendable[sl] = true;
+      }
 
       /* how many pending requests already overlap each candidate slot */
       const queue = {};
@@ -392,7 +423,7 @@ export async function onRequest(context) {
           (b) => b.status === "pending" && overlaps(s, pk.dur_h, b.time, b.dur_h || 1)
         ).length;
       }
-      return json({ slots, queue });
+      return json({ slots, queue, extendable, bufferH: ops.bufferH });
     }
 
     /* ---------------- public: live price quote ---------------- */
@@ -413,7 +444,7 @@ export async function onRequest(context) {
     /* ---------------- public: create request ---------------- */
     if (route === "/book" && request.method === "POST") {
       const body = await request.json();
-      const { name, email, pkg, date, time, people, note, addons, contact, contact_channel, contact_id, area, needs } = body || {};
+      const { name, email, pkg, date, time, people, note, addons, contact, contact_channel, contact_id, area, option, needs } = body || {};
       if (!name || !email || !pkg || !date || !time) return json({ error: "missing fields" }, 400);
 
       const [packages, hours, dayhours, closed, blocked] = await Promise.all([
@@ -429,7 +460,7 @@ export async function onRequest(context) {
       if (!pk) return json({ error: "unknown package" }, 400);
 
       const { results } = await db
-        .prepare("SELECT pkg_id, date, time, dur_h, status FROM bookings WHERE date = ? AND status IN ('pending','confirmed')")
+        .prepare("SELECT pkg_id, date, time, dur_h, status, no_buffer FROM bookings WHERE date = ? AND status IN ('pending','confirmed')")
         .bind(date)
         .all();
       const live = results || [];
@@ -438,8 +469,12 @@ export async function onRequest(context) {
       const confirmedSame = confirmed.filter((b) => b.pkg_id === pkg).length;
       if (pk.max_per_day && confirmedSame >= pk.max_per_day) return json({ error: "full" }, 409);
 
-      const ok = bookableStarts(date, pk.dur_h, pk.last_start, hours, dayhours, blocked, confirmed);
-      if (!ok.includes(time)) return json({ error: "taken" }, 409);
+      const ops = await opsCfg(db);
+      /* an "+1 hour" add-on makes the booking longer, so validate the real length */
+      const extraH = (addons || []).some((a) => a && a.extendsHour) ? 1 : 0;
+      const realDur = pk.dur_h + extraH;
+      const ok = bookableStarts(date, realDur, pk.last_start, hours, dayhours, blocked, confirmed, ops.bufferH);
+      if (!ok.includes(time)) return json({ error: extraH ? "no_room_for_addon" : "taken" }, 409);
 
       const cust = await upsertCustomer(db, { email, name, contact, contact_channel });
       const pay = (await getSetting(db, "pay", null)) || DEFAULT_PAY;
@@ -451,8 +486,8 @@ export async function onRequest(context) {
 
       await db
         .prepare(
-          `INSERT INTO bookings (code,customer_id,visit_no,name,email,contact,contact_channel,contact_id,area,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at,deposit_amount,total_amount)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?,?,?)`
+          `INSERT INTO bookings (code,customer_id,visit_no,name,email,contact,contact_channel,contact_id,area,opt,needs,pkg_id,pkg_name,dur_h,date,time,people,note,addons,status,seen,created_at,updated_at,deposit_amount,total_amount)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',0,?,?,?,?)`
         )
         .bind(
           code,
@@ -464,10 +499,11 @@ export async function onRequest(context) {
           String(contact_channel || "").slice(0, 20),
           String(contact_id || "").slice(0, 120),
           String(area || "").slice(0, 40),
+          String(option || "").slice(0, 8),
           JSON.stringify(needs || []),
           pkg,
           (pk.title && pk.title.en) || pkg,
-          pk.dur_h,
+          realDur,
           date,
           time,
           parseInt(people) || 1,
@@ -517,7 +553,7 @@ export async function onRequest(context) {
           ? `🔄 <b>재방문 예약</b> (${cust.bookingNo}번째)\n\n`
           : `✨ <b>신규 예약 신청</b>\n\n`) +
         `👤 ${name}\n` +
-        `📦 ${(pk.title && pk.title.en) || pkg}\n` +
+        `📦 ${(pk.title && pk.title.en) || pkg}${option ? ` (Option ${option})` : ""}\n` +
         `📅 ${date}  ⏰ ${time}–${endT}\n` +
         `👥 ${parseInt(people) || 1}명\n` +
         `💬 ${contact || "-"}\n` +
@@ -937,6 +973,16 @@ export async function onRequest(context) {
       return json({ ok: true });
     }
 
+    /* ---------------- admin: allow back-to-back for one booking ---------------- */
+    if (route === "/admin/buffer" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
+      const { id, off } = await request.json();
+      await db.prepare("UPDATE bookings SET no_buffer=?, updated_at=? WHERE id=?")
+        .bind(off ? 1 : 0, nowISO(), id).run();
+      await audit(db, "booking", id, off ? "buffer_off" : "buffer_on", "admin", null, null);
+      return json({ ok: true });
+    }
+
     /* ---------------- admin: decline with reason ---------------- */
     if (route === "/admin/decline" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
@@ -988,7 +1034,7 @@ export async function onRequest(context) {
     if (route === "/admin/save" && request.method === "POST") {
       if (!checkAdmin(request, env)) return json({ error: "unauthorized" }, 401);
       const body = await request.json();
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz", "reward", "areas"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz", "reward", "areas", "ops"];
 
       /* keep a snapshot of the current state before overwriting it */
       const label = body.__label || "";
@@ -1043,7 +1089,7 @@ export async function onRequest(context) {
       const snap = await db.prepare("SELECT * FROM snapshots WHERE id = ?").bind(id).first();
       if (!snap) return json({ error: "not found" }, 404);
       const data = safeParseObj(snap.data);
-      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz", "reward", "areas"];
+      const keys = ["packages", "hours", "dayhours", "closed", "blocked", "zh", "feats", "host", "contact", "faq", "media", "privacy", "terms", "igPosts", "copy", "nav", "langs", "pay", "msgs", "biz", "reward", "areas", "ops"];
 
       /* snapshot the current state too, so a restore is itself undoable */
       try {
