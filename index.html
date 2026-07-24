@@ -87,6 +87,10 @@
   .pack.feature .pr-now{color:var(--paper)}
   .pr-usd{font-family:'Space Mono',monospace;font-size:.72rem;font-weight:400;color:var(--sage);letter-spacing:.02em}
   .pr-tag{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;background:var(--clay);color:#fff;padding:3px 8px;border-radius:20px;font-weight:400;align-self:center}
+  .pt-cur{font-size:.78rem !important}
+  .pt-cur select{padding:4px 8px;border-radius:7px;border:1px solid var(--line);font-family:inherit;font-size:.76rem;background:#fff;color:var(--ink)}
+  .pt-krw{font-style:normal;font-family:'Space Mono',monospace;font-size:.66rem;color:var(--sage);margin-left:6px;white-space:nowrap}
+  .pack.feature .pt-krw{color:#9fb0ab}
   .pt-hint{font-size:.68rem !important;color:var(--sage);opacity:.85}
   /* list item + addon editing */
   .pack li{position:relative}
@@ -647,6 +651,64 @@
   @keyframes shakeX{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
   .agree-check.shake{animation:shakeX .4s}
 
+  /* ===== buffer & addon gating ===== */
+  .addon-check.off{opacity:.55;cursor:not-allowed;background:var(--paper-2)}
+  .ao-note{display:block;font-style:normal;font-size:.72rem;color:var(--sage);margin-top:2px;line-height:1.4}
+  .ao-block{display:block;font-style:normal;font-size:.72rem;color:var(--clay);margin-top:3px;line-height:1.4}
+  .ao-tag{font-style:normal;font-family:'Space Mono',monospace;font-size:.58rem;padding:2px 8px;border-radius:20px;white-space:nowrap;letter-spacing:.04em}
+  .ao-tag.pre{background:var(--ink);color:var(--gold)}
+  .ao-tag.day{background:var(--mist);color:#6b746f}
+  .buf-line{display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:var(--paper-2);border-radius:9px;padding:8px 11px;margin-top:8px;font-size:.78rem}
+  .buf-line i{font-style:normal;color:var(--sage);font-size:.74rem}
+  .tgl.sm{width:36px;height:20px}
+  .tgl.sm::after{width:15px;height:15px;top:2.5px;left:2.5px}
+  .tgl.sm.on::after{left:18px}
+
+  /* ===== option summary on cards ===== */
+  .card-opts{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+  .pack.feature .card-opts{border-top-color:#33504f}
+  .co-label{color:var(--sage);display:block;margin-bottom:9px;font-size:.6rem}
+  .pack.feature .co-label{color:var(--gold)}
+  .co-row{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:10px 12px;margin-bottom:7px;cursor:pointer;font-family:inherit;transition:.15s}
+  .co-row:hover{border-color:var(--clay);background:#fdf7f4}
+  .pack.feature .co-row{background:#22403f;border-color:#33504f}
+  .pack.feature .co-row:hover{border-color:var(--gold);background:#2c4f4e}
+  .co-badge{flex:0 0 22px;height:22px;border-radius:50%;background:var(--clay);color:#fff;display:grid;place-items:center;font-family:'Space Mono',monospace;font-size:.68rem;font-weight:600}
+  .pack.feature .co-badge{background:var(--gold);color:var(--ink)}
+  .co-txt{flex:1;min-width:0}
+  .co-txt b{display:block;font-size:.84rem;color:var(--ink);line-height:1.3}
+  .pack.feature .co-txt b{color:var(--paper)}
+  .co-txt i{font-style:normal;font-size:.72rem;color:var(--sage);line-height:1.4;display:block;margin-top:2px}
+  .pack.feature .co-txt i{color:#9fb0ab}
+  .co-arrow{color:var(--sage);font-size:.8rem;flex-shrink:0}
+  .co-row:hover .co-arrow{color:var(--clay)}
+
+  /* ===== A/B options ===== */
+  .opt-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+  .opt-tab{display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 13px;cursor:pointer;font-family:inherit;transition:.15s}
+  .opt-tab:hover{border-color:var(--clay)}
+  .opt-tab.on{background:var(--ink);border-color:var(--ink)}
+  .opt-tab b{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.06em;color:var(--clay)}
+  .opt-tab.on b{color:var(--gold)}
+  .opt-tab span{font-size:.86rem;color:var(--ink);line-height:1.35}
+  .opt-tab.on span{color:var(--paper)}
+  .opt-blurb{background:var(--paper-2);border-radius:10px;padding:10px 13px;font-size:.82rem;color:#4a5654;margin-bottom:12px;line-height:1.5}
+  .it-flow{background:#fdf3ee;border-left:3px solid var(--clay);border-radius:10px;padding:11px 13px;font-size:.82rem;color:#4a5654;margin-bottom:14px;line-height:1.6}
+  .it-price{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--clay);margin:6px 0 4px}
+  .it-price span{font-family:'Instrument Sans',sans-serif;font-size:.74rem;color:var(--sage);margin-left:6px}
+  .opt-pick{display:flex;align-items:flex-start;gap:11px;border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:8px;cursor:pointer;background:#fff;transition:.15s;font-weight:400}
+  .opt-pick:hover{border-color:var(--clay)}
+  .opt-pick.on{border-color:var(--clay);background:#fdf7f4;box-shadow:0 0 0 2px rgba(201,111,82,.12)}
+  .opt-pick input{width:17px !important;min-width:17px;height:17px;margin:2px 0 0;flex:0 0 17px;accent-color:var(--clay)}
+  .opt-pick span{flex:1}
+  .opt-pick b{display:block;font-size:.9rem;margin-bottom:3px}
+  .opt-pick i{font-style:normal;font-size:.78rem;color:var(--sage);line-height:1.45}
+  .opt-compare{width:100%;background:none;border:1px dashed var(--line);border-radius:10px;padding:9px;font-family:inherit;font-size:.78rem;color:var(--sage);cursor:pointer;margin-top:2px}
+  .opt-compare:hover{border-color:var(--clay);color:var(--clay)}
+  .pr-pp{font-family:'Space Mono',monospace;font-size:.66rem;color:var(--sage);letter-spacing:.04em}
+  .pp-tag{font-style:normal;font-family:'Space Mono',monospace;font-size:.64rem;color:var(--sage);font-weight:400;margin-left:5px}
+  @media (max-width:520px){.opt-tabs{grid-template-columns:1fr}}
+
   /* ===== itinerary ===== */
   .itin-link{width:100%;margin-top:12px;background:none;border:1px dashed var(--line);border-radius:30px;padding:11px;font-family:inherit;font-size:.85rem;color:var(--sage);cursor:pointer;transition:.2s}
   .itin-link:hover{border-color:var(--clay);color:var(--clay);border-style:solid}
@@ -1084,7 +1146,7 @@ const I18N={
     reset_confirm:"Reset \"{x}\" to the original? A backup is saved first.",reset_done:"Reset done.",
     wl_full:"This date is fully booked.",wl_cta:"Notify me if a spot opens",wl_title:"Get notified",
     wl_sub:"If someone cancels on this date, I'll email you right away. No obligation.",
-    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",acc_login:"Log in",acc_register:"Create account",acc_pw:"Password",acc_login_sub:"See your past bookings, points and coupons.",acc_reg_sub:"Optional — you can book without an account. Members earn points and get return-visit offers.",acc_have:"Already have an account?",acc_no:"No account yet?",acc_bonus:"{n} points just for joining",acc_welcome:"Welcome! Points added.",acc_dup:"That email is already registered — try logging in.",acc_short:"Password must be at least 6 characters.",acc_none:"No account with that email yet.",acc_wrong:"Wrong email or password.",acc_my:"My page",acc_points:"points",acc_visits:"{n} bookings",acc_bookings:"My bookings",acc_no_bookings:"No bookings yet.",acc_coupons:"My coupons",acc_off:"off",acc_history:"Points history",acc_logout:"Log out",acc_nth:"visit #{n}",tier1:"First-timer",tier2:"Returning guest",tier3:"Regular",pr_signup:"Joined",pr_visit:"Visit completed",pr_review:"Left a review",pr_manual:"Adjusted",grp_ops:"Bookings",grp_cust:"Guests",grp_edit:"Edit site",grp_sys:"Settings",ab_reward:"Points & coupons",rw_sub:"Set how points are earned, and issue coupons.",rw_enabled:"Rewards programme",rw_enabled_note:"Turn off to stop all point earning",rw_signup:"Sign-up bonus (points)",rw_earn:"Earn rate (% of package price)",rw_review:"Review bonus (points)",rw_minredeem:"Minimum points before redeeming",rw_example:"Example:",rw_coupons:"Coupons",rw_issue:"Issue",rw_used:"used",rw_anyone:"anyone",rw_no_coupons:"No coupons issued yet.",ab_cust:"Customers",cs_total:"Total",cs_new:"First-time",cs_return:"Returning",cs_rate:"Return rate",cs_list:"Customer list",cs_returning:"returning",cs_first:"new",cs_member:"member",cs_bookings:"{n} bookings",cs_visits:"{n} visits",cs_since:"since",cs_none:"No customers yet.",cs_coupon:"Give coupon",cs_points:"Adjust points",ie_included:"What's included",ie_excluded:"Not included",meet_title:"Where we meet",meet_map:"Open in Google Maps",meet_note:"Staying elsewhere? Tell me in your booking note and we can adjust the meeting point.",biz_title:"Business information",biz_name:"Business name",biz_owner:"Representative",biz_reg:"Business registration no.",biz_mailorder:"Mail-order sales no.",biz_addr:"Address",biz_email:"Support email",os_title:"Paying on the day",os_sub:"Balance is settled when we meet — several ways to do it.",os_modal_sub:"Accepted payment methods for the remaining balance.",os_card:"Credit / debit cards — NFC, Apple Pay, Google Pay",os_qr:"QR payments — Alipay, WeChat Pay",os_cash:"Cash in ",os_flex_badge:"Flexible change",os_flex:"Paying in USD or EUR cash? Choose the currency you get your change back in — whatever suits the rest of your trip.",os_flex_note:"Foreign change is given in notes only, rounded to the nearest dollar or euro.",os_link:"How I take payment on the day",ao_prepay:"prepaid",ao_onsite:"on the day",ps_incl_pre:"incl. prepaid extras",ps_total:"Total",ps_deposit:"Deposit now ({p}%)",ps_deposit_due:"Deposit to confirm",ps_note:"Balance of {a} is paid on the day.",pay_title:"Pay your deposit",pay_deposit:"Deposit due",pay_method:"How would you like to pay?",pay_global:"International card / Apple Pay / Alipay",pay_domestic:"Korean card / Naver Pay / Kakao Pay",pay_agree:"I have read and agree to the cancellation and refund policy.",pay_go:"Pay deposit securely →",pay_pick_err:"Please choose a payment method.",pay_opening:"Opening secure payment…",pay_verifying:"Confirming your payment…",pay_failed:"Payment was not completed.",pay_verify_fail:"We could not confirm the payment. If money left your account, contact me and I will check.",pay_done:"Deposit received",pay_done_sub:"Your spot is secured. See you in Seoul!",pay_now:"Pay deposit {a}",pay_note:"Payments are processed by PortOne. We never see or store your card details.",itin_sub:"How the day flows — you pick the start time when you book.",itin_note:"⏱ <b>You choose your start time</b> from whatever is open on your date — morning, afternoon or evening. The steps below only show the order and rough pacing, and we shift things around on the day.",
+    wl_ok:"You're on the list. I'll email you the moment a spot opens.",wl_already:"You're already on the list for this date.",wl_pos:"You're #{n} in line for this date.",acc_login:"Log in",acc_register:"Create account",acc_pw:"Password",acc_login_sub:"See your past bookings, points and coupons.",acc_reg_sub:"Optional — you can book without an account. Members earn points and get return-visit offers.",acc_have:"Already have an account?",acc_no:"No account yet?",acc_bonus:"{n} points just for joining",acc_welcome:"Welcome! Points added.",acc_dup:"That email is already registered — try logging in.",acc_short:"Password must be at least 6 characters.",acc_none:"No account with that email yet.",acc_wrong:"Wrong email or password.",acc_my:"My page",acc_points:"points",acc_visits:"{n} bookings",acc_bookings:"My bookings",acc_no_bookings:"No bookings yet.",acc_coupons:"My coupons",acc_off:"off",acc_history:"Points history",acc_logout:"Log out",acc_nth:"visit #{n}",tier1:"First-timer",tier2:"Returning guest",tier3:"Regular",pr_signup:"Joined",pr_visit:"Visit completed",pr_review:"Left a review",pr_manual:"Adjusted",grp_ops:"Bookings",grp_cust:"Guests",grp_edit:"Edit site",grp_sys:"Settings",ab_reward:"Points & coupons",rw_sub:"Set how points are earned, and issue coupons.",rw_enabled:"Rewards programme",rw_enabled_note:"Turn off to stop all point earning",rw_signup:"Sign-up bonus (points)",rw_earn:"Earn rate (% of package price)",rw_review:"Review bonus (points)",rw_minredeem:"Minimum points before redeeming",rw_example:"Example:",rw_coupons:"Coupons",rw_issue:"Issue",rw_used:"used",rw_anyone:"anyone",rw_no_coupons:"No coupons issued yet.",ab_cust:"Customers",cs_total:"Total",cs_new:"First-time",cs_return:"Returning",cs_rate:"Return rate",cs_list:"Customer list",cs_returning:"returning",cs_first:"new",cs_member:"member",cs_bookings:"{n} bookings",cs_visits:"{n} visits",cs_since:"since",cs_none:"No customers yet.",cs_coupon:"Give coupon",cs_points:"Adjust points",ie_included:"What's included",ie_excluded:"Not included",meet_title:"Where we meet",meet_map:"Open in Google Maps",meet_note:"Staying elsewhere? Tell me in your booking note and we can adjust the meeting point.",biz_title:"Business information",biz_name:"Business name",biz_owner:"Representative",biz_reg:"Business registration no.",biz_mailorder:"Mail-order sales no.",biz_addr:"Address",biz_email:"Support email",os_title:"Paying on the day",os_sub:"Balance is settled when we meet — several ways to do it.",os_modal_sub:"Accepted payment methods for the remaining balance.",os_card:"Credit / debit cards — NFC, Apple Pay, Google Pay",os_qr:"QR payments — Alipay, WeChat Pay",os_cash:"Cash in ",os_flex_badge:"Flexible change",os_flex:"Paying in USD or EUR cash? Choose the currency you get your change back in — whatever suits the rest of your trip.",os_flex_note:"Foreign change is given in notes only, rounded to the nearest dollar or euro.",os_link:"How I take payment on the day",ao_prepay:"prepaid",ao_onsite:"on the day",ps_incl_pre:"incl. prepaid extras",ao_no_room:"Not available for this start time — the slot after is taken",ops_label:"Scheduling",ops_buffer:"Rest buffer after each booking (hours)",ops_buffer_note:"Blocked automatically after every confirmed booking, so you get a break between guests. You can release it per booking.",buf_label:"Rest buffer",buf_on_note:"1h blocked after this booking",buf_off_note:"back-to-back allowed",slot_no_addon:"That start time cannot take the extra hour. Pick another time or remove the add-on.",card_choose:"Choose one on the day",card_compare:"Compare both options",per_person:"per person",f_option:"Choose your option",f_option_err:"Please choose Option A or B.",f_option_compare:"Compare A and B in detail",ps_total:"Total",ps_deposit:"Deposit now ({p}%)",ps_deposit_due:"Deposit to confirm",ps_note:"Balance of {a} is paid on the day.",pay_title:"Pay your deposit",pay_deposit:"Deposit due",pay_method:"How would you like to pay?",pay_global:"International card / Apple Pay / Alipay",pay_domestic:"Korean card / Naver Pay / Kakao Pay",pay_agree:"I have read and agree to the cancellation and refund policy.",pay_go:"Pay deposit securely →",pay_pick_err:"Please choose a payment method.",pay_opening:"Opening secure payment…",pay_verifying:"Confirming your payment…",pay_failed:"Payment was not completed.",pay_verify_fail:"We could not confirm the payment. If money left your account, contact me and I will check.",pay_done:"Deposit received",pay_done_sub:"Your spot is secured. See you in Seoul!",pay_now:"Pay deposit {a}",pay_note:"Payments are processed by PortOne. We never see or store your card details.",itin_sub:"How the day flows — you pick the start time when you book.",itin_note:"⏱ <b>You choose your start time</b> from whatever is open on your date — morning, afternoon or evening. The steps below only show the order and rough pacing, and we shift things around on the day.",
     msg_title:"Message templates",msg_sub:"These are the emails guests receive. Edit the wording to sound like you.",
     msg_approved:"When you approve a booking",msg_declined:"When you decline",msg_bumped:"When someone else got the slot",msg_bumpedCta:"Button text on that email",
     msg_wlopen:"When a spot opens (waitlist)",msg_deposit:"When you mark the deposit paid",msg_subject:"Subject",msg_body:"Message",ab_msgs:"Messages",msg_reset:"Reset to default",
@@ -1175,7 +1237,7 @@ const I18N={
     reset_confirm:"\"{x}\"을(를) 처음 상태로 되돌릴까요? 먼저 백업돼요.",reset_done:"초기화했어요.",
     wl_full:"이 날짜는 예약이 마감됐어요.",wl_cta:"자리 나면 알림 받기",wl_title:"자리 알림 신청",
     wl_sub:"이 날짜에 취소가 생기면 바로 이메일로 알려드려요. 예약 의무는 없어요.",
-    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",acc_login:"로그인",acc_register:"회원가입",acc_pw:"비밀번호",acc_login_sub:"지난 예약 내역과 포인트·쿠폰을 확인하세요.",acc_reg_sub:"선택 사항이에요 — 가입 없이도 예약할 수 있어요. 회원은 포인트가 쌓이고 재방문 혜택을 받아요.",acc_have:"이미 계정이 있으신가요?",acc_no:"아직 계정이 없으신가요?",acc_bonus:"가입만 해도 {n}포인트",acc_welcome:"환영합니다! 포인트가 적립됐어요.",acc_dup:"이미 가입된 이메일이에요 — 로그인해보세요.",acc_short:"비밀번호는 6자 이상이어야 해요.",acc_none:"해당 이메일로 가입된 계정이 없어요.",acc_wrong:"이메일 또는 비밀번호가 틀렸어요.",acc_my:"마이페이지",acc_points:"포인트",acc_visits:"예약 {n}회",acc_bookings:"내 예약 내역",acc_no_bookings:"아직 예약 내역이 없어요.",acc_coupons:"내 쿠폰",acc_off:"할인",acc_history:"포인트 내역",acc_logout:"로그아웃",acc_nth:"{n}번째 방문",tier1:"첫 방문",tier2:"재방문 고객",tier3:"단골",pr_signup:"회원가입",pr_visit:"방문 완료",pr_review:"후기 작성",pr_manual:"수동 조정",grp_ops:"예약 관리",grp_cust:"고객",grp_edit:"사이트 수정",grp_sys:"설정",ab_reward:"포인트·쿠폰",rw_sub:"포인트 적립 기준을 정하고 쿠폰을 발급하세요.",rw_enabled:"포인트 제도",rw_enabled_note:"끄면 모든 적립이 중단돼요",rw_signup:"가입 보너스 (포인트)",rw_earn:"적립률 (패키지 금액의 %)",rw_review:"후기 작성 보너스 (포인트)",rw_minredeem:"사용 가능 최소 포인트",rw_example:"예시:",rw_coupons:"쿠폰",rw_issue:"발급",rw_used:"사용됨",rw_anyone:"누구나",rw_no_coupons:"발급된 쿠폰이 없어요.",ab_cust:"고객 관리",cs_total:"전체",cs_new:"신규",cs_return:"재방문",cs_rate:"재방문율",cs_list:"고객 목록",cs_returning:"재방문",cs_first:"신규",cs_member:"회원",cs_bookings:"예약 {n}회",cs_visits:"방문 {n}회",cs_since:"첫 방문",cs_none:"아직 고객이 없어요.",cs_coupon:"쿠폰 발급",cs_points:"포인트 조정",ie_included:"포함 사항",ie_excluded:"불포함 사항",meet_title:"만나는 곳",meet_map:"구글맵에서 열기",meet_note:"다른 곳에 머무시나요? 예약할 때 알려주시면 만나는 곳을 조정할 수 있어요.",biz_title:"사업자 정보",biz_name:"상호명",biz_owner:"대표자",biz_reg:"사업자등록번호",biz_mailorder:"통신판매업 신고번호",biz_addr:"주소",biz_email:"고객지원 이메일",os_title:"당일 결제 안내",os_sub:"잔금은 만나서 결제해요 — 방법은 여러 가지예요.",os_modal_sub:"당일 잔금 결제 시 이용 가능한 수단이에요.",os_card:"신용/체크카드 — NFC, 애플페이, 구글페이",os_qr:"QR 결제 — 알리페이, 위챗페이",os_cash:"현금 ",os_flex_badge:"거스름돈 선택",os_flex:"달러나 유로 현금으로 내시나요? 거스름돈을 원하는 통화로 받으실 수 있어요 — 남은 여행 일정에 맞춰서요.",os_flex_note:"외화 거스름돈은 지폐로만 드리며, 달러/유로 단위로 반올림됩니다.",os_link:"당일 결제 방법 보기",ao_prepay:"선결제",ao_onsite:"당일 결제",ps_incl_pre:"선결제 옵션 포함",ps_total:"총 금액",ps_deposit:"지금 결제할 예약금 ({p}%)",ps_deposit_due:"확정을 위한 예약금",ps_note:"잔금 {a}는 당일에 결제해요.",pay_title:"예약금 결제",pay_deposit:"결제할 예약금",pay_method:"어떻게 결제하시겠어요?",pay_global:"해외 카드 / Apple Pay / Alipay",pay_domestic:"국내 카드 / 네이버페이 / 카카오페이",pay_agree:"취소 및 환불 규정을 읽고 동의합니다.",pay_go:"안전하게 예약금 결제하기 →",pay_pick_err:"결제 수단을 선택해주세요.",pay_opening:"결제창을 여는 중…",pay_verifying:"결제를 확인하는 중…",pay_failed:"결제가 완료되지 않았어요.",pay_verify_fail:"결제 확인에 실패했어요. 출금이 되었다면 연락 주세요, 바로 확인할게요.",pay_done:"예약금 결제 완료",pay_done_sub:"자리가 확정됐어요. 곧 뵙겠습니다!",pay_now:"예약금 {a} 결제하기",pay_note:"결제는 포트원(PortOne)을 통해 안전하게 처리되며, 카드 정보는 저장되지 않아요.",itin_sub:"하루가 어떻게 흘러가는지 — 시작 시간은 예약할 때 직접 고르세요.",itin_note:"⏱ <b>시작 시간은 원하는 대로 고르실 수 있어요</b> — 그날 열려 있는 시간 중에서 오전·오후·저녁 아무 때나요. 아래는 순서와 대략적인 흐름만 보여주는 거예요.",
+    wl_ok:"신청됐어요. 자리가 나면 바로 알려드릴게요.",wl_already:"이미 이 날짜 알림을 신청하셨어요.",wl_pos:"이 날짜 대기 {n}번째예요.",acc_login:"로그인",acc_register:"회원가입",acc_pw:"비밀번호",acc_login_sub:"지난 예약 내역과 포인트·쿠폰을 확인하세요.",acc_reg_sub:"선택 사항이에요 — 가입 없이도 예약할 수 있어요. 회원은 포인트가 쌓이고 재방문 혜택을 받아요.",acc_have:"이미 계정이 있으신가요?",acc_no:"아직 계정이 없으신가요?",acc_bonus:"가입만 해도 {n}포인트",acc_welcome:"환영합니다! 포인트가 적립됐어요.",acc_dup:"이미 가입된 이메일이에요 — 로그인해보세요.",acc_short:"비밀번호는 6자 이상이어야 해요.",acc_none:"해당 이메일로 가입된 계정이 없어요.",acc_wrong:"이메일 또는 비밀번호가 틀렸어요.",acc_my:"마이페이지",acc_points:"포인트",acc_visits:"예약 {n}회",acc_bookings:"내 예약 내역",acc_no_bookings:"아직 예약 내역이 없어요.",acc_coupons:"내 쿠폰",acc_off:"할인",acc_history:"포인트 내역",acc_logout:"로그아웃",acc_nth:"{n}번째 방문",tier1:"첫 방문",tier2:"재방문 고객",tier3:"단골",pr_signup:"회원가입",pr_visit:"방문 완료",pr_review:"후기 작성",pr_manual:"수동 조정",grp_ops:"예약 관리",grp_cust:"고객",grp_edit:"사이트 수정",grp_sys:"설정",ab_reward:"포인트·쿠폰",rw_sub:"포인트 적립 기준을 정하고 쿠폰을 발급하세요.",rw_enabled:"포인트 제도",rw_enabled_note:"끄면 모든 적립이 중단돼요",rw_signup:"가입 보너스 (포인트)",rw_earn:"적립률 (패키지 금액의 %)",rw_review:"후기 작성 보너스 (포인트)",rw_minredeem:"사용 가능 최소 포인트",rw_example:"예시:",rw_coupons:"쿠폰",rw_issue:"발급",rw_used:"사용됨",rw_anyone:"누구나",rw_no_coupons:"발급된 쿠폰이 없어요.",ab_cust:"고객 관리",cs_total:"전체",cs_new:"신규",cs_return:"재방문",cs_rate:"재방문율",cs_list:"고객 목록",cs_returning:"재방문",cs_first:"신규",cs_member:"회원",cs_bookings:"예약 {n}회",cs_visits:"방문 {n}회",cs_since:"첫 방문",cs_none:"아직 고객이 없어요.",cs_coupon:"쿠폰 발급",cs_points:"포인트 조정",ie_included:"포함 사항",ie_excluded:"불포함 사항",meet_title:"만나는 곳",meet_map:"구글맵에서 열기",meet_note:"다른 곳에 머무시나요? 예약할 때 알려주시면 만나는 곳을 조정할 수 있어요.",biz_title:"사업자 정보",biz_name:"상호명",biz_owner:"대표자",biz_reg:"사업자등록번호",biz_mailorder:"통신판매업 신고번호",biz_addr:"주소",biz_email:"고객지원 이메일",os_title:"당일 결제 안내",os_sub:"잔금은 만나서 결제해요 — 방법은 여러 가지예요.",os_modal_sub:"당일 잔금 결제 시 이용 가능한 수단이에요.",os_card:"신용/체크카드 — NFC, 애플페이, 구글페이",os_qr:"QR 결제 — 알리페이, 위챗페이",os_cash:"현금 ",os_flex_badge:"거스름돈 선택",os_flex:"달러나 유로 현금으로 내시나요? 거스름돈을 원하는 통화로 받으실 수 있어요 — 남은 여행 일정에 맞춰서요.",os_flex_note:"외화 거스름돈은 지폐로만 드리며, 달러/유로 단위로 반올림됩니다.",os_link:"당일 결제 방법 보기",ao_prepay:"선결제",ao_onsite:"당일 결제",ps_incl_pre:"선결제 옵션 포함",ao_no_room:"이 시작 시간엔 선택할 수 없어요 — 뒤 시간대에 다른 예약이 있어요",ops_label:"일정 운영",ops_buffer:"예약 후 휴식 시간 (시간)",ops_buffer_note:"예약이 확정되면 종료 후 이 시간만큼 자동으로 예약이 막혀요. 필요하면 예약별로 해제할 수 있어요.",buf_label:"휴식 시간",buf_on_note:"종료 후 1시간 차단 중",buf_off_note:"연속 예약 허용됨",slot_no_addon:"이 시작 시간엔 1시간 연장이 어려워요. 다른 시간을 고르거나 옵션을 빼주세요.",card_choose:"둘 중 하나를 선택하세요",card_compare:"두 옵션 비교하기",per_person:"1인 기준",f_option:"옵션을 선택하세요",f_option_err:"Option A 또는 B를 선택해주세요.",f_option_compare:"A·B 자세히 비교하기",ps_total:"총 금액",ps_deposit:"지금 결제할 예약금 ({p}%)",ps_deposit_due:"확정을 위한 예약금",ps_note:"잔금 {a}는 당일에 결제해요.",pay_title:"예약금 결제",pay_deposit:"결제할 예약금",pay_method:"어떻게 결제하시겠어요?",pay_global:"해외 카드 / Apple Pay / Alipay",pay_domestic:"국내 카드 / 네이버페이 / 카카오페이",pay_agree:"취소 및 환불 규정을 읽고 동의합니다.",pay_go:"안전하게 예약금 결제하기 →",pay_pick_err:"결제 수단을 선택해주세요.",pay_opening:"결제창을 여는 중…",pay_verifying:"결제를 확인하는 중…",pay_failed:"결제가 완료되지 않았어요.",pay_verify_fail:"결제 확인에 실패했어요. 출금이 되었다면 연락 주세요, 바로 확인할게요.",pay_done:"예약금 결제 완료",pay_done_sub:"자리가 확정됐어요. 곧 뵙겠습니다!",pay_now:"예약금 {a} 결제하기",pay_note:"결제는 포트원(PortOne)을 통해 안전하게 처리되며, 카드 정보는 저장되지 않아요.",itin_sub:"하루가 어떻게 흘러가는지 — 시작 시간은 예약할 때 직접 고르세요.",itin_note:"⏱ <b>시작 시간은 원하는 대로 고르실 수 있어요</b> — 그날 열려 있는 시간 중에서 오전·오후·저녁 아무 때나요. 아래는 순서와 대략적인 흐름만 보여주는 거예요.",
     msg_title:"메시지 문구",msg_sub:"고객에게 나가는 이메일 문구예요. 내 말투로 바꿔보세요.",
     msg_approved:"예약을 승인했을 때",msg_declined:"거절했을 때",msg_bumped:"다른 분이 먼저 확정됐을 때",msg_bumpedCta:"그 메일의 버튼 문구",
     msg_wlopen:"자리가 났을 때 (대기자)",msg_deposit:"예약금 입금 확인했을 때",msg_subject:"제목",msg_body:"내용",ab_msgs:"메시지 문구",msg_reset:"기본 문구로 되돌리기",
@@ -1255,6 +1317,9 @@ I18N.zhHant = Object.assign({}, I18N.en, {
   ie_included:"費用包含",ie_excluded:"費用不包含",meet_title:"集合地點",meet_map:"用 Google 地圖開啟",meet_note:"住在其他區域嗎？預約時告訴我，可以調整集合地點。",biz_title:"營業資訊",biz_name:"商號",biz_owner:"代表人",biz_reg:"營業登記號碼",biz_mailorder:"通信販賣申報號碼",biz_addr:"地址",biz_email:"客服信箱",
   os_title:"當天付款方式",os_sub:"餘款於見面時結清 — 有多種方式。",os_modal_sub:"支付餘款時可使用的方式。",os_card:"信用卡／金融卡 — NFC、Apple Pay、Google Pay",os_qr:"QR 支付 — 支付寶、微信支付",os_cash:"現金 ",os_flex_badge:"找零可選",os_flex:"以美金或歐元現金付款嗎？找零幣別由你選擇 — 依你接下來的行程需求。",os_flex_note:"外幣找零僅提供紙鈔，並四捨五入至整數。",os_link:"查看當天付款方式",
   ao_prepay:"預付",ao_onsite:"當天付款",ps_incl_pre:"含預付項目",
+  ao_no_room:"此開始時間無法加購 — 後面時段已有預約",slot_no_addon:"此時段無法延長一小時，請選其他時間或取消加購。",
+  card_choose:"擇一選擇",card_compare:"比較兩種方案",
+  per_person:"每人",f_option:"選擇方案",f_option_err:"請選擇 Option A 或 B。",f_option_compare:"詳細比較 A 與 B",
   ps_total:"總金額",ps_deposit:"現在支付訂金（{p}%）",ps_deposit_due:"確認用訂金",ps_note:"餘款 {a} 於當天支付。",
   pay_title:"支付訂金",pay_deposit:"應付訂金",pay_method:"你想如何付款？",pay_global:"國際信用卡 / Apple Pay / 支付寶",pay_domestic:"韓國信用卡 / Naver Pay / Kakao Pay",pay_agree:"我已閱讀並同意取消與退款規定。",pay_go:"安全支付訂金 →",pay_pick_err:"請選擇付款方式。",pay_opening:"正在開啟付款視窗…",pay_verifying:"確認付款中…",pay_failed:"付款未完成。",pay_done:"訂金已收到",pay_done_sub:"你的名額已確認，首爾見！",pay_now:"支付訂金 {a}",
   itin_sub:"當天的流程 — 開始時間由你預約時選擇。",itin_note:"⏱ <b>開始時間可自由選擇</b> — 從當天有空的時段中挑選，早上、下午或傍晚都可以。以下僅顯示順序與大致節奏。",
@@ -1293,6 +1358,7 @@ I18N.zhHans = Object.assign({}, I18N.zhHant, {
   faq_title:"常被问到的问题。",rev_title:"客人怎么说。",rev_write:"撰写评价",
   disclaimer:"Zeneverse 是个人美妆咨询与购物导览服务，不提供医疗行为，也不安排、中介或代订任何医疗疗程与诊所预约。",
   f_contact:"我该如何联系你？",ch_pick_first:"请先选择上方的通讯软件",ch_err:"请选择联系方式。",
+  per_person:"每人",f_option:"选择方案",f_option_err:"请选择 Option A 或 B。",f_option_compare:"详细比较 A 与 B",
   itin_sub:"当天的流程 — 开始时间由你预约时选择。",itin_note:"⏱ <b>开始时间可自由选择</b> — 从当天有空的时段中挑选，早上、下午或傍晚都可以。以下仅显示顺序与大致节奏。",
   need_other:"其他（自行填写）",need_other_ph:"请告诉我你想了解什么…",f_people_err:"此方案最多 {n} 位。",
   host_more:"更多介绍",host_bio:"关于我",
@@ -1302,93 +1368,172 @@ I18N.zhHans = Object.assign({}, I18N.zhHant, {
 
 /* ------------- default package data (editable) ------------- */
 const DEFAULT_PACKS=[
-  {id:"makeover",max_people:4,feature:true,tag:"Signature",dur_h:4,last_start:17,max_per_day:2,
-   kicker:{en:"Most popular",ko:"가장 인기"},
-   title:{en:"All-in Beauty Makeover",ko:"올인원 뷰티 메이크오버"},
-   dur:{en:"1 day · beauty focus",ko:"1일 · 뷰티 집중"},
-   desc:{en:"The full insider day — from a personal skin consultation to walking out with the right products in your bag.",ko:"맞춤 피부 분석부터 딱 맞는 제품을 손에 들고 나올 때까지, 인사이더의 하루 풀코스."},
-   items:{en:["1:1 personal skin consultation & honest advice","Olive Young & store shopping, guided","Vetted brow / lash / hair salon matching","Personal outfit & styling picks"],
-          ko:["1:1 맞춤 피부 분석 &amp; 솔직한 조언","올리브영 & 매장 쇼핑 가이드","검증된 눈썹/속눈썹/헤어샵 매칭","퍼스널 의류 & 스타일링 추천"]},
+  {id:"express",max_people:1,feature:false,tag:"",dur_h:2,last_start:19,max_per_day:3,perPerson:true,
+   kicker:{en:"Short & focused",ko:"짧고 집중적으로",zhHant:"短而精準",zhHans:"短而精准"},
+   title:{en:"Express Glow",ko:"익스프레스 글로우",zhHant:"Express Glow",zhHans:"Express Glow"},
+   dur:{en:"2 hours · one area",ko:"2시간 · 한 구역",zhHant:"2 小時 · 單一區域",zhHans:"2 小时 · 单一区域"},
+   desc:{en:"One neighbourhood, no wasted travel — a compact care-and-shopping session.",
+         ko:"이동을 최소화한 1개 구역 원스톱 콤팩트 케어 & 핵심 쇼핑.",
+         zhHant:"集中在同一區域，不浪費移動時間的精華護理與採買。",
+         zhHans:"集中在同一区域，不浪费移动时间的精华护理与采买。"},
+   items:{en:["1:1 precision skin-barrier reading","Guided Olive Young curation","Emergency AM/PM skincare card","Choose Option A or B"],
+          ko:["1:1 피부 장벽 정밀 진단","올리브영 맞춤 쇼핑 큐레이션","Emergency AM/PM 스킨케어 카드","Option A 또는 B 선택"],
+          zhHant:["1:1 肌膚屏障精密檢測","Olive Young 客製選購","Emergency AM/PM 保養卡","可選 Option A 或 B"],
+          zhHans:["1:1 肌肤屏障精密检测","Olive Young 定制选购","Emergency AM/PM 护肤卡","可选 Option A 或 B"]},
+   excludes:{en:["Products you buy (paid on the spot)","Salon treatment fees","Meals and personal expenses","Transport fares"],
+             ko:["구매하시는 제품 (현장 결제)","살롱 시술 비용","식사 및 개인 경비","교통비"],
+             zhHant:["你購買的產品（現場支付）","沙龍療程費用","餐費與個人開銷","交通費"],
+             zhHans:["你购买的产品（现场支付）","沙龙疗程费用","餐费与个人开销","交通费"]},
+   options:[
+    {id:"A",
+     name:{en:"Relax & Scalp",ko:"릴렉스 & 두피 힐링",zhHant:"放鬆與頭皮療癒",zhHans:"放松与头皮疗愈"},
+     blurb:{en:"Scalp spa healing, then shopping",ko:"두피 스파 힐링 후 쇼핑",zhHant:"頭皮 SPA 後選購",zhHans:"头皮 SPA 后选购"},
+     itinerary:[
+      {t:"0:00–0:20",title:{en:"1:1 precision skin-barrier reading",ko:"1:1 피부 장벽 정밀 진단"},
+       d:{en:"Oil/moisture and barrier measurement, plus a skincare consultation.",ko:"유수분·장벽 측정 및 스킨케어 컨설팅."}},
+      {t:"0:20–1:05",title:{en:"K-head spa healing care",ko:"K-헤드스파 힐링 케어"},
+       d:{en:"Check-in, shampoo, steam massage and blow-dry.",ko:"입장·준비, 샴푸·스팀 마사지, 드라이 정돈."}},
+      {t:"1:05–1:40",title:{en:"Olive Young curated shopping",ko:"올리브영 맞춤 쇼핑"},
+       d:{en:"Five essentials picked from what your reading showed.",ko:"진단 기반 필수 5가지 핵심 아이템 집중 큐레이션."}},
+      {t:"1:40–2:00",title:{en:"Emergency AM/PM skincare card",ko:"Emergency AM/PM 스킨케어 카드"},
+       d:{en:"Your routine card, handed over with a relaxed wrap-up.",ko:"루틴 카드 전달 및 여유로운 마감."}}]},
+    {id:"B",
+     name:{en:"Glow & Skin Pack / Color",ko:"글로우 & 스킨팩 / 컬러",zhHant:"亮澤面膜 / 色彩",zhHans:"亮泽面膜 / 色彩"},
+     blurb:{en:"Hydration pack or personal colour matching",ko:"수분팩 또는 퍼스널 컬러 매칭",zhHant:"保濕面膜或個人色彩",zhHans:"保湿面膜或个人色彩"},
+     itinerary:[
+      {t:"0:00–0:20",title:{en:"1:1 precision skin-barrier reading",ko:"1:1 피부 장벽 정밀 진단"},
+       d:{en:"Skin type, tone and texture analysis.",ko:"피부 타입 및 톤·결 분석."}},
+      {t:"0:20–1:05",title:{en:"Alternative beauty experience",ko:"대체 뷰티 체험"},
+       d:{en:"Choose an intensive hydration/soothing pack, or personal lip & cheek colour matching.",
+          ko:"급속 수분·진정 팩 케어 또는 퍼스널 립·치크 색조 매칭 중 선택."}},
+      {t:"1:05–1:40",title:{en:"Olive Young curated shopping",ko:"올리브영 맞춤 쇼핑"},
+       d:{en:"Skincare and tone-up items matched to your texture and tone.",ko:"피부결·톤에 맞는 스킨케어 & 톤업 아이템 큐레이션."}},
+      {t:"1:40–2:00",title:{en:"Emergency AM/PM skincare card",ko:"Emergency AM/PM 스킨케어 카드"},
+       d:{en:"Your routine card and wrap-up.",ko:"루틴 카드 전달 및 마감."}}]}],
    addons:[
-     {name:{en:"Extra hour of guiding & shopping",ko:"시간·쇼핑 1시간 연장"},price:120000,prepay:false,
+     {name:{en:"Extra hour of guiding & shopping",ko:"시간·쇼핑 1시간 연장"},price:120000,prepay:false,extendsHour:true,
+      note:{en:"Paid on the day",ko:"당일 결제"}},
+     {name:{en:"Private hotel / airport pick-up",ko:"호텔·공항 프라이빗 픽업"},price:160000,prepay:true,
+      note:{en:"Paid upfront — I need to arrange the car in advance",ko:"차량 사전 예약이 필요해 선결제예요"}}],
+   meet:{name:{en:"Chosen on booking",ko:"예약 시 선택"},
+         detail:{en:"You pick the neighbourhood in the booking form and I'll confirm the exact spot.",
+                 ko:"예약 폼에서 동네를 고르시면 정확한 미팅 포인트를 안내드려요."},map:""},
+   pricing:{regular:0,launch:600000}},
+
+  {id:"signature",max_people:1,feature:true,tag:"BEST",dur_h:4,last_start:16,max_per_day:2,perPerson:true,
+   kicker:{en:"Most popular",ko:"가장 인기",zhHant:"最受歡迎",zhHans:"最受欢迎"},
+   title:{en:"Signature Blueprint",ko:"시그니처 블루프린트",zhHant:"Signature Blueprint",zhHans:"Signature Blueprint"},
+   dur:{en:"4 hours · half-day makeover",ko:"4시간 · 하프데이 메이크오버",zhHant:"4 小時 · 半日改造",zhHans:"4 小时 · 半日改造"},
+   desc:{en:"A half-day makeover that ends with you looking exactly how you wanted.",
+         ko:"완벽하게 예뻐진 상태로 마치는 하프데이 메이크오버 & 뷰티 종합 쇼핑.",
+         zhHant:"以最理想的狀態結束的半日改造與美妝採買。",
+         zhHans:"以最理想的状态结束的半日改造与美妆采买。"},
+   items:{en:["1:1 skin analysis & personal colour reading","Olive Young + K-pharmacy shopping","Digital skin blueprint (PDF)","Choose Option A or B"],
+          ko:["1:1 피부 분석 & 퍼스널 컬러 진단","올리브영 + K-Pharmacy(약국) 쇼핑","디지털 피부 블루프린트 (PDF)","Option A 또는 B 선택"],
+          zhHant:["1:1 肌膚分析與個人色彩診斷","Olive Young + 韓國藥妝採買","數位肌膚藍圖（PDF）","可選 Option A 或 B"],
+          zhHans:["1:1 肌肤分析与个人色彩诊断","Olive Young + 韩国药妆采买","数字肌肤蓝图（PDF）","可选 Option A 或 B"]},
+   excludes:{en:["Products you buy (paid on the spot)","Salon treatment fees","Meals and personal expenses","Transport fares"],
+             ko:["구매하시는 제품 (현장 결제)","살롱 시술 비용","식사 및 개인 경비","교통비"],
+             zhHant:["你購買的產品（現場支付）","沙龍療程費用","餐費與個人開銷","交通費"],
+             zhHans:["你购买的产品（现场支付）","沙龙疗程费用","餐费与个人开销","交通费"]},
+   flow:{en:"Order is always reading → shopping → beauty care, so skin tests and sweat never spoil the result.",
+         ko:"피부 테스트 및 땀 고민 방지를 위해 진단 → 쇼핑 → 뷰티 케어 순서로 진행해요.",
+         zhHant:"依「檢測 → 採買 → 美容護理」順序進行，避免測試與流汗影響成果。",
+         zhHans:"依 检测 → 采买 → 美容护理 顺序进行，避免测试与流汗影响成果。"},
+   options:[
+    {id:"A",
+     name:{en:"Skin Care & Lymph Healing",ko:"스킨케어 & 림프 경락 힐링",zhHant:"肌膚護理與淋巴療癒",zhHans:"肌肤护理与淋巴疗愈"},
+     blurb:{en:"Contour and lymph spa, ends with a PDF blueprint",ko:"윤곽·림프 스파, PDF 블루프린트로 마무리",zhHant:"輪廓淋巴 SPA，以 PDF 藍圖收尾",zhHans:"轮廓淋巴 SPA，以 PDF 蓝图收尾"},
+     itinerary:[
+      {t:"0:00–0:40",title:{en:"1:1 skin analysis & personal colour",ko:"1:1 피부 분석 & 퍼스널 컬러 진단"},
+       d:{en:"Skin tone, type and colour matching.",ko:"피부 톤·타입 및 색조 매칭."}},
+      {t:"0:40–2:00",title:{en:"Olive Young + K-pharmacy shopping",ko:"올리브영 + K-Pharmacy(약국) 쇼핑"},
+       d:{en:"Test freely, then pick up ointments, cica creams and cosmetics.",ko:"마음껏 테스트 후 연고·재생크림·화장품 득템."}},
+      {t:"2:00–3:15",title:{en:"K-aesthetic & lymph care",ko:"K-에스테틱 & 승모근·데콜테 림프 케어"},
+       d:{en:"60-minute contour/lymph spa, including prep and finishing.",ko:"60분 윤곽·림프 스파 (준비~정돈 포함)."}},
+      {t:"3:15–4:00",title:{en:"Digital skin blueprint (PDF)",ko:"디지털 피부 블루프린트 (PDF)"},
+       d:{en:"Briefing on your report, plus photos to finish.",ko:"리포트 브리핑 및 사진 촬영 마감."}}]},
+    {id:"B",
+     name:{en:"Glam & K-Beauty Makeover",ko:"글램 & K-뷰티 메이크오버",zhHant:"魅力 K-Beauty 改造",zhHans:"魅力 K-Beauty 改造"},
+     blurb:{en:"Full hair & makeup styling by a K-beauty pro",ko:"헤어·메이크업 풀 변신",zhHant:"髮型與妝容全套造型",zhHans:"发型与妆容全套造型"},
+     itinerary:[
+      {t:"0:00–0:40",title:{en:"1:1 skin analysis & personal colour",ko:"1:1 피부 분석 & 퍼스널 컬러 진단"},
+       d:{en:"Skin tone, type and colour matching.",ko:"피부 톤·타입 및 색조 매칭."}},
+      {t:"0:40–2:00",title:{en:"Olive Young + K-pharmacy shopping",ko:"올리브영 + K-Pharmacy(약국) 쇼핑"},
+       d:{en:"Curated colour and skincare picks that suit you.",ko:"나에게 맞는 색조·피부 아이템 큐레이션."}},
+      {t:"2:00–3:15",title:{en:"Pro hair & makeup styling",ko:"K-뷰티 전문가 헤어 & 메이크업 풀 스타일링"},
+       d:{en:"Idol/actor-level styling, prep included.",ko:"준비부터 아이돌·배우 스타일링까지."}},
+      {t:"3:15–4:00",title:{en:"PDF report & photos",ko:"PDF 리포트 브리핑 & 기념 촬영"},
+       d:{en:"Fully made over, we finish with your report and photos.",ko:"완벽한 메이크오버 상태로 리포트 브리핑 & 촬영 마감."}}]}],
+   addons:[
+     {name:{en:"Extra hour of guiding & shopping",ko:"시간·쇼핑 1시간 연장"},price:120000,prepay:false,extendsHour:true,
       note:{en:"Paid on the day",ko:"당일 결제"}},
      {name:{en:"K-Heritage wellness clinic — escort & interpreting",ko:"한방 웰니스 클리닉 동행·통역"},price:160000,prepay:false,
       note:{en:"My escort & interpreting fee. Treatment costs are paid directly to the clinic.",
             ko:"동행·통역 비용이에요. 시술비는 클리닉에 직접 결제하세요."}},
      {name:{en:"Body tone & brightening salon — escort & interpreting",ko:"바디 톤·브라이트닝 살롱 동행·통역"},price:200000,prepay:false,
-      note:{en:"My escort & interpreting fee. Salon costs are paid directly on site.",
+      note:{en:"My escort & interpreting fee. Salon costs are paid directly.",
             ko:"동행·통역 비용이에요. 살롱 비용은 현장에서 직접 결제하세요."}},
      {name:{en:"Private hotel pick-up & drop-off",ko:"호텔 프라이빗 픽업·드롭오프"},price:160000,prepay:true,
-      note:{en:"Paid upfront — I need to arrange the car in advance",ko:"차량 사전 예약이 필요해 선결제예요"}}
-   ],
-   itinerary:[
-     {t:{en:"Start",ko:"시작"},title:{en:"Meet & skin consultation",ko:"만남 & 피부 분석"},d:{en:"Coffee first, then a proper look at your skin — what it needs, what it doesn't.",ko:"먼저 커피 한 잔, 그다음 피부를 제대로 살펴봐요 — 뭐가 필요하고 뭐가 필요 없는지."}},
-     {t:{en:"+1 hr",ko:"1시간 후"},title:{en:"Olive Young, decoded",ko:"올리브영 완전 정복"},d:{en:"We shop together. I read the ingredient lists so you don't buy the wrong thing.",ko:"함께 쇼핑해요. 제가 성분표를 읽어드려서 잘못된 제품을 사지 않게 해요."}},
-     {t:{en:"+3 hrs",ko:"3시간 후"},title:{en:"Lunch break",ko:"점심"},d:{en:"A local spot near where we are — nothing touristy.",ko:"근처 로컬 맛집으로 — 관광지 말고요."}},
-     {t:{en:"+4 hrs",ko:"4시간 후"},title:{en:"Salon or styling",ko:"살롱 또는 스타일링"},d:{en:"Brow, lash or hair at a vetted salon — or personal styling if you'd rather shop.",ko:"검증된 샵에서 눈썹·속눈썹·헤어 — 쇼핑을 원하시면 퍼스널 스타일링으로."}}
-   ],
-   excludes:{en:["Products you buy (paid on the spot)","Salon services — brow, lash, hair","Your meals and personal expenses","Transport fares (subway/taxi)"],
-             ko:["구매하시는 제품 (현장 결제)","살롱 서비스 — 눈썹·속눈썹·헤어","식사 및 개인 경비","교통비 (지하철·택시)"]},
-   meet:{name:{en:"Hongdae Station, Exit 3",ko:"홍대입구역 3번 출구"},
-         detail:{en:"In front of the Starbucks, just outside Exit 3. I'll be holding a small Zeneverse card.",
-                 ko:"3번 출구 바로 앞 스타벅스 앞이에요. 제너버스 카드를 들고 서 있을게요."},
-         map:"https://maps.google.com/?q=Hongik+University+Station+Exit+3+Seoul"},
-   pricing:{regular:500000,launch:400000}},
-  {id:"layover",max_people:4,feature:false,tag:"",dur_h:2,last_start:19,max_per_day:3,
-   kicker:{en:"Short & sharp",ko:"짧고 굵게"},
-   title:{en:"Layover Glow",ko:"레이오버 글로우"},
-   dur:{en:"Half day · express",ko:"반나절 · 익스프레스"},
-   desc:{en:"A tight, high-impact half-day for travellers passing through — the essentials, done right.",ko:"경유하는 여행객을 위한 짧고 강력한 반나절 — 핵심만 제대로."},
-   items:{en:["Quick skin consultation & priorities","One curated shopping stop","Brow / lash / styling match","Product shortlist to take home"],
-          ko:["빠른 피부 분석 &amp; 우선순위","엄선된 쇼핑 한 곳","눈썹/속눈썹/스타일링 매칭","집에 가져갈 제품 리스트"]},
+      note:{en:"Paid upfront — I need to arrange the car in advance",ko:"차량 사전 예약이 필요해 선결제예요"}}],
+   meet:{name:{en:"Chosen on booking",ko:"예약 시 선택"},
+         detail:{en:"You pick the neighbourhood in the booking form and I'll confirm the exact spot.",
+                 ko:"예약 폼에서 동네를 고르시면 정확한 미팅 포인트를 안내드려요."},map:""},
+   pricing:{regular:0,launch:800000}},
+
+  {id:"reset",max_people:1,feature:false,tag:"VIP",dur_h:6,last_start:14,max_per_day:1,perPerson:true,
+   kicker:{en:"Full VIP day",ko:"풀데이 VIP",zhHant:"全日 VIP",zhHans:"全日 VIP"},
+   title:{en:"Skin Reset",ko:"스킨 리셋",zhHant:"Skin Reset",zhHans:"Skin Reset"},
+   dur:{en:"6 hours · VIP full day",ko:"6시간 · VIP 풀데이",zhHant:"6 小時 · VIP 全日",zhHans:"6 小时 · VIP 全日"},
+   desc:{en:"An unhurried full VIP day with a café break, plus care that continues through your stay.",
+         ko:"6시간 여유로운 풀데이 VIP 투어 + 카페 브레이크 + 체류 기간 밀착 케어.",
+         zhHant:"從容的六小時 VIP 全日行程，含咖啡休息與停留期間的持續照顧。",
+         zhHans:"从容的六小时 VIP 全日行程，含咖啡休息与停留期间的持续照顾。"},
+   items:{en:["Everything in Signature Blueprint","Relaxed lunch & café break","VIP WhatsApp hotline during your stay","Pre-flight / in-flight skincare report"],
+          ko:["Signature Blueprint 전 과정 포함","여유로운 런치 & 핫플 카페 브레이크","체류 내내 VIP WhatsApp 1:1 핫라인","출국 전·기내 스킨케어 리포트"],
+          zhHant:["包含 Signature Blueprint 全程","悠閒午餐與人氣咖啡廳休息","停留期間 VIP WhatsApp 專線","出境前／機上保養報告"],
+          zhHans:["包含 Signature Blueprint 全程","悠闲午餐与人气咖啡厅休息","停留期间 VIP WhatsApp 专线","出境前／机上护肤报告"]},
+   excludes:{en:["Products you buy (paid on the spot)","Salon treatment fees","Meals and personal expenses","Transport fares"],
+             ko:["구매하시는 제품 (현장 결제)","살롱 시술 비용","식사 및 개인 경비","교통비"],
+             zhHant:["你購買的產品（現場支付）","沙龍療程費用","餐費與個人開銷","交通費"],
+             zhHans:["你购买的产品（现场支付）","沙龙疗程费用","餐费与个人开销","交通费"]},
+   options:[
+    {id:"A",
+     name:{en:"VIP Ultimate Wellness & Recovery",ko:"VIP 얼티밋 웰니스 & 리커버리",zhHant:"VIP 極致舒緩與修復",zhHans:"VIP 极致舒缓与修复"},
+     blurb:{en:"Full-body lymph and aesthetic recovery",ko:"전신 힐링 & 에스테틱",zhHant:"全身療癒與美容",zhHans:"全身疗愈与美容"},
+     itinerary:[
+      {t:"0:00–4:00",title:{en:"Full Signature Blueprint course",ko:"Signature Blueprint 코스 전 과정"},
+       d:{en:"Reading, then pharmacy and Olive Young shopping.",ko:"진단 + 약국·올리브영 쇼핑."}},
+      {t:"4:00–5:00",title:{en:"Relaxed lunch & café break",ko:"여유로운 런치 & 핫플 카페 브레이크"},
+       d:{en:"Travel time and a proper rest.",ko:"이동 및 여유로운 휴식."}},
+      {t:"5:00–6:00",title:{en:"VIP full-body lymph & K-aesthetic recovery",ko:"VIP 전신 림프 & K-에스테틱 재생 케어"},
+       d:{en:"60-minute body/skin spa, changing and finishing included.",ko:"60분 바디·피부 스파 (착·탈의 및 정돈 포함)."}},
+      {t:"After",title:{en:"VIP WhatsApp hotline + flight report",ko:"VIP 핫라인 + 출국 리포트"},
+       d:{en:"1:1 care through the rest of your stay, plus a pre-flight skincare report.",
+          ko:"체류 내내 1:1 케어 + 출국 전·기내 스킨케어 리포트."}}]},
+    {id:"B",
+     name:{en:"VIP Head-to-Toe All-In-One Glam",ko:"VIP 헤드투토 올인원 글램",zhHant:"VIP 全身全套造型",zhHans:"VIP 全身全套造型"},
+     blurb:{en:"Spa plus full hair and makeup styling",ko:"에스테틱 + 헤어·메이크업 풀코스",zhHant:"美容加全套髮妝",zhHans:"美容加全套发妆"},
+     itinerary:[
+      {t:"0:00–4:00",title:{en:"Full Signature Blueprint course",ko:"Signature Blueprint 코스 전 과정"},
+       d:{en:"Reading, then pharmacy and Olive Young shopping.",ko:"진단 + 약국·올리브영 쇼핑."}},
+      {t:"4:00–5:00",title:{en:"Relaxed lunch & café break",ko:"여유로운 런치 & 핫플 카페 브레이크"},
+       d:{en:"Travel time and a proper rest.",ko:"이동 및 여유로운 휴식."}},
+      {t:"5:00–6:00",title:{en:"Hydration spa (30 min) + full hair & makeup",ko:"수분 스파 30분 + K-뷰티 헤어·메이크업 풀 스타일링"},
+       d:{en:"Finished head to toe.",ko:"머리부터 발끝까지 완성."}},
+      {t:"After",title:{en:"VIP WhatsApp hotline + flight report",ko:"VIP 핫라인 + 출국 리포트"},
+       d:{en:"1:1 care through the rest of your stay, plus a pre-flight skincare report.",
+          ko:"체류 내내 1:1 케어 + 출국 전·기내 스킨케어 리포트."}}]}],
    addons:[
-     {name:{en:"Extra hour of guiding & shopping",ko:"시간·쇼핑 1시간 연장"},price:120000,prepay:false,
-      note:{en:"Paid on the day",ko:"당일 결제"}},
-     {name:{en:"Private hotel / airport pick-up",ko:"호텔·공항 프라이빗 픽업"},price:160000,prepay:true,
-      note:{en:"Paid upfront — I need to arrange the car in advance",ko:"차량 사전 예약이 필요해 선결제예요"}}
-   ],
-   itinerary:[
-     {t:{en:"Start",ko:"시작"},title:{en:"Quick skin read",ko:"빠른 피부 분석"},d:{en:"Straight to it — your skin type and the two or three things that matter.",ko:"바로 시작해요 — 피부 타입과 정말 중요한 두세 가지."}},
-     {t:{en:"+30 min",ko:"30분 후"},title:{en:"One focused shopping stop",ko:"핵심 쇼핑 한 곳"},d:{en:"A tight list, no wandering. You leave with what actually works.",ko:"짧은 리스트로 헤매지 않아요. 진짜 맞는 것만 들고 나와요."}},
-     {t:{en:"+1.5 hrs",ko:"1시간 반 후"},title:{en:"Wrap up",ko:"마무리"},d:{en:"A written shortlist to take home, plus where to buy it later.",ko:"집에 가져갈 제품 리스트와 나중에 살 수 있는 곳까지."}}
-   ],
-   excludes:{en:["Products you buy (paid on the spot)","Salon services","Meals and personal expenses","Transport fares"],
-             ko:["구매하시는 제품 (현장 결제)","살롱 서비스","식사 및 개인 경비","교통비"]},
-   meet:{name:{en:"Hongdae Station, Exit 3",ko:"홍대입구역 3번 출구"},
-         detail:{en:"In front of the Starbucks, just outside Exit 3. Short on time? Tell me your layover window and I'll meet you closer to your route.",
-                 ko:"3번 출구 앞 스타벅스 앞이에요. 시간이 촉박하시면 경유 일정에 맞춰 가까운 곳에서 만날 수 있어요."},
-         map:"https://maps.google.com/?q=Hongik+University+Station+Exit+3+Seoul"},
-   pricing:{regular:250000,launch:200000}},
-  {id:"reset",max_people:4,feature:false,tag:"",dur_h:4,last_start:17,max_per_day:2,
-   kicker:{en:"Stay longer",ko:"길게 머물기"},
-   title:{en:"Skin Reset",ko:"스킨 리셋"},
-   dur:{en:"1 day + follow-up",ko:"1일 + 후속 케어"},
-   desc:{en:"For guests staying weeks or months — a full day plus a check-in to keep your routine on track.",ko:"몇 주에서 몇 달 머무는 게스트를 위해 — 하루 풀코스 + 루틴 유지를 위한 후속 점검."},
-   items:{en:["Everything in the Makeover day","Custom skincare blend, mixed for you","Routine plan for your skin","One follow-up review during your stay"],
-          ko:["메이크오버 데이 전체 포함","당신을 위한 맞춤 스킨케어 조제","내 피부 맞춤 루틴 플랜","체류 중 1회 후속 점검"]},
-   addons:[
-     {name:{en:"Extra custom blend refill",ko:"맞춤 조제 리필 추가"},price:80000,prepay:false,
-      note:{en:"Paid on the day",ko:"당일 결제"}},
      {name:{en:"K-Heritage wellness clinic — escort & interpreting",ko:"한방 웰니스 클리닉 동행·통역"},price:160000,prepay:false,
       note:{en:"My escort & interpreting fee. Treatment costs are paid directly to the clinic.",
             ko:"동행·통역 비용이에요. 시술비는 클리닉에 직접 결제하세요."}},
      {name:{en:"Private hotel pick-up & drop-off",ko:"호텔 프라이빗 픽업·드롭오프"},price:160000,prepay:true,
-      note:{en:"Paid upfront — I need to arrange the car in advance",ko:"차량 사전 예약이 필요해 선결제예요"}}
-   ],
-   itinerary:[
-     {t:{en:"Start",ko:"시작"},title:{en:"Deep skin consultation",ko:"심층 피부 분석"},d:{en:"A longer look — your history, your routine, what's actually going on.",ko:"더 깊이 봐요 — 피부 이력, 현재 루틴, 실제로 무슨 일이 일어나는지."}},
-     {t:{en:"+1 hr",ko:"1시간 후"},title:{en:"Custom blend, made for you",ko:"나만의 맞춤 조제"},d:{en:"We mix a skincare formula for your skin, right there.",ko:"그 자리에서 당신 피부에 맞는 스킨케어를 직접 조제해요."}},
-     {t:{en:"+2.5 hrs",ko:"2시간 반 후"},title:{en:"Lunch & routine plan",ko:"점심 & 루틴 설계"},d:{en:"Over lunch we map out a routine you'll actually keep.",ko:"점심 먹으며 실제로 지킬 수 있는 루틴을 함께 짜요."}},
-     {t:{en:"+4 hrs",ko:"4시간 후"},title:{en:"Guided shopping",ko:"동행 쇼핑"},d:{en:"Fill the gaps in your routine with the right products.",ko:"루틴에서 빠진 부분을 맞는 제품으로 채워요."}},
-     {t:{en:"Later",ko:"체류 중"},title:{en:"Follow-up check-in",ko:"후속 점검"},d:{en:"One review during your stay — how's the skin responding?",ko:"체류 중 1회 점검 — 피부가 어떻게 반응하는지 확인해요."}}
-   ],
-   excludes:{en:["Products beyond your custom blend","Salon services","Meals and personal expenses","Transport fares"],
-             ko:["맞춤 조제 외 구매 제품","살롱 서비스","식사 및 개인 경비","교통비"]},
-   meet:{name:{en:"Hongdae Station, Exit 3",ko:"홍대입구역 3번 출구"},
-         detail:{en:"In front of the Starbucks, just outside Exit 3. Staying nearby? I can meet you closer to your place.",
-                 ko:"3번 출구 앞 스타벅스 앞이에요. 근처에 머무시면 숙소 가까운 곳에서 만날 수도 있어요."},
-         map:"https://maps.google.com/?q=Hongik+University+Station+Exit+3+Seoul"},
-   pricing:{regular:800000,launch:650000}}
+      note:{en:"Paid upfront — I need to arrange the car in advance",ko:"차량 사전 예약이 필요해 선결제예요"}}],
+   meet:{name:{en:"Chosen on booking",ko:"예약 시 선택"},
+         detail:{en:"You pick the neighbourhood in the booking form and I'll confirm the exact spot.",
+                 ko:"예약 폼에서 동네를 고르시면 정확한 미팅 포인트를 안내드려요."},map:""},
+   pricing:{regular:0,launch:1000000}}
 ];
 
 let lang="en", adminMode=false, editMode=false;
@@ -1407,7 +1552,7 @@ function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
 
 let adminToken = sessionStorage.getItem("zv_token") || "";
 const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false,
-  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, msgs:null, msgsDefault:null, biz:null, reward:null, areas:null, loaded:false };
+  feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, msgs:null, msgsDefault:null, biz:null, reward:null, areas:null, ops:null, loaded:false };
 
 async function loadConfig(){
   try{
@@ -1432,6 +1577,7 @@ async function loadConfig(){
     STATE.biz = c.biz || null;
     STATE.reward = c.reward || null;
     STATE.areas = c.areas || null;
+    STATE.ops = c.ops || {bufferH:1};
     STATE.msgs = c.msgs || null;
     STATE.msgsDefault = c.msgsDefault || null;
     STATE.copy = c.copy || null;
@@ -1462,7 +1608,7 @@ async function saveAll(){
       packages:PACKS, hours:STATE.hours, dayhours:STATE.dayhours,
       closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh,
       feats:loadFeats(), host:STATE.host||DEFAULT_HOST, contact:STATE.contact||DEFAULT_CONTACT,
-      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay, msgs:STATE.msgs, biz:STATE.biz, reward:STATE.reward, areas:loadAreas()
+      faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay, msgs:STATE.msgs, biz:STATE.biz, reward:STATE.reward, areas:loadAreas(), ops:STATE.ops
     });
   }catch(e){ alert("저장 실패 / Save failed: "+e.message); }
 }
@@ -2271,22 +2417,37 @@ function renderPacks(){
       <p class="desc"${editMode?' contenteditable="true" class="edit-field"':''} data-e="${i}.desc">${p.desc[lang]}</p>
       <ul>${p.items[lang].map((it,j)=>`<li${editMode?' contenteditable="true" class="edit-field"':''} data-e="${i}.items.${j}">${it}${editMode?`<button class="li-del" contenteditable="false" onclick="delItem(${i},${j})" title="remove">&times;</button>`:""}</li>`).join("")}</ul>
       ${editMode?`<button class="li-add" onclick="addItem(${i})">+ ${lang==="ko"?"항목 추가":"Add item"}</button>`:""}
+      ${!editMode&&(p.options||[]).length>1?`<div class="card-opts">
+        <div class="co-label mono">${I18N[lang].card_choose}</div>
+        ${p.options.map(o=>`
+          <button class="co-row" onclick="event.stopPropagation();openItinerary('${p.id}','${o.id}')">
+            <span class="co-badge">${o.id}</span>
+            <span class="co-txt"><b>${esc(tx(o.name))}</b><i>${esc(tx(o.blurb))}</i></span>
+            <span class="co-arrow">→</span>
+          </button>`).join("")}
+      </div>`:""}
       ${(p.addons&&p.addons.length)||editMode?`<div class="addons">
         <div class="addons-label mono">${lang==="ko"?"추가 옵션":"Add-ons"}</div>
         ${(p.addons||[]).map((a,j)=>`<div class="addon-row">
             <span class="addon-name"${editMode?` contenteditable="true" class="addon-name edit-field" data-a="${i}.${j}"`:""}>${a.name[lang]}</span>
-            ${editMode?`<input class="addon-price" type="number" min="0" step="10000" value="${a.price||0}" onchange="setAddonPrice(${i},${j},this.value)"><button class="li-del" onclick="delAddon(${i},${j})">&times;</button>`:`<span class="addon-price-view">+${money(a.price||0)}</span>`}
+            ${editMode?`<input class="addon-price" type="number" min="0" step="${editCur==="KRW"?10000:10}" value="${toEditCur(a.price||0)}" title="${wonFmt(a.price||0)}" onchange="setAddonPrice(${i},${j},this.value)"><button class="li-del" onclick="delAddon(${i},${j})">&times;</button>`:`<span class="addon-price-view">+${money(a.price||0)}</span>`}
           </div>`).join("")}
         ${editMode?`<button class="li-add" onclick="addAddon(${i})">+ ${lang==="ko"?"옵션 추가":"Add option"}</button>`:""}
       </div>`:""}
       <div class="sep-note">${lang==="ko"?"※ 눈썹·헤어샵 등 파트너 시술·서비스 비용은 현장에서 별도 결제됩니다.":"Note: brow, lash, hair salon and other partner services are paid separately on site."}</div>
       <div class="foot">
         <div class="price">${priceHTML(p)}</div>
-        ${!editMode&&(p.itinerary&&p.itinerary.length)?`<button class="itin-link" onclick="openItinerary('${p.id}')">${lang==="ko"?"이 날의 흐름 보기":"See how the day goes"} →</button>`:""}
+        ${!editMode&&((p.options&&p.options.length)||(p.itinerary&&p.itinerary.length))?`<button class="itin-link" onclick="openItinerary('${p.id}')">${(p.options||[]).length>1?I18N[lang].card_compare:(lang==="ko"?"이 날의 흐름 보기":"See how the day goes")} →</button>`:""}
         ${editMode?`<div class="pack-timing">
-            <label>${lang==="ko"?"정가":"Regular"} ₩<input type="number" min="0" step="10000" value="${p.pricing.regular||0}" onchange="setPrice(${i},'regular',this.value)"></label>
-            <label>${lang==="ko"?"런칭가":"Launch"} ₩<input type="number" min="0" step="10000" value="${p.pricing.launch||0}" onchange="setPrice(${i},'launch',this.value)"></label>
-            <label class="pt-hint">${lang==="ko"?"0 = 가격 문의로 표시":"0 = shows 'Enquire'"}</label>
+            <label class="pt-cur">${aKo()?"입력 통화":"Enter in"}
+              <select onchange="setEditCur(this.value)">
+                ${["KRW","USD","EUR"].map(c=>`<option value="${c}"${editCur===c?" selected":""}>${CURRENCIES[c].label}</option>`).join("")}
+              </select></label>
+            <label>${aKo()?"정가":"Regular"} ${CURRENCIES[editCur].sym}<input type="number" min="0" step="${editCur==="KRW"?10000:10}" value="${toEditCur(p.pricing.regular||0)}" onchange="setPrice(${i},'regular',this.value)">
+              <i class="pt-krw">${p.pricing.regular?wonFmt(p.pricing.regular):"—"}</i></label>
+            <label>${aKo()?"런칭가":"Launch"} ${CURRENCIES[editCur].sym}<input type="number" min="0" step="${editCur==="KRW"?10000:10}" value="${toEditCur(p.pricing.launch||0)}" onchange="setPrice(${i},'launch',this.value)">
+              <i class="pt-krw">${p.pricing.launch?wonFmt(p.pricing.launch):"—"}</i></label>
+            <label class="pt-hint">${aKo()?"0 = 가격 문의로 표시 · 저장은 항상 원화 기준":"0 = shows 'Enquire' · always stored in KRW"}</label>
             <label>${lang==="ko"?"소요":"Duration"}: <input type="number" min="1" max="12" value="${p.dur_h}" onchange="setPackNum(${i},'dur_h',this.value)"> ${lang==="ko"?"시간":"h"}</label>
             <label>${lang==="ko"?"마지막 시작":"Last start"}: <input type="number" min="0" max="23" value="${p.last_start}" onchange="setPackNum(${i},'last_start',this.value)"> :00</label>
             <label>${lang==="ko"?"하루 최대 팀":"Max teams/day"}: <input type="number" min="1" max="10" value="${p.max_per_day}" onchange="setPackNum(${i},'max_per_day',this.value)"> ${lang==="ko"?"팀":"teams"}</label>
@@ -2339,8 +2500,31 @@ function addAddon(i){
   savePacks(PACKS);renderPacks();
 }
 function delAddon(i,j){PACKS[i].addons.splice(j,1);savePacks(PACKS);renderPacks();}
-function setAddonPrice(i,j,v){const n=parseInt(v);PACKS[i].addons[j].price=isNaN(n)?0:n;savePacks(PACKS);renderPacks();}
-function setPrice(idx,key,val){const n=parseInt(val);PACKS[idx].pricing[key]=isNaN(n)?0:n;savePacks(PACKS);renderPacks();}
+function setAddonPrice(i,j,v){PACKS[i].addons[j].price=fromEditCur(v);savePacks(PACKS);renderPacks();}
+let editCur=(()=>{try{return localStorage.getItem("zv_editcur")||"KRW";}catch(e){return "KRW";}})();
+function setEditCur(c){
+  editCur=CURRENCIES[c]?c:"KRW";
+  try{localStorage.setItem("zv_editcur",editCur);}catch(e){}
+  renderPacks();
+}
+/* KRW stored -> number shown in the editor's currency */
+function toEditCur(won){
+  if(editCur==="KRW")return won||0;
+  const r=rates()[editCur]||1;
+  return Math.round((won||0)/r);
+}
+/* editor input -> KRW to store */
+function fromEditCur(v){
+  const n=parseFloat(v);
+  if(isNaN(n))return 0;
+  if(editCur==="KRW")return Math.round(n);
+  const r=rates()[editCur]||1;
+  return Math.round(n*r/1000)*1000;   // round to the nearest 1,000 KRW
+}
+function setPrice(idx,key,val){
+  PACKS[idx].pricing[key]=fromEditCur(val);
+  savePacks(PACKS);renderPacks();
+}
 function wonFmt(n){return "₩"+n.toLocaleString("ko-KR");}
 function usdApprox(won){return Math.round(won/1350/5)*5;} // rough USD, rounded to nearest $5
 function priceHTML(p){
@@ -2354,6 +2538,7 @@ function priceHTML(p){
   return `
     ${hasDiscount?`<span class="pr-was">${money(reg)}</span>`:""}
     <span class="pr-now">${money(show)}</span>
+    <span class="pr-pp">${I18N[lang].per_person}</span>
     ${ref?`<span class="pr-usd">${ref}</span>`:""}
     ${hasDiscount?`<span class="pr-tag">${launchLabel}</span>`:""}`;
 }
@@ -2362,8 +2547,9 @@ const nav=document.getElementById("nav");
 addEventListener("scroll",()=>nav.classList.toggle("scrolled",scrollY>20));
 
 /* ------------- booking modal ------------- */
-function openBooking(preselect){
+function openBooking(preselect,preOpt){
   if(textEditMode)return;
+  pickedOption=preOpt||"";
   const t=I18N[lang];
   const opts=PACKS.map(p=>`<option value="${p.id}"${preselect===p.id?" selected":""}>${p.title[lang]} · ${p.dur_h}${lang==="ko"?"시간":"h"}</option>`).join("");
   document.getElementById("modalRoot").innerHTML=`
@@ -2374,7 +2560,8 @@ function openBooking(preselect){
         <div class="sub">${t.book_sub}</div>
         <div class="field"><label>${t.f_name}</label><input id="bk_name" type="text"></div>
         <div class="field"><label>${t.f_email}</label><input id="bk_email" type="email"></div>
-        <div class="field"><label>${t.f_pkg}</label><select id="bk_pkg" onchange="refreshSlots();refreshAddons();updatePriceSum()">${opts}</select></div>
+        <div class="field"><label>${t.f_pkg}</label><select id="bk_pkg" onchange="refreshSlots();refreshOptions();refreshAddons();updatePriceSum()">${opts}</select></div>
+        <div class="field" id="bk_opt_wrap"><label>${t.f_option}</label><div id="bk_options"></div></div>
         <div class="field" id="bk_addons_wrap"><label>${t.f_addons}</label><div id="bk_addons"></div></div>
         <div class="field"><label>${t.f_date}</label><input id="bk_date" type="date" min="${todayStr()}" onchange="refreshSlots()"></div>
         <div class="field"><label>${t.f_time} <span id="bk_durhint" class="dur-hint"></span></label><div id="bk_slots" class="slot-wrap"><span class="slot-hint">${t.slot_pick}</span></div></div>
@@ -2419,6 +2606,7 @@ function openBooking(preselect){
         <div class="msg" id="bk_msg"></div>
       </div>
     </div>`;
+  refreshOptions();
   refreshAddons();
   clampPeople();
   updatePriceSum();
@@ -2472,7 +2660,7 @@ function updatePriceSum(){
     ${picked.map(a=>`<div class="ps-row sub"><span>+ ${esc(tx(a.name))}
       <i class="ao-tag ${a.prepay?"pre":"day"}">${a.prepay?t.ao_prepay:t.ao_onsite}</i></span>
       <b>${money(a.price||0)}</b></div>`).join("")}
-    <div class="ps-row total"><span>${t.ps_total}</span>
+    <div class="ps-row total"><span>${t.ps_total} <i class="pp-tag">${t.per_person}</i></span>
       <b>${money(total)}${ref?`<i>${ref}</i>`:""}</b></div>
     <div class="ps-dep">
       <span>${t.ps_deposit.replace("{p}",pct)}${prepaid?` <i>${t.ps_incl_pre}</i>`:""}</span>
@@ -2480,22 +2668,45 @@ function updatePriceSum(){
     </div>
     <div class="ps-note">${t.ps_note.replace("{a}",money(total-dep))}</div>`;
 }
+let pickedOption="";
+let SLOT_EXTENDABLE={},BUFFER_H=1;
+function refreshOptions(){
+  const pk=currentPack(),wrap=document.getElementById("bk_options"),box=document.getElementById("bk_opt_wrap");
+  if(!wrap||!box)return;
+  const opts=pk.options||[];
+  if(opts.length<2){box.style.display="none";wrap.innerHTML="";pickedOption=opts[0]?opts[0].id:"";return;}
+  box.style.display="";
+  if(!opts.find(o=>o.id===pickedOption))pickedOption="";
+  wrap.innerHTML=opts.map(o=>`
+    <label class="opt-pick${o.id===pickedOption?" on":""}">
+      <input type="radio" name="bkopt" value="${o.id}" ${o.id===pickedOption?"checked":""} onchange="pickOption('${o.id}')">
+      <span><b>Option ${o.id} · ${esc(tx(o.name))}</b><i>${esc(tx(o.blurb))}</i></span>
+    </label>`).join("")+
+    `<button type="button" class="opt-compare" onclick="closeModal();setTimeout(()=>openItinerary('${pk.id}'),150)">${I18N[lang].f_option_compare}</button>`;
+}
+function pickOption(id){
+  pickedOption=id;
+  document.querySelectorAll(".opt-pick").forEach(l=>l.classList.toggle("on",l.querySelector("input").value===id));
+}
 function refreshAddons(){
   const pk=currentPack(),wrap=document.getElementById("bk_addons"),box=document.getElementById("bk_addons_wrap");
+  if(!wrap||!box)return;
   const list=pk.addons||[];
   if(!list.length){box.style.display="none";wrap.innerHTML="";updatePriceSum();return;}
   box.style.display="";
-  wrap.innerHTML=list.map((a,j)=>
-    `<label class="addon-check">
-       <input type="checkbox" data-addon="${j}" onchange="updatePriceSum()">
-       <span class="ao-body">
-         <span class="ao-top">${a.name[lang]}
-           <i class="ao-tag ${a.prepay?"pre":"day"}">${a.prepay?t.ao_prepay:t.ao_onsite}</i></span>
-         ${a.note?`<i class="ao-note">${esc(tx(a.note))}</i>`:""}
-       </span>
-       <b>+${money(a.price||0)}</b>
-     </label>`
-  ).join("");
+  const t=I18N[lang];
+  wrap.innerHTML=list.map((a,j)=>{
+    /* an add-on that adds an hour needs the next slot free */
+    const blocked = a.extendsHour && selectedSlot && SLOT_EXTENDABLE[selectedSlot]!==true;
+    return `<label class="addon-check${blocked?" off":""}">
+      <input type="checkbox" data-addon="${j}" onchange="updatePriceSum()" ${blocked?"disabled":""}>
+      <span>${a.name[lang]}
+        ${a.note?`<i class="ao-note">${esc(tx(a.note))}</i>`:""}
+        ${blocked?`<i class="ao-block">${t.ao_no_room}</i>`:""}</span>
+      <b>+${money(a.price||0)}</b>
+      ${a.prepay!==undefined?`<i class="ao-tag ${a.prepay?"pre":"day"}">${a.prepay?t.ao_prepay:t.ao_onsite}</i>`:""}
+    </label>`;
+  }).join("");
 }
 function selectedAddons(){
   const pk=currentPack(),out=[];
@@ -2524,6 +2735,8 @@ async function refreshSlots(){
       return;
     }
     const q=r.queue||{};
+    SLOT_EXTENDABLE=r.extendable||{};
+    BUFFER_H=r.bufferH==null?1:r.bufferH;
     wrap.innerHTML=starts.map(sl=>{
       const end=pad(parseInt(sl)+pk.dur_h)+":00";
       const n=q[sl]||0;
@@ -2534,7 +2747,13 @@ async function refreshSlots(){
     wrap.innerHTML=`<span class="slot-hint">${t.slot_err}</span>`;
   }
 }
-function pickSlot(s,el){selectedSlot=s;document.querySelectorAll(".slot-btn").forEach(b=>b.classList.remove("on"));el.classList.add("on");}
+function pickSlot(s,el){
+  selectedSlot=s;
+  document.querySelectorAll(".slot-btn").forEach(b=>b.classList.remove("on"));
+  el.classList.add("on");
+  refreshAddons();          // re-check whether the extra hour still fits
+  updatePriceSum();
+}
 async function submitBooking(){
   const t=I18N[lang],msg=document.getElementById("bk_msg");
   const name=document.getElementById("bk_name").value.trim();
@@ -2543,6 +2762,7 @@ async function submitBooking(){
   const contactId=document.getElementById("bk_contact").value.trim();
   const contact=pickedChannel?`${CH_LABEL[pickedChannel]}: ${contactId}`:contactId;
   if(!name||!email||!date){msg.style.color="#c96f52";msg.textContent=t.book_err;return;}
+  if((pk.options||[]).length>1&&!pickedOption){msg.style.color="#c96f52";msg.textContent=t.f_option_err;return;}
   if(!pickedArea){msg.style.color="#c96f52";msg.textContent=t.f_area_err;return;}
   if(!pickedChannel){msg.style.color="#c96f52";msg.textContent=t.ch_err;return;}
   if(!contactId){msg.style.color="#c96f52";msg.textContent=t.f_contact_err;return;}
@@ -2559,7 +2779,7 @@ async function submitBooking(){
     const r=await API.post("/api/book",{
       name,email,pkg:pk.id,date,time:selectedSlot,
       people:document.getElementById("bk_people").value,
-      contact, contact_channel:pickedChannel, contact_id:contactId, area:pickedArea, needs,
+      contact, contact_channel:pickedChannel, contact_id:contactId, area:pickedArea, option:pickedOption, needs,
       note:document.getElementById("bk_note").value.trim(),
       addons:selectedAddons()
     });
@@ -2568,7 +2788,7 @@ async function submitBooking(){
   }catch(e){
     console.error("booking failed:",e);
     msg.style.color="#c96f52";
-    msg.textContent = e.code==="full" ? t.slot_full : e.code==="taken" ? t.slot_taken
+    msg.textContent = e.code==="full" ? t.slot_full : e.code==="no_room_for_addon" ? t.slot_no_addon : e.code==="taken" ? t.slot_taken
       : e.code==="closed" ? t.slot_none : (t.book_fail+" ("+(e.message||e.code||"error")+")");
     refreshSlots();
   }
@@ -3190,34 +3410,47 @@ async function checkPaymentRedirect(){
 }
 
 /* ============ ITINERARY (sample day) ============ */
-function openItinerary(pkgId){
+function openItinerary(pkgId,optId){
   if(textEditMode)return;
   const t=I18N[lang],ko=lang==="ko";
   const i=PACKS.findIndex(x=>x.id===pkgId);if(i<0)return;
   const p=PACKS[i];
-  const list=p.itinerary||[];
+  const opts=p.options||[];
+  const cur=opts.length?(opts.find(o=>o.id===optId)||opts[0]):null;
+  const list=cur?cur.itinerary:(p.itinerary||[]);
   const ed=adminMode?' contenteditable="true" class="it-edit"':'';
+  const oi=cur?opts.indexOf(cur):-1;
   document.getElementById("modalRoot").innerHTML=`
     <div class="modal-bg" onclick="if(event.target===this)closeModal()">
-      <div class="modal" style="max-width:520px">
+      <div class="modal" style="max-width:540px">
         <button class="close" onclick="closeModal()">&times;</button>
         <div class="it-head">
           <div class="mono it-kicker">${esc(p.dur[lang]||"")}</div>
           <h3>${esc(p.title[lang]||"")}</h3>
+          <div class="it-price">${money((p.pricing&&(p.pricing.launch||p.pricing.regular))||0)}
+            <span>${t.per_person}</span></div>
           <div class="sub">${t.itin_sub}</div>
         </div>
         ${adminMode?`<div class="hp-editnote">${aKo()?`✏️ 시간·제목·설명을 클릭해서 수정 — 지금 <b>${LANG_NAME[lang]}</b> 편집 중`:`✏️ Click any time, title or line — editing <b>${LANG_NAME[lang]}</b>`}</div>`:""}
+
+        ${opts.length>1?`<div class="opt-tabs">
+          ${opts.map(o=>`<button class="opt-tab${o===cur?" on":""}" onclick="openItinerary('${p.id}','${o.id}')">
+            <b>Option ${o.id}</b><span>${esc(tx(o.name))}</span></button>`).join("")}
+        </div>`:""}
+        ${cur&&tx(cur.blurb)?`<div class="opt-blurb">${esc(tx(cur.blurb))}</div>`:""}
+        ${p.flow&&tx(p.flow)?`<div class="it-flow">📌 ${esc(tx(p.flow))}</div>`:""}
+
         <div class="it-list">
           ${list.map((it,j)=>`
             <div class="it-item">
-              <div class="it-time"${ed} data-it="${i}.${j}.t">${esc(typeof it.t==="string"?it.t:tx(it.t))}</div>
+              <div class="it-time"${ed} data-it="${i}.${oi}.${j}.t">${esc(typeof it.t==="string"?it.t:tx(it.t))}</div>
               <div class="it-body">
-                <b${ed} data-it="${i}.${j}.title">${esc(tx(it.title))}</b>
-                <p${ed} data-it="${i}.${j}.d">${esc(tx(it.d))}</p>
+                <b${ed} data-it="${i}.${oi}.${j}.title">${esc(tx(it.title))}</b>
+                <p${ed} data-it="${i}.${oi}.${j}.d">${esc(tx(it.d))}</p>
               </div>
-              ${adminMode?`<button class="hp-x" onclick="delItin(${i},${j})">&times;</button>`:""}
+              ${adminMode?`<button class="hp-x" onclick="delItin(${i},${oi},${j})">&times;</button>`:""}
             </div>`).join("")}
-          ${adminMode?`<button class="hp-add wide" onclick="addItin(${i})">+ ${ko?"단계 추가":"Add step"}</button>`:""}
+          ${adminMode?`<button class="hp-add wide" onclick="addItin(${i},${oi})">+ ${aKo()?"단계 추가":"Add step"}</button>`:""}
         </div>
         <div class="it-note">${t.itin_note}</div>
 
@@ -3238,9 +3471,9 @@ function openItinerary(pkgId){
             <div><b>${t.meet_title}</b><i>${esc(tx(p.meet.name))}</i></div></div>
           <p class="meet-detail">${esc(tx(p.meet.detail))}</p>
           ${p.meet.map?`<a class="meet-map" href="${esc(p.meet.map)}" target="_blank" rel="noopener">🗺 ${t.meet_map} →</a>`:""}
-          <div class="meet-note">${t.meet_note}</div>
         </div>`:""}
-        <button class="submit" onclick="closeModal();setTimeout(()=>openBooking('${p.id}'),150)">${ko?"이 패키지 예약하기 →":"Book this package →"}</button>
+
+        <button class="submit" onclick="closeModal();setTimeout(()=>openBooking('${p.id}'${cur?`,'${cur.id}'`:""}),150)">${aKo()?"이 패키지 예약하기 →":"Book this package →"}</button>
       </div>
     </div>`;
   if(adminMode)wireItinEdit();
@@ -3261,13 +3494,15 @@ function wireItinEdit(){
     el.addEventListener("keydown",e=>{if(e.key==="Escape")el.blur();});
   });
 }
-function addItin(i){
-  const p=PACKS[i];p.itinerary=p.itinerary||[];
-  p.itinerary.push({t:{[lang]:lang==="ko"?"이후":"Later"},title:{[lang]:lang==="ko"?"새 단계":"New step"},d:{[lang]:lang==="ko"?"설명":"Description"}});
-  savePacks(PACKS);openItinerary(p.id);
+function itinArr(p,oi){ return (oi>=0&&p.options)?p.options[oi].itinerary:(p.itinerary=p.itinerary||[]); }
+function addItin(i,oi){
+  const p=PACKS[i],arr=itinArr(p,+oi);
+  arr.push({t:{[lang]:aKo()?"이후":"Later"},title:{[lang]:aKo()?"새 단계":"New step"},d:{[lang]:aKo()?"설명":"Description"}});
+  savePacks(PACKS);openItinerary(p.id, oi>=0?p.options[oi].id:undefined);
 }
-function delItin(i,j){
-  const p=PACKS[i];p.itinerary.splice(j,1);savePacks(PACKS);openItinerary(p.id);
+function delItin(i,oi,j){
+  const p=PACKS[i];itinArr(p,+oi).splice(j,1);
+  savePacks(PACKS);openItinerary(p.id, oi>=0?p.options[oi].id:undefined);
 }
 
 /* ============ ADMIN: customers & stats ============ */
@@ -3683,6 +3918,11 @@ function openSettings(){
         <div class="field"><label>${t.biz_addr}</label><input id="bz_addr" type="text" value="${esc((STATE.biz||{}).addr||"")}"></div>
         <div class="field"><label>${t.biz_email}</label><input id="bz_email" type="email" value="${esc((STATE.biz||{}).email||"")}"></div>
 
+        <div class="set-label mono">${t.ops_label}</div>
+        <div class="field"><label>${t.ops_buffer}</label>
+          <input id="ops_buffer" type="number" min="0" max="4" step="0.5" value="${(STATE.ops&&STATE.ops.bufferH)!=null?STATE.ops.bufferH:1}"></div>
+        <div class="rw-preview">${t.ops_buffer_note}</div>
+
         <div class="set-label mono">${t.pay_label}</div>
         <div class="field"><label>${t.pay_pct}</label>
           <input id="pay_pct" type="number" min="0" max="100" value="${(STATE.pay&&STATE.pay.depositPct)||30}"></div>
@@ -3802,6 +4042,8 @@ function saveSettings(){
   STATE.media={v1:g("st_v1"),v2:g("st_v2"),v3:g("st_v3")};
   STATE.biz={name:g("bz_name"),owner:g("bz_owner"),regNo:g("bz_reg"),
     mailOrderNo:g("bz_mail"),addr:g("bz_addr"),email:g("bz_email")};
+  const numOps=(id,d)=>{const v=parseFloat(document.getElementById(id).value);return isNaN(v)?d:v;};
+  STATE.ops={bufferH:numOps("ops_buffer",1)};
   const num=(id,d)=>{const v=parseInt(document.getElementById(id).value);return isNaN(v)?d:v;};
   STATE.pay={depositPct:num("pay_pct",30),paypalMe:g("pay_ppme"),bank:g("pay_bank"),
     usdRate:num("pay_rate",1350),eurRate:num("pay_rate_eur",1450),defaultCurrency:g("pay_defcur"),refund:{fullDays:num("ref_full",7),halfDays:num("ref_half",3)}};
@@ -4022,6 +4264,7 @@ async function viewBookings(filter){
       <div class="meta">${esc(x.email)} &middot; ${t.bk_code}: <code>${esc(x.code||"")}</code></div>
       ${x.contact?`<div class="meta ch-row">💬 <b>${esc(x.contact)}</b>
         ${contactBtns(x)}</div>`:""}
+      ${x.opt?`<div class="meta">🅰️ Option ${esc(x.opt)}</div>`:""}
       ${x.area?`<div class="meta">📍 ${esc(areaName(x.area))}</div>`:""}
       ${(()=>{const n=safeNeeds(x.needs);return n.length?`<div class="meta">🎯 ${n.map(esc).join(" · ")}</div>`:"";})()}
       ${x.addons&&x.addons.length?`<div class="meta">+ ${x.addons.map(a=>esc(aKo()&&a.name_ko?a.name_ko:a.name)+" ("+wonFmt(a.price||0)+")").join(", ")}</div>`:""}
@@ -4036,6 +4279,11 @@ async function viewBookings(filter){
         ${x.deposit_status==="paid"
           ? `<button class="bk-del" onclick="markDeposit(${x.id},'unpaid')">${t.dep_unmark}</button>`
           : `<button class="bk-act ok" style="padding:4px 12px;font-size:.74rem" onclick="markDeposit(${x.id},'paid')">${t.dep_mark}</button>`}
+      </div>`:""}
+      ${x.status==="confirmed"?`<div class="meta buf-line">
+        <span>${t.buf_label}</span>
+        <button class="tgl sm${x.no_buffer?"":" on"}" onclick="toggleBuffer(${x.id},${x.no_buffer?0:1})"></button>
+        <i>${x.no_buffer?t.buf_off_note:t.buf_on_note}</i>
       </div>`:""}
       <div class="bk-actions">
         ${x.status==="pending"?`<button class="bk-act ok" onclick="approveBk(${x.id})">${t.bk_approve}</button>
@@ -4087,6 +4335,10 @@ function contactBtns(x){
 function copyMsg(m){
   navigator.clipboard?.writeText(m);
   flashSaved();
+}
+async function toggleBuffer(id,off){
+  try{ await API.post("/api/admin/buffer",{id,off}); viewBookings(); }
+  catch(e){ alert(A().book_fail); }
 }
 async function markDeposit(id,status){
   const t=A();
