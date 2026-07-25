@@ -701,6 +701,12 @@
   .co-txt i{font-style:normal;font-size:.72rem;color:var(--sage);line-height:1.4;display:block;margin-top:2px}
   .pack.feature .co-txt i{color:#9fb0ab}
   .co-arrow{color:var(--sage);font-size:.8rem;flex-shrink:0}
+  .opt-edit-box{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+  .opt-edit-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+  .opt-edit-fields{display:flex;flex-direction:column;gap:6px;flex:1}
+  .opt-edit-name,.opt-edit-blurb{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 11px;font:inherit;font-size:.85rem;background:#fff}
+  .opt-edit-name{font-weight:700}
+  .opt-edit-blurb{font-size:.8rem;color:#4a5654}
   .co-row:hover .co-arrow{color:var(--clay)}
 
   /* ===== collapsible add-ons on the card ===== */
@@ -1273,9 +1279,9 @@ const I18N={
     admin_title:"Admin login",admin_sub:"Enter the password to edit packages and view bookings.",admin_pw:"Password",admin_enter:"Enter",admin_wrong:"Wrong password.",
     ab_badge:"Admin mode",ab_edit:"Edit packages & prices",ab_done:"Save changes",ab_view:"View bookings",ab_exit:"Exit admin",ab_hint:"Click any package title, text or price to edit.",ab_zh:"繁中",ab_editing:"Editing",ab_switch:"switch language above to edit the other version",
     bk_title:"Bookings",bk_none:"No bookings yet.",bk_del:"delete",bk_clear:"Clear all",
-    ab_slots:"Availability",f_time:"Time slot",slot_pick:"Pick a date first",slot_none:"This date isn't available",slot_choose:"Choose a time",slot_full:"Fully booked for this date — please try another day.",slot_taken:"That time was just taken — please pick another.",
+    ab_slots:"Availability",f_time:"Time slot",slot_pick:"Pick a date first",slot_none:"This date isn't available",slot_closed_month:"Bookings aren't open for this month yet — please pick an earlier date.",slot_choose:"Choose a time",slot_full:"Fully booked for this date — please try another day.",slot_taken:"That time was just taken — please pick another.",
     av_title:"Availability",av_sub:"Every date is open by default. Just close the days you're off, and 1-hour slots fill your business hours automatically. Guests only see times that fit their package length.",
-    av_bizhours:"Default business hours",av_save:"Save",av_close:"Done",av_booked:"booked",
+    av_bizhours:"Default business hours",av_save:"Save",av_close:"Done",av_booked:"booked",av_window:"Bookings open through",av_window_hint:"Guests can only book dates up to the end of this month. Leave blank to open every month.",av_window_none:"— open indefinitely —",av_window_note:"Now taking bookings through {m}.",
     av_closeday:"Close a day off",av_closebtn:"Close this date",av_closedtag:"closed",av_reopen:"reopen",av_noclosed:"No days closed — every date is open.",
     av_special:"Special hours for a date",av_specialhint:"(optional — block specific hours or change hours for one date)",av_specialbtn:"Add date",
     av_prompt:"Custom hours for {d}? Enter as open-close (e.g. 12-20):"
@@ -1364,9 +1370,9 @@ const I18N={
     admin_title:"관리자 로그인",admin_sub:"패키지 수정 및 예약 확인을 위해 비밀번호를 입력하세요.",admin_pw:"비밀번호",admin_enter:"입력",admin_wrong:"비밀번호가 틀렸어요.",
     ab_badge:"관리자 모드",ab_edit:"패키지·가격 수정",ab_done:"변경 저장",ab_view:"예약 보기",ab_exit:"관리자 종료",ab_hint:"패키지 제목 &middot; 내용 &middot; 가격을 클릭해 수정하세요.",ab_zh:"繁中",ab_editing:"수정 중:",ab_switch:"다른 언어는 위 EN/KO 버튼으로 전환 후 수정",
     bk_title:"예약 목록",bk_none:"아직 예약이 없어요.",bk_del:"삭제",bk_clear:"전체 삭제",
-    ab_slots:"예약 가능 관리",f_time:"시간 슬롯",slot_pick:"먼저 날짜를 선택하세요",slot_none:"이 날짜는 예약할 수 없어요",slot_choose:"시간을 선택하세요",slot_full:"이 날짜는 예약이 마감됐어요 — 다른 날짜를 선택해주세요.",slot_taken:"방금 그 시간이 마감됐어요 — 다른 시간을 골라주세요.",
+    ab_slots:"예약 가능 관리",f_time:"시간 슬롯",slot_pick:"먼저 날짜를 선택하세요",slot_none:"이 날짜는 예약할 수 없어요",slot_closed_month:"아직 이 달은 예약을 받고 있지 않아요 — 더 이른 날짜를 선택해주세요.",slot_choose:"시간을 선택하세요",slot_full:"이 날짜는 예약이 마감됐어요 — 다른 날짜를 선택해주세요.",slot_taken:"방금 그 시간이 마감됐어요 — 다른 시간을 골라주세요.",
     av_title:"예약 가능 관리",av_sub:"모든 날짜가 기본으로 열려 있어요. 쉬는 날만 닫으면 되고, 영업시간에 1시간 슬롯이 자동으로 깔립니다. 고객에겐 패키지 소요시간에 맞는 시작 시간만 보여요.",
-    av_bizhours:"기본 영업시간",av_save:"저장",av_close:"완료",av_booked:"예약됨",
+    av_bizhours:"기본 영업시간",av_save:"저장",av_close:"완료",av_booked:"예약됨",av_window:"예약 오픈 마지막 월",av_window_hint:"이 달 말까지의 날짜만 예약할 수 있어요. 비워두면 모든 달이 열려요.",av_window_none:"— 제한 없음 (전체 오픈) —",av_window_note:"현재 {m}까지 예약을 받고 있어요.",
     av_closeday:"쉬는 날 닫기",av_closebtn:"이 날짜 닫기",av_closedtag:"휴무",av_reopen:"다시 열기",av_noclosed:"닫힌 날이 없어요 — 모든 날짜가 열려 있어요.",
     av_special:"특정 날짜 시간 조정",av_specialhint:"(선택 — 특정 시간만 끄거나 그 날 영업시간만 다르게)",av_specialbtn:"날짜 추가",
     av_prompt:"{d} 날짜만 영업시간을 다르게 할까요? 시작-종료로 입력 (예: 12-20):"
@@ -1404,7 +1410,7 @@ I18N.zhHant = Object.assign({}, I18N.en, {
   kst_note:"所有時間皆為韓國標準時間（KST, GMT+9）。",
   trip_tip:"小提醒：安排在行程第 2～3 天最理想 — 才有時間試用我們挑的產品。",
   book_submit:"送出申請",book_ok:"已收到你的申請，我會盡快聯絡你！",book_err:"請填寫姓名、電子郵件與日期。",book_sending:"傳送中…",book_fail:"發生錯誤，請再試一次。",
-  slot_pick:"請先選擇日期",slot_none:"此日期無法預約",slot_choose:"請選擇時段",slot_full:"此日期已額滿 — 請選擇其他日期。",slot_taken:"該時段剛被預約 — 請選擇其他時段。",slot_loading:"載入時段中…",slot_err:"無法載入時段。",
+  slot_pick:"請先選擇日期",slot_none:"此日期無法預約",slot_closed_month:"此月份尚未開放預約 — 請選擇較早的日期。",slot_choose:"請選擇時段",slot_full:"此日期已額滿 — 請選擇其他日期。",slot_taken:"該時段剛被預約 — 請選擇其他時段。",slot_loading:"載入時段中…",slot_err:"無法載入時段。",
   st_pending:"等待確認",st_confirmed:"已確認",st_declined:"未能安排",st_cancelled:"已取消",
   queue_none:"目前排在第一位",queue_ahead:"前面有 {n} 位申請中",queue_note:"同一時段可能有多位客人申請，我會確認其中一位並通知其他人。",
   code_title:"你的預約代碼",code_sub:"請保存 — 查詢、變更或取消預約時需要用到。",code_copied:"已複製",
@@ -1470,7 +1476,8 @@ I18N.zhHans = Object.assign({}, I18N.zhHant, {
   itin_sub:"当天的流程 — 开始时间由你预约时选择。",itin_note:"⏱ <b>开始时间可自由选择</b> — 从当天有空的时段中挑选，早上、下午或傍晚都可以。以下仅显示顺序与大致节奏。",
   need_other:"其他（自行填写）",need_other_ph:"请告诉我你想了解什么…",f_people_err:"此方案最多 {n} 位。",
   host_more:"更多介绍",host_bio:"关于我",
-  priv_link:"隐私政策",terms_link:"取消规定",float_label:"联系我"
+  priv_link:"隐私政策",terms_link:"取消规定",float_label:"联系我",
+  slot_closed_month:"此月份尚未开放预约 — 请选择较早的日期。"
 });
 
 
@@ -1659,7 +1666,7 @@ const API = {
 function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
 
 let adminToken = sessionStorage.getItem("zv_token") || "";
-const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, zh:false,
+const STATE = { packages:null, hours:{open:10,close:21}, dayhours:{}, closed:[], blocked:{}, bookOpenMonth:"", zh:false,
   feats:null, host:null, contact:null, faq:null, media:null, reviews:[], privacy:null, terms:null, igPosts:[], copy:null, nav:null, langs:null, pay:null, msgs:null, msgsDefault:null, biz:null, reward:null, areas:null, ops:null, loaded:false };
 
 async function loadConfig(){
@@ -1670,6 +1677,7 @@ async function loadConfig(){
     STATE.dayhours = c.dayhours || {};
     STATE.closed = c.closed || [];
     STATE.blocked = c.blocked || {};
+    STATE.bookOpenMonth = c.bookOpenMonth || "";
     STATE.zh = !!c.zh;
     STATE.feats = c.feats || null;
     STATE.host = c.host || null;
@@ -1720,7 +1728,7 @@ async function saveAll(){
   try{
     await API.post("/api/admin/save",{
       packages:PACKS, hours:STATE.hours, dayhours:STATE.dayhours,
-      closed:STATE.closed, blocked:STATE.blocked, zh:STATE.zh,
+      closed:STATE.closed, blocked:STATE.blocked, bookOpenMonth:STATE.bookOpenMonth, zh:STATE.zh,
       feats:loadFeats(), host:STATE.host||DEFAULT_HOST, contact:STATE.contact||DEFAULT_CONTACT,
       faq:loadFaq(), media:STATE.media||DEFAULT_MEDIA, privacy:STATE.privacy, terms:STATE.terms, igPosts:STATE.igPosts||[], copy:loadCopy(), nav:loadNav(), langs:loadLangs(), pay:STATE.pay, msgs:STATE.msgs, biz:STATE.biz, reward:STATE.reward, areas:loadAreas(), ops:STATE.ops
     });
@@ -1734,9 +1742,23 @@ function loadDayHours(){ return STATE.dayhours; }
 function saveDayHours(o){ STATE.dayhours=o; saveAll(); }
 function loadClosedDates(){ return STATE.closed; }
 function saveClosedDates(a){ STATE.closed=a; saveAll(); }
-function isDateOpen(date){ return !STATE.closed.includes(date); }
+function isDateOpen(date){ return !STATE.closed.includes(date) && withinBookWindow(date); }
 function loadBlocked(){ return STATE.blocked; }
 function saveBlocked(b){ STATE.blocked=b; saveAll(); }
+/* ---- booking window: only open dates up to the last open month ---- */
+function bookOpenMonth(){ return STATE.bookOpenMonth || ""; }
+function saveBookOpenMonth(m){ STATE.bookOpenMonth=m||""; saveAll(); }
+/* last day (YYYY-MM-DD) guests may book, or "" if no limit set */
+function bookMaxDate(){
+  const m=bookOpenMonth(); if(!m) return "";
+  const [y,mo]=m.split("-").map(Number); if(!y||!mo) return "";
+  const last=new Date(y,mo,0).getDate();               // day 0 of next month = last day of this month
+  return `${y}-${pad(mo)}-${pad(last)}`;
+}
+function withinBookWindow(date){
+  const mx=bookMaxDate(); if(!mx) return true;
+  return date<=mx;
+}
 /* ---- which languages are offered to visitors ---- */
 const ALL_LANGS=[{id:"en",label:"English",short:"EN"},{id:"ko",label:"한국어",short:"KO"},
                  {id:"zhHant",label:"繁體中文",short:"繁中"},{id:"zhHans",label:"简体中文",short:"简中"}];
@@ -2540,6 +2562,19 @@ function renderPacks(){
             <span class="co-arrow">→</span>
           </button>`).join("")}
       </div>`:""}
+      ${editMode&&(p.options||[]).length?`<div class="opt-edit-box">
+        <div class="co-label mono">${lang==="ko"?"선택지 (Option A / B)":"Options (A / B)"}</div>
+        ${p.options.map((o,oi)=>`
+          <div class="opt-edit-row">
+            <span class="co-badge">${o.id}</span>
+            <div class="opt-edit-fields">
+              <input class="opt-edit-name" type="text" value="${esc(tx(o.name)||"")}"
+                placeholder="${lang==="ko"?"옵션 이름":"Option name"}" onchange="setOptText(${i},${oi},'name',this.value)">
+              <input class="opt-edit-blurb" type="text" value="${esc(tx(o.blurb)||"")}"
+                placeholder="${lang==="ko"?"한 줄 설명":"One-line description"}" onchange="setOptText(${i},${oi},'blurb',this.value)">
+            </div>
+          </div>`).join("")}
+      </div>`:""}
       ${(p.addons&&p.addons.length)||editMode?`<div class="addons${!editMode?" collapsible":""}" id="ads_${i}">
         ${!editMode?`<button class="addons-toggle" onclick="event.stopPropagation();document.getElementById('ads_${i}').classList.toggle('open')">
             <span class="addons-label mono">${I18N[lang].ao_title}</span>
@@ -2624,6 +2659,12 @@ function renderPacks(){
   }
 }
 function setPackNum(idx,key,val){const n=parseInt(val);if(!isNaN(n)){PACKS[idx][key]=n;savePacks(PACKS);}}
+function setOptText(pi,oi,key,val){
+  const o=PACKS[pi].options&&PACKS[pi].options[oi];if(!o)return;
+  if(!o[key]||typeof o[key]!=="object")o[key]={};
+  o[key][lang]=val.trim();
+  savePacks(PACKS);
+}
 function addItem(i){
   PACKS[i].items.en.push("New item");PACKS[i].items.ko.push("새 항목");
   savePacks(PACKS);renderPacks();
@@ -3045,7 +3086,7 @@ function openBooking(preselect,preOpt){
         <div class="field"><label>${t.f_pkg}</label><select id="bk_pkg" onchange="refreshSlots();refreshOptions();refreshAddons();updatePriceSum()">${opts}</select></div>
         <div class="field" id="bk_opt_wrap"><label>${t.f_option}</label><div id="bk_options"></div></div>
         <div class="field" id="bk_addons_wrap"><label>${t.f_addons}</label><div id="bk_addons"></div></div>
-        <div class="field"><label>${t.f_date}</label><input id="bk_date" type="date" min="${todayStr()}" onchange="refreshSlots()"></div>
+        <div class="field"><label>${t.f_date}</label><input id="bk_date" type="date" min="${todayStr()}"${bookMaxDate()?` max="${bookMaxDate()}"`:""} onchange="refreshSlots()"></div>
         <div class="field"><label>${t.f_time} <span id="bk_durhint" class="dur-hint"></span></label><div id="bk_slots" class="slot-wrap"><span class="slot-hint">${t.slot_pick}</span></div></div>
         <div class="field"><label>${t.f_people} <span class="dur-hint" id="bk_maxhint"></span></label>
           <input id="bk_people" type="number" min="1" value="1" onchange="clampPeople()"></div>
@@ -3232,6 +3273,7 @@ async function refreshSlots(){
   clampPeople();
   selectedSlot="";
   if(!date){wrap.innerHTML=`<span class="slot-hint">${t.slot_pick}</span>`;return;}
+  if(!withinBookWindow(date)){wrap.innerHTML=`<span class="slot-hint">${t.slot_closed_month}</span>`;return;}
   wrap.innerHTML=`<span class="slot-hint">${t.slot_loading}</span>`;
   try{
     const r=await API.get(`/api/slots?date=${encodeURIComponent(date)}&pkg=${encodeURIComponent(pk.id)}`);
@@ -3425,7 +3467,7 @@ function openChange(code){
   const t=I18N[lang];
   document.getElementById("lk_result").innerHTML=`
     <div class="lk-card">
-      <div class="field"><label>${t.my_chg_date}</label><input id="cg_date" type="date" min="${todayStr()}"></div>
+      <div class="field"><label>${t.my_chg_date}</label><input id="cg_date" type="date" min="${todayStr()}"${bookMaxDate()?` max="${bookMaxDate()}"`:""}></div>
       <div class="field"><label>${t.my_chg_time}</label><input id="cg_time" type="time"></div>
       <div class="field"><label>${t.my_chg_msg}</label><textarea id="cg_msg" rows="2"></textarea></div>
       <button class="submit" onclick="sendChange('${code}')">${t.my_chg_send}</button>
@@ -4883,6 +4925,16 @@ async function manageAvail(){
             <button onclick="saveBizHours()">${t.av_save}</button>
           </div>
         </div>
+        <div class="av-hours-box">
+          <span class="mono">${t.av_window}</span>
+          <div class="av-hint2" style="margin:4px 0 8px">${t.av_window_hint}</div>
+          <div class="av-hours-row">
+            <input id="av_window" type="month" min="${todayStr().slice(0,7)}" value="${bookOpenMonth()}">
+            <button onclick="saveBookWindow()">${t.av_save}</button>
+            <button class="bk-del" onclick="clearBookWindow()">${t.av_window_none}</button>
+          </div>
+          ${bookOpenMonth()?`<div class="av-hint2" style="margin-top:8px;color:var(--clay)">${t.av_window_note.replace("{m}",bookOpenMonth())}</div>`:""}
+        </div>
         <div class="av-section-label mono">${t.av_closeday}</div>
         <div class="av-add-row">
           <input id="av_date" type="date">
@@ -4903,6 +4955,13 @@ function saveBizHours(){
   const o=parseInt(document.getElementById("biz_open").value),c=parseInt(document.getElementById("biz_close").value);
   if(isNaN(o)||isNaN(c)||c<=o)return;
   saveHours({open:o,close:c});manageAvail();
+}
+function saveBookWindow(){
+  const m=document.getElementById("av_window").value||"";
+  saveBookOpenMonth(m);manageAvail();
+}
+function clearBookWindow(){
+  saveBookOpenMonth("");manageAvail();
 }
 function closeThisDate(){
   const d=document.getElementById("av_date").value;if(!d)return;
