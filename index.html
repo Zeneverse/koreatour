@@ -216,6 +216,43 @@
 
   /* slot picker in booking form */
   .slot-wrap{display:flex;flex-wrap:wrap;gap:8px}
+  /* ===== inline booking calendar ===== */
+  .bk-cal{border:1px solid var(--line);border-radius:14px;padding:12px 12px 10px;background:#fff}
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .cal-title{font-weight:700;font-size:.95rem;color:var(--ink)}
+  .cal-nav{width:32px;height:32px;border:1px solid var(--line);background:#fff;border-radius:9px;font-size:1.1rem;line-height:1;cursor:pointer;color:var(--ink);transition:.15s}
+  .cal-nav:hover:not(:disabled){border-color:var(--clay);color:var(--clay)}
+  .cal-nav:disabled{opacity:.3;cursor:default}
+  .cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
+  .cal-dow span{text-align:center;font-size:.68rem;font-weight:600;color:var(--sage);padding:2px 0}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+  .cal-day{position:relative;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:9px;font-size:.86rem;border:1px solid transparent;background:transparent}
+  .cal-day.empty{visibility:hidden}
+  .cal-day.off{color:#c7ccc9}
+  button.cal-day{cursor:pointer;transition:.12s}
+  .cal-num{font-weight:600;line-height:1;color:var(--ink)}
+  .cal-day.loading .cal-num{color:#b9bfbc}
+  .cal-n{font-size:.6rem;font-weight:700;margin-top:2px;line-height:1}
+  .cal-x{font-size:.9rem;line-height:.5;margin-top:2px;color:#c96f52}
+  /* availability colours */
+  .cal-day.avail.hi{background:#e7f1ea;border-color:#cfe4d6}
+  .cal-day.avail.hi .cal-n{color:#3f7a54}
+  .cal-day.avail.mid{background:#fbf3e4;border-color:#f0e2c6}
+  .cal-day.avail.mid .cal-n{color:#a9812f}
+  .cal-day.avail.low{background:#f9e9e2;border-color:#f0d3c6}
+  .cal-day.avail.low .cal-n{color:#c96f52}
+  .cal-day.full{background:var(--mist);color:#a7ada9}
+  .cal-day.full .cal-num{color:#a7ada9;text-decoration:line-through}
+  button.cal-day:hover{border-color:var(--clay)}
+  .cal-day.on{background:var(--clay)!important;border-color:var(--clay)!important}
+  .cal-day.on .cal-num,.cal-day.on .cal-n{color:#fff!important;text-decoration:none}
+  .cal-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;padding-top:9px;border-top:1px solid var(--line);font-size:.68rem;color:var(--sage)}
+  .cal-legend .lg{display:inline-flex;align-items:center;gap:4px}
+  .cal-legend .lg::before{content:"";width:11px;height:11px;border-radius:3px;display:inline-block}
+  .lg-hi::before{background:#cfe4d6}
+  .lg-mid::before{background:#f0e2c6}
+  .lg-low::before{background:#f0d3c6}
+  .lg-full::before{background:var(--mist)}
   .slot-hint{font-size:.85rem;color:var(--sage);padding:4px 0}
   .slot-btn{border:1px solid var(--line);background:#fff;border-radius:40px;padding:8px 16px;font-family:'Space Mono',monospace;font-size:.82rem;cursor:pointer;transition:.15s;color:var(--ink)}
   .slot-btn:hover{border-color:var(--clay)}
@@ -3083,10 +3120,13 @@ function openBooking(preselect,preOpt){
         <div class="sub">${t.book_sub}</div>
         <div class="field"><label>${t.f_name}</label><input id="bk_name" type="text"></div>
         <div class="field"><label>${t.f_email}</label><input id="bk_email" type="email"></div>
-        <div class="field"><label>${t.f_pkg}</label><select id="bk_pkg" onchange="refreshSlots();refreshOptions();refreshAddons();updatePriceSum()">${opts}</select></div>
+        <div class="field"><label>${t.f_pkg}</label><select id="bk_pkg" onchange="refreshSlots();refreshOptions();refreshAddons();updatePriceSum();renderBookCal()">${opts}</select></div>
         <div class="field" id="bk_opt_wrap"><label>${t.f_option}</label><div id="bk_options"></div></div>
         <div class="field" id="bk_addons_wrap"><label>${t.f_addons}</label><div id="bk_addons"></div></div>
-        <div class="field"><label>${t.f_date}</label><input id="bk_date" type="date" min="${todayStr()}"${bookMaxDate()?` max="${bookMaxDate()}"`:""} onchange="refreshSlots()"></div>
+        <div class="field"><label>${t.f_date}</label>
+          <input id="bk_date" type="hidden">
+          <div id="bk_cal" class="bk-cal"></div>
+        </div>
         <div class="field"><label>${t.f_time} <span id="bk_durhint" class="dur-hint"></span></label><div id="bk_slots" class="slot-wrap"><span class="slot-hint">${t.slot_pick}</span></div></div>
         <div class="field"><label>${t.f_people} <span class="dur-hint" id="bk_maxhint"></span></label>
           <input id="bk_people" type="number" min="1" value="1" onchange="clampPeople()"></div>
@@ -3135,6 +3175,7 @@ function openBooking(preselect,preOpt){
   clampPeople();
   updatePriceSum();
   pickedChannel="";pickedArea="";
+  initBookCal();
 }
 const CH_INFO={
   whatsapp:{ph:{en:"+886 912 345 678",ko:"+886 912 345 678"},hint:{en:"Include your country code",ko:"국가번호를 포함해주세요"},type:"tel"},
@@ -3266,6 +3307,139 @@ function selectedAddons(){
   return out;
 }
 let selectedSlot="";
+/* ===== inline booking calendar with per-day availability ===== */
+let CAL_YM=null;                 // {y, m} currently shown (m is 1-12)
+const CAL_CACHE={};              // "pkgId|YYYY-MM-DD" -> {count, full, closed}
+function ymKey(y,m){return `${y}-${pad(m)}`;}
+function firstOpenYM(){const d=new Date();return {y:d.getFullYear(),m:d.getMonth()+1};}
+function lastOpenYM(){
+  const mx=bookMaxDate();
+  if(mx){const [y,m]=mx.split("-").map(Number);return {y,m};}
+  const f=firstOpenYM();                 // no limit set: allow up to 12 months out
+  let m=f.m+11,y=f.y;while(m>12){m-=12;y++;}return {y,m};
+}
+function ymLE(a,b){return a.y<b.y||(a.y===b.y&&a.m<=b.m);}
+function initBookCal(){
+  CAL_YM=firstOpenYM();
+  document.getElementById("bk_date").value="";
+  renderBookCal();
+}
+function calShiftMonth(dir){
+  let {y,m}=CAL_YM;m+=dir;if(m<1){m=12;y--;}if(m>12){m=1;y++;}
+  const lo=firstOpenYM(),hi=lastOpenYM();
+  const cand={y,m};
+  if(!ymLE(lo,cand)||!ymLE(cand,hi))return;   // stay within window
+  CAL_YM={y,m};renderBookCal();
+}
+function pickCalDate(dateStr){
+  const inp=document.getElementById("bk_date");
+  inp.value=dateStr;
+  document.querySelectorAll("#bk_cal .cal-day.on").forEach(el=>el.classList.remove("on"));
+  const cell=document.querySelector(`#bk_cal .cal-day[data-d="${dateStr}"]`);
+  if(cell)cell.classList.add("on");
+  refreshSlots();
+  // bring the time slots into view on mobile
+  setTimeout(()=>document.getElementById("bk_slots")?.scrollIntoView({behavior:"smooth",block:"nearest"}),80);
+}
+function renderBookCal(){
+  const wrap=document.getElementById("bk_cal");if(!wrap||!CAL_YM)return;
+  const t=I18N[lang],pk=currentPack();
+  const {y,m}=CAL_YM;
+  const lo=firstOpenYM(),hi=lastOpenYM();
+  const prevYM=(m-1<1)?{y:y-1,m:12}:{y,m:m-1};
+  const nextYM=(m+1>12)?{y:y+1,m:1}:{y,m:m+1};
+  const showPrev=ymLE(lo,prevYM)&&ymLE(prevYM,hi);
+  const showNext=ymLE(lo,nextYM)&&ymLE(nextYM,hi);
+  const monthName=new Date(y,m-1,1).toLocaleDateString(lang==="ko"?"ko-KR":"en-US",{month:"long",year:"numeric"});
+  const dow=(lang==="ko")?["일","월","화","수","목","금","토"]:["Su","Mo","Tu","We","Th","Fr","Sa"];
+  const first=new Date(y,m-1,1).getDay();
+  const days=new Date(y,m,0).getDate();
+  const today=todayStr(),mx=bookMaxDate();
+  let cells="";
+  for(let i=0;i<first;i++)cells+=`<div class="cal-day empty"></div>`;
+  for(let d=1;d<=days;d++){
+    const ds=`${y}-${pad(m)}-${pad(d)}`;
+    const past=ds<today;
+    const overWindow=mx&&ds>mx;
+    const closedDay=STATE.closed.includes(ds);
+    const disabled=past||overWindow||closedDay;
+    const sel=document.getElementById("bk_date")?.value===ds;
+    // availability comes in asynchronously; show placeholder now
+    const cacheKey=`${pk.id}|${ds}`;
+    const info=CAL_CACHE[cacheKey];
+    let cls="cal-day",badge="";
+    if(disabled){cls+=" off";}
+    else if(info){
+      if(info.full||info.count===0){cls+=" full";badge=`<i class="cal-x">·</i>`;}
+      else{const lvl=info.count>=4?"hi":info.count>=2?"mid":"low";cls+=` avail ${lvl}`;badge=`<i class="cal-n">${info.count}</i>`;}
+    }else{cls+=" loading";}
+    if(sel)cls+=" on";
+    cells+=disabled
+      ? `<div class="${cls}">${d}</div>`
+      : `<button type="button" class="${cls}" data-d="${ds}" onclick="pickCalDate('${ds}')"><span class="cal-num">${d}</span>${badge}</button>`;
+  }
+  wrap.innerHTML=`
+    <div class="cal-head">
+      <button type="button" class="cal-nav" ${showPrev?"":"disabled"} onclick="calShiftMonth(-1)">‹</button>
+      <span class="cal-title">${monthName}</span>
+      <button type="button" class="cal-nav" ${showNext?"":"disabled"} onclick="calShiftMonth(1)">›</button>
+    </div>
+    <div class="cal-dow">${dow.map(x=>`<span>${x}</span>`).join("")}</div>
+    <div class="cal-grid">${cells}</div>
+    <div class="cal-legend">
+      <span class="lg lg-hi">${lang==="ko"?"여유":"Open"}</span>
+      <span class="lg lg-mid">${lang==="ko"?"보통":"Filling"}</span>
+      <span class="lg lg-low">${lang==="ko"?"마감 임박":"Few left"}</span>
+      <span class="lg lg-full">${lang==="ko"?"마감":"Full"}</span>
+    </div>`;
+  fetchMonthAvailability(y,m,pk);
+}
+/* pull remaining-slot counts for the visible month, one light request per open day */
+async function fetchMonthAvailability(y,m,pk){
+  const today=todayStr(),mx=bookMaxDate();
+  const days=new Date(y,m,0).getDate();
+  const targets=[];
+  for(let d=1;d<=days;d++){
+    const ds=`${y}-${pad(m)}-${pad(d)}`;
+    if(ds<today)continue;
+    if(mx&&ds>mx)continue;
+    if(STATE.closed.includes(ds))continue;
+    if(CAL_CACHE[`${pk.id}|${ds}`]!==undefined)continue;
+    targets.push(ds);
+  }
+  if(!targets.length)return;
+  // fetch in small batches so we never hammer the worker
+  const BATCH=6;
+  for(let i=0;i<targets.length;i+=BATCH){
+    const chunk=targets.slice(i,i+BATCH);
+    await Promise.all(chunk.map(async ds=>{
+      try{
+        const r=await API.get(`/api/slots?date=${encodeURIComponent(ds)}&pkg=${encodeURIComponent(pk.id)}`);
+        const count=(r.slots||[]).length;
+        CAL_CACHE[`${pk.id}|${ds}`]={count,full:r.reason==="full"||count===0};
+      }catch(e){
+        CAL_CACHE[`${pk.id}|${ds}`]={count:0,full:false,err:true};
+      }
+    }));
+    // repaint only if still on the same month
+    if(CAL_YM&&CAL_YM.y===y&&CAL_YM.m===m)paintCalCounts(y,m,pk);
+  }
+}
+/* update day cells in place without rebuilding the whole calendar */
+function paintCalCounts(y,m,pk){
+  const days=new Date(y,m,0).getDate();
+  for(let d=1;d<=days;d++){
+    const ds=`${y}-${pad(m)}-${pad(d)}`;
+    const cell=document.querySelector(`#bk_cal .cal-day[data-d="${ds}"]`);
+    if(!cell)continue;
+    const info=CAL_CACHE[`${pk.id}|${ds}`];if(!info)continue;
+    cell.classList.remove("loading","avail","full","hi","mid","low");
+    let badge="";
+    if(info.full||info.count===0){cell.classList.add("full");badge=`<i class="cal-x">·</i>`;}
+    else{const lvl=info.count>=4?"hi":info.count>=2?"mid":"low";cell.classList.add("avail",lvl);badge=`<i class="cal-n">${info.count}</i>`;}
+    cell.innerHTML=`<span class="cal-num">${d}</span>${badge}`;
+  }
+}
 async function refreshSlots(){
   const t=I18N[lang],date=document.getElementById("bk_date").value,wrap=document.getElementById("bk_slots");
   const pk=currentPack();
@@ -3334,6 +3508,7 @@ async function submitBooking(){
       note:document.getElementById("bk_note").value.trim(),
       addons:selectedAddons()
     });
+    delete CAL_CACHE[`${pk.id}|${date}`];   // that day's count just changed
     showCode(r.code,r.queueAhead||0,pickedChannel,r.total,r.deposit);
     return;
   }catch(e){
