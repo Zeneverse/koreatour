@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zeneverse — Korea, past &amp; present</title>
+<meta name="description" content="Curated private tours of Korea, guided in English. Beauty today — history and more, coming soon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&family=Space+Mono&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#232733; --paper:#f4f0ec; --paper-2:#eae3dc; --clay:#c98a72;
+    --sage:#9a8f8a; --mist:#e3ddd8; --line:#d8cfc7; --gold:#c2a06a;
+    --blush:#e6c3bd; --plum:#5a4d52;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:'Instrument Sans','Noto Sans KR',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body.lang-ko{font-family:'Noto Sans KR','Instrument Sans',sans-serif}
+  .mono{font-family:'Space Mono',monospace;letter-spacing:.04em}
+  .wrap{width:min(1180px,92vw);margin:0 auto}
+
+  /* ===== NAV ===== */
+  nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+    padding:20px clamp(20px,5vw,60px);transition:background .3s,color .3s;color:#fdfbf7}
+  nav .logo{font-family:'Fraunces',serif;font-weight:600;font-size:1.35rem;letter-spacing:-.01em;color:#fdfbf7;text-shadow:0 1px 12px rgba(0,0,0,.4);text-decoration:none}
+  nav .nav-right{display:flex;align-items:center;gap:26px}
+  nav .nav-links{display:flex;gap:24px}
+  nav .nav-links a{color:#fdfbf7;text-decoration:none;font-size:.96rem;cursor:pointer;opacity:.92;text-shadow:0 1px 10px rgba(0,0,0,.35)}
+  nav .nav-links a:hover{opacity:1}
+  .lang-toggle{position:relative}
+  .lang-cur{cursor:pointer;color:#fdfbf7;font-size:.9rem;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);padding:7px 13px;border-radius:30px;border:1px solid rgba(255,255,255,.3)}
+  .lang-menu{position:absolute;top:120%;right:0;background:#fff;border-radius:14px;box-shadow:0 20px 50px -12px rgba(0,0,0,.3);padding:8px;min-width:150px;display:none}
+  .lang-menu.open{display:block}
+  .lang-menu a{display:block;padding:10px 14px;border-radius:9px;color:var(--ink);text-decoration:none;font-size:.92rem;cursor:pointer}
+  .lang-menu a:hover{background:var(--paper-2)}
+  @media(max-width:720px){nav .nav-links{display:none}}
+
+  /* ===== REVEAL HERO ===== */
+  .reveal-hero{position:relative;width:100%;height:100vh;height:100svh;min-height:600px;overflow:hidden;background:#0d0d0f;cursor:crosshair;isolation:isolate}
+  .reveal-hero .layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+  .reveal-hero .front{z-index:1}
+  .reveal-hero::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(180deg,rgba(12,20,20,.30) 0%,rgba(12,20,20,0) 26%,rgba(12,20,20,0) 42%,rgba(12,20,20,.5) 80%,rgba(12,20,20,.72) 100%),
+               linear-gradient(90deg,rgba(12,20,20,.32) 0%,rgba(12,20,20,0) 48%)}
+  .hero-copy{position:absolute;left:clamp(20px,5vw,72px);bottom:clamp(90px,15vh,150px);z-index:3;max-width:640px;color:#fff;pointer-events:none}
+  .hero-copy .eyebrow{font-size:.72rem;letter-spacing:.28em;font-weight:600;color:#f3d9c9;margin-bottom:20px;display:flex;align-items:center;gap:12px;text-shadow:0 1px 10px rgba(0,0,0,.4)}
+  .hero-copy .eyebrow::before{content:"";width:34px;height:1px;background:#f3d9c9}
+  .hero-copy h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(2.5rem,6vw,5rem);line-height:1.02;letter-spacing:-.02em;color:#fdfbf7;text-shadow:0 2px 30px rgba(0,0,0,.45);margin-bottom:20px}
+  body.lang-ko .hero-copy h1{font-family:'Noto Sans KR',sans-serif;font-weight:600;letter-spacing:-.03em}
+  .hero-copy h1 em{font-style:italic;color:#f0b79c}
+  body.lang-ko .hero-copy h1 em{font-style:normal}
+  .hero-copy .lede{font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.5;color:#eef0ec;text-shadow:0 1px 16px rgba(0,0,0,.5);max-width:44ch}
+  .hero-hint{position:absolute;top:50%;right:clamp(20px,5vw,72px);transform:translateY(-50%);z-index:3;
+    font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.62);pointer-events:none;
+    writing-mode:vertical-rl;animation:pulse 2.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.3}50%{opacity:.85}}
+  .hero-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;color:#fdfbf7;opacity:.8;pointer-events:none}
+  .hero-cue .chev{width:20px;height:20px;border-right:2px solid #fdfbf7;border-bottom:2px solid #fdfbf7;transform:rotate(45deg);animation:cueBounce 1.8s ease-in-out infinite}
+  @keyframes cueBounce{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.5}50%{transform:rotate(45deg) translate(3px,3px);opacity:1}}
+
+  @media (hover:none){
+    .reveal-hero{cursor:default}
+    .reveal-hero .front{animation:sweep 7s ease-in-out infinite}
+    .hero-hint{display:none}
+  }
+  @keyframes sweep{
+    0%{-webkit-mask-image:radial-gradient(circle 150px at 18% 45%,transparent 0,transparent 100px,#000 150px);mask-image:radial-gradient(circle 150px at 18% 45%,transparent 0,transparent 100px,#000 150px)}
+    50%{-webkit-mask-image:radial-gradient(circle 150px at 82% 55%,transparent 0,transparent 100px,#000 150px);mask-image:radial-gradient(circle 150px at 82% 55%,transparent 0,transparent 100px,#000 150px)}
+    100%{-webkit-mask-image:radial-gradient(circle 150px at 18% 45%,transparent 0,transparent 100px,#000 150px);mask-image:radial-gradient(circle 150px at 18% 45%,transparent 0,transparent 100px,#000 150px)}
+  }
+  @media (prefers-reduced-motion:reduce){.hero-hint,.reveal-hero .front,.hero-cue .chev{animation:none}}
+
+  /* ===== TOURS ===== */
+  .tours{position:relative;z-index:2;background:var(--paper);border-radius:26px 26px 0 0;margin-top:-26px;padding:clamp(60px,9vh,110px) 0 clamp(70px,10vh,120px);box-shadow:0 -30px 80px -30px rgba(12,20,20,.4)}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto clamp(40px,6vh,64px)}
+  .sec-head .eyebrow{justify-content:center;color:var(--clay);font-size:.72rem;letter-spacing:.24em;font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:12px}
+  .sec-head .eyebrow::before,.sec-head .eyebrow::after{content:"";width:28px;height:1px;background:var(--clay)}
+  .sec-head h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.1;letter-spacing:-.02em}
+  body.lang-ko .sec-head h2{font-family:'Noto Sans KR',sans-serif;font-weight:600}
+  .sec-head p{margin-top:16px;color:var(--plum);font-size:1.06rem}
+
+  .tour-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;width:min(1180px,92vw);margin:0 auto}
+  @media(max-width:900px){.tour-grid{grid-template-columns:1fr;max-width:460px}}
+  .tour-card{position:relative;border-radius:20px;overflow:hidden;min-height:420px;display:flex;flex-direction:column;justify-content:flex-end;
+    padding:28px;color:#fff;text-decoration:none;isolation:isolate;transition:transform .35s ease,box-shadow .35s ease}
+  .tour-card::after{content:"";position:absolute;inset:0;z-index:-1;background-size:cover;background-position:center;transition:transform .6s ease}
+  .tour-card::before{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(to top,rgba(15,18,26,.82) 0%,rgba(15,18,26,.25) 55%,rgba(15,18,26,.1) 100%)}
+  .tour-card>*{position:relative;z-index:1}
+  .tour-card.live{cursor:pointer}
+  .tour-card.live:hover{transform:translateY(-6px);box-shadow:0 26px 50px -20px rgba(12,20,20,.5)}
+  .tour-card.live:hover::after{transform:scale(1.06)}
+  .tour-card .tnum{font-family:'Space Mono',monospace;font-size:.74rem;letter-spacing:.1em;opacity:.85;margin-bottom:10px}
+  .tour-card h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.7rem;line-height:1.1;margin-bottom:10px}
+  body.lang-ko .tour-card h3{font-family:'Noto Sans KR',sans-serif;font-weight:600}
+  .tour-card p{font-size:.96rem;color:rgba(255,255,255,.9);margin-bottom:18px;max-width:34ch}
+  .tour-card .go{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.95rem;background:#fff;color:var(--ink);padding:11px 20px;border-radius:40px;align-self:flex-start}
+  .tour-card .soon{display:inline-flex;align-items:center;font-weight:600;font-size:.82rem;letter-spacing:.06em;background:rgba(255,255,255,.16);color:#fff;padding:8px 16px;border-radius:40px;align-self:flex-start;border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(3px)}
+  .tour-card.soon-card{filter:saturate(.85)}
+
+  .beauty::after{background-image:url('images/beauty-card.jpg')}
+  .history::after{background-image:url('images/history-card.jpg')}
+  .activity::after{background-image:url('images/activity-card.jpg')}
+  /* fallback tints if the card images are not present yet */
+  .beauty{background:linear-gradient(135deg,#7d5a4e,#b98977)}
+  .history{background:linear-gradient(135deg,#3a4256,#5a4d52)}
+  .activity{background:linear-gradient(135deg,#4a5c4e,#8a9a7a)}
+
+  /* ===== FOOTER ===== */
+  footer{background:var(--ink);color:#cfc9c4;text-align:center;padding:44px 20px;font-size:.9rem}
+  footer .logo{font-family:'Fraunces',serif;color:#fdfbf7;font-size:1.2rem;margin-bottom:8px;display:block}
+  footer a{color:#f0b79c;text-decoration:none}
+</style>
+</head>
+<body class="lang-en">
+
+<nav id="nav">
+  <a href="index.html" class="logo">Zeneverse</a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a data-i18n="nav_tours" onclick="document.getElementById('tours').scrollIntoView({behavior:'smooth'})">Tours</a>
+      <a data-i18n="nav_beauty" href="beauty.html">Beauty tour</a>
+    </div>
+    <div class="lang-toggle">
+      <div class="lang-cur" onclick="toggleLangMenu()"><span id="langCurLabel">EN</span> &#9662;</div>
+      <div class="lang-menu" id="langMenu">
+        <a onclick="setLang('en')">English</a>
+        <a onclick="setLang('ko')">한국어</a>
+        <a onclick="setLang('zhHant')">繁體中文</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= REVEAL HERO ================= -->
+<section class="reveal-hero" id="hero" style="--radius:165px;--feather:52px;">
+  <img class="layer reveal" src="images/main-reveal.jpg" alt="" aria-hidden="true">
+  <img class="layer front" id="frontImg" src="images/main-front.jpg" alt="" aria-hidden="true">
+
+  <div class="hero-copy">
+    <p class="eyebrow" data-i18n="hero_eyebrow">KOREA · PAST &amp; PRESENT</p>
+    <h1 data-i18n="hero_title">Two Koreas, <em>one journey</em>.</h1>
+    <p class="lede" data-i18n="hero_lede">Move across the screen — today&rsquo;s Seoul gives way to the Korea beneath it. Private, English-guided tours, curated by an insider.</p>
+  </div>
+  <p class="hero-hint" data-i18n="hero_hint">move to reveal</p>
+  <div class="hero-cue"><span class="chev"></span></div>
+</section>
+
+<!-- ================= TOURS ================= -->
+<section class="tours" id="tours">
+  <div class="sec-head">
+    <p class="eyebrow" data-i18n="tours_eyebrow">CHOOSE YOUR KOREA</p>
+    <h2 data-i18n="tours_title">Curated tours, guided in English</h2>
+    <p data-i18n="tours_sub">We start with beauty — the one we know best. History and activity tours are on the way.</p>
+  </div>
+
+  <div class="tour-grid">
+    <!-- Beauty: LIVE -->
+    <a class="tour-card beauty live" href="beauty.html">
+      <div class="tnum">01</div>
+      <h3 data-i18n="card_beauty_t">Beauty Tour</h3>
+      <p data-i18n="card_beauty_d">A private beauty day led by a working dermatology-clinic manager — skin consult, honest product picks, curated K-beauty shopping.</p>
+      <span class="go" data-i18n="card_beauty_cta">Explore &rarr;</span>
+    </a>
+
+    <!-- History: COMING SOON -->
+    <div class="tour-card history soon-card">
+      <div class="tnum">02</div>
+      <h3 data-i18n="card_history_t">History Tour</h3>
+      <p data-i18n="card_history_d">Palaces, hanok villages and the stories behind them — walk through the Korea that shaped today.</p>
+      <span class="soon" data-i18n="soon">Coming soon</span>
+    </div>
+
+    <!-- Activity: COMING SOON -->
+    <div class="tour-card activity soon-card">
+      <div class="tnum">03</div>
+      <h3 data-i18n="card_activity_t">Activity Tour</h3>
+      <p data-i18n="card_activity_d">Hands-on Korea — markets, making, tasting and moving through the city with a local by your side.</p>
+      <span class="soon" data-i18n="soon">Coming soon</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="index.html" class="logo">Zeneverse</a>
+  <p data-i18n="footer_tag">Curated private tours of Korea · guided in English</p>
+  <p style="margin-top:10px"><a href="beauty.html" data-i18n="footer_beauty">Go to the Beauty Tour &rarr;</a></p>
+</footer>
+
+<script>
+  /* ---------- i18n ---------- */
+  const I18N = {
+    en:{
+      nav_tours:"Tours", nav_beauty:"Beauty tour",
+      hero_eyebrow:"KOREA · PAST &amp; PRESENT",
+      hero_title:"Two Koreas, <em>one journey</em>.",
+      hero_lede:"Move across the screen — today&rsquo;s Seoul gives way to the Korea beneath it. Private, English-guided tours, curated by an insider.",
+      hero_hint:"move to reveal",
+      tours_eyebrow:"CHOOSE YOUR KOREA",
+      tours_title:"Curated tours, guided in English",
+      tours_sub:"We start with beauty — the one we know best. History and activity tours are on the way.",
+      card_beauty_t:"Beauty Tour",
+      card_beauty_d:"A private beauty day led by a working dermatology-clinic manager — skin consult, honest product picks, curated K-beauty shopping.",
+      card_beauty_cta:"Explore &rarr;",
+      card_history_t:"History Tour",
+      card_history_d:"Palaces, hanok villages and the stories behind them — walk through the Korea that shaped today.",
+      card_activity_t:"Activity Tour",
+      card_activity_d:"Hands-on Korea — markets, making, tasting and moving through the city with a local by your side.",
+      soon:"Coming soon",
+      footer_tag:"Curated private tours of Korea · guided in English",
+      footer_beauty:"Go to the Beauty Tour &rarr;"
+    },
+    ko:{
+      nav_tours:"투어", nav_beauty:"뷰티 투어",
+      hero_eyebrow:"한국 · 과거와 현재",
+      hero_title:"두 개의 한국, <em>하나의 여정</em>.",
+      hero_lede:"화면 위를 움직여 보세요 — 오늘의 서울 아래 숨은 한국이 드러납니다. 인사이더가 큐레이션한, 영어 가이드 프라이빗 투어.",
+      hero_hint:"움직여서 열어보세요",
+      tours_eyebrow:"당신의 한국을 고르세요",
+      tours_title:"영어로 안내하는 큐레이션 투어",
+      tours_sub:"가장 잘 아는 뷰티부터 시작합니다. 역사·액티비티 투어도 곧 열립니다.",
+      card_beauty_t:"뷰티 투어",
+      card_beauty_d:"현직 피부과 실장이 직접 안내하는 프라이빗 뷰티 데이 — 맞춤 피부 상담, 솔직한 제품 추천, 엄선된 K-뷰티 쇼핑.",
+      card_beauty_cta:"둘러보기 &rarr;",
+      card_history_t:"역사 투어",
+      card_history_d:"궁궐과 한옥마을, 그리고 그 뒤의 이야기 — 오늘을 만든 한국을 걷습니다.",
+      card_activity_t:"액티비티 투어",
+      card_activity_d:"직접 경험하는 한국 — 시장, 만들기, 맛보기, 그리고 로컬과 함께 도시를 누비기.",
+      soon:"곧 공개",
+      footer_tag:"한국의 프라이빗 큐레이션 투어 · 영어 가이드",
+      footer_beauty:"뷰티 투어로 가기 &rarr;"
+    },
+    zhHant:{
+      nav_tours:"行程", nav_beauty:"美妝導覽",
+      hero_eyebrow:"韓國 · 過去與現在",
+      hero_title:"兩個韓國，<em>一趟旅程</em>。",
+      hero_lede:"在畫面上移動 — 今日的首爾之下，藏著另一個韓國。由在地達人策劃的英語隨行私人導覽。",
+      hero_hint:"移動以顯示",
+      tours_eyebrow:"選擇你的韓國",
+      tours_title:"英語隨行的策劃導覽",
+      tours_sub:"我們從最擅長的美妝開始。歷史與體驗行程即將推出。",
+      card_beauty_t:"美妝導覽",
+      card_beauty_d:"由現任皮膚科診所經理親自帶領的私人美妝日 — 肌膚諮詢、誠實選品、精選韓妝購物。",
+      card_beauty_cta:"探索 &rarr;",
+      card_history_t:"歷史導覽",
+      card_history_d:"宮殿、韓屋村，以及背後的故事 — 走進形塑今日的韓國。",
+      card_activity_t:"體驗導覽",
+      card_activity_d:"親手體驗韓國 — 市場、手作、品嚐，與在地人一起穿梭城市。",
+      soon:"即將推出",
+      footer_tag:"韓國私人策劃導覽 · 英語隨行",
+      footer_beauty:"前往美妝導覽 &rarr;"
+    }
+  };
+  const LANG_LABEL={en:"EN",ko:"KO",zhHant:"繁中"};
+  let lang="en";
+
+  function toggleLangMenu(){document.getElementById("langMenu").classList.toggle("open");}
+  function setLang(l){
+    if(!I18N[l])l="en";
+    lang=l;
+    document.body.classList.toggle("lang-ko",l==="ko");
+    document.body.classList.toggle("lang-zh",l==="zhHant");
+    document.body.classList.toggle("lang-en",l==="en");
+    document.getElementById("langCurLabel").textContent=LANG_LABEL[l]||"EN";
+    document.getElementById("langMenu").classList.remove("open");
+    document.documentElement.lang = l==="ko"?"ko":l==="zhHant"?"zh-Hant":"en";
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const k=el.getAttribute("data-i18n");
+      if(I18N[l][k]!==undefined)el.innerHTML=I18N[l][k];
+    });
+    try{localStorage.setItem("zv_lang",l);}catch(e){}
+  }
+  /* share the same saved language as the beauty site */
+  (function initLang(){
+    let saved=null;try{saved=localStorage.getItem("zv_lang");}catch(e){}
+    if(saved&&I18N[saved]){setLang(saved);return;}
+    const nav=(navigator.language||"en").toLowerCase();
+    if(nav.startsWith("ko"))setLang("ko");
+    else if(nav.startsWith("zh"))setLang("zhHant");
+    else setLang("en");
+  })();
+  document.addEventListener("click",e=>{
+    const t=e.target.closest(".lang-toggle");
+    if(!t)document.getElementById("langMenu").classList.remove("open");
+  });
+
+  /* ---------- reveal interaction ---------- */
+  (function(){
+    var hero=document.getElementById("hero");
+    var front=document.getElementById("frontImg");
+    var cs=getComputedStyle(hero);
+    var R=parseInt(cs.getPropertyValue("--radius"))||165;
+    var F=parseInt(cs.getPropertyValue("--feather"))||52;
+    var raf=null,px=-999,py=-999;
+    function draw(){
+      var g="radial-gradient(circle "+R+"px at "+px+"px "+py+"px, transparent 0, transparent "+(R-F)+"px, #000 "+R+"px)";
+      front.style.webkitMaskImage=g; front.style.maskImage=g; raf=null;
+    }
+    function move(e){
+      var r=hero.getBoundingClientRect();
+      px=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
+      py=(e.touches?e.touches[0].clientY:e.clientY)-r.top;
+      if(!raf)raf=requestAnimationFrame(draw);
+    }
+    function leave(){front.style.webkitMaskImage="none";front.style.maskImage="none";}
+    hero.addEventListener("mousemove",move);
+    hero.addEventListener("mouseleave",leave);
+    hero.addEventListener("touchmove",move,{passive:true});
+  })();
+
+  /* nav background after scrolling past hero */
+  window.addEventListener("scroll",()=>{
+    const past=window.scrollY>window.innerHeight-80;
+    const nav=document.getElementById("nav");
+    nav.style.background=past?"var(--paper)":"transparent";
+    nav.querySelectorAll(".logo,.nav-links a,.lang-cur,#langCurLabel").forEach(el=>{
+      el.style.color=past?"var(--ink)":"#fdfbf7";
+      el.style.textShadow=past?"none":"";
+    });
+  });
+</script>
+</body>
+</html>
