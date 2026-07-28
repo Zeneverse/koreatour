@@ -111,6 +111,22 @@
   footer{background:var(--ink);color:#cfc9c4;text-align:center;padding:44px 20px;font-size:.9rem}
   footer .logo{font-family:'Fraunces',serif;color:#fdfbf7;font-size:1.2rem;margin-bottom:8px;display:block}
   footer a{color:#f0b79c;text-decoration:none}
+  footer .admin-dot{color:#6b6560;font-size:.78rem;cursor:pointer;opacity:.5}
+  footer .admin-dot:hover{opacity:1;color:#f0b79c}
+
+  /* ===== admin edit mode ===== */
+  body.main-edit .main-editable{outline:1px dashed rgba(201,138,114,.6);outline-offset:3px;border-radius:3px;cursor:text;transition:background .15s,outline-color .15s}
+  body.main-edit .main-editable:hover{background:rgba(201,138,114,.12);outline-color:var(--clay)}
+  body.main-edit .main-editable:focus{background:rgba(201,138,114,.1);outline:2px solid var(--clay);outline-offset:3px}
+  body.main-edit .reveal-hero .main-editable{background:rgba(0,0,0,.25)}
+  #mainAdminBar{position:fixed;left:0;right:0;bottom:0;z-index:100;background:var(--ink);color:#fdfbf7;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px clamp(16px,4vw,40px);
+    font-size:.9rem;box-shadow:0 -8px 30px rgba(0,0,0,.25);flex-wrap:wrap}
+  #mainAdminBar .mab-note{opacity:.9}
+  #mainAdminBar .mab-actions{display:flex;gap:10px}
+  #mainAdminBar button{padding:9px 18px;border-radius:30px;border:none;font-family:inherit;font-weight:600;font-size:.9rem;cursor:pointer;background:var(--clay);color:#fff}
+  #mainAdminBar button:disabled{opacity:.6;cursor:default}
+  #mainAdminBar .mab-exit{background:transparent;color:#fdfbf7;border:1px solid rgba(255,255,255,.4)}
 </style>
 </head>
 <body class="lang-en">
@@ -186,6 +202,7 @@
   <a href="index.html" class="logo">Zeneverse</a>
   <p data-i18n="footer_tag">Curated private tours of Korea · guided in English</p>
   <p style="margin-top:10px"><a href="beauty.html" data-i18n="footer_beauty">Go to the Beauty Tour &rarr;</a></p>
+  <p style="margin-top:16px"><a class="admin-dot" onclick="openAdminLogin()">&middot; admin</a></p>
 </footer>
 
 <script>
@@ -255,6 +272,15 @@
   const LANG_LABEL={en:"EN",ko:"KO",zhHant:"繁中"};
   let lang="en";
 
+  /* SAVED holds server-stored overrides: SAVED[lang][key] wins over I18N defaults */
+  let SAVED = {};
+  let adminToken = sessionStorage.getItem("zv_token") || "";
+  let adminMode = false;
+
+  function textFor(l,k){
+    if(SAVED[l]&&SAVED[l][k]!==undefined&&SAVED[l][k]!=="") return SAVED[l][k];
+    return (I18N[l]&&I18N[l][k]!==undefined)?I18N[l][k]:"";
+  }
   function toggleLangMenu(){document.getElementById("langMenu").classList.toggle("open");}
   function setLang(l){
     if(!I18N[l])l="en";
@@ -267,7 +293,8 @@
     document.documentElement.lang = l==="ko"?"ko":l==="zhHant"?"zh-Hant":"en";
     document.querySelectorAll("[data-i18n]").forEach(el=>{
       const k=el.getAttribute("data-i18n");
-      if(I18N[l][k]!==undefined)el.innerHTML=I18N[l][k];
+      const v=textFor(l,k);
+      if(v!==undefined&&v!=="")el.innerHTML=v;
     });
     try{localStorage.setItem("zv_lang",l);}catch(e){}
   }
@@ -284,6 +311,91 @@
     const t=e.target.closest(".lang-toggle");
     if(!t)document.getElementById("langMenu").classList.remove("open");
   });
+
+  /* ---------- load saved copy from the SAME backend as the beauty site ---------- */
+  function authHeaders(){ return adminToken?{"x-admin-token":adminToken}:{}; }
+  async function loadSavedCopy(){
+    try{
+      const r=await fetch("/api/config",{headers:authHeaders()});
+      if(!r.ok)return;
+      const c=await r.json();
+      /* main-landing copy lives in copy.main — never touches the beauty site's own keys */
+      if(c&&c.copy&&c.copy.main&&typeof c.copy.main==="object"){
+        SAVED=c.copy.main;
+        setLang(lang); /* re-render with saved text */
+      }
+    }catch(e){/* offline / opened as a local file — just use defaults */}
+  }
+  loadSavedCopy();
+
+  /* ---------- admin: same password + same DB as the beauty site ---------- */
+  async function openAdminLogin(){
+    if(adminMode){ toggleEdit(); return; }
+    const pw=prompt("Admin password / 관리자 비밀번호");
+    if(!pw)return;
+    try{
+      const r=await fetch("/api/admin/login",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({password:pw})});
+      const d=await r.json().catch(()=>({}));
+      if(r.ok&&d.token){
+        adminToken=d.token; sessionStorage.setItem("zv_token",adminToken);
+        adminMode=true; enterEdit();
+      }else{ alert("Wrong password / 비밀번호가 틀렸어요"); }
+    }catch(e){ alert("Login failed / 로그인 실패: "+e.message); }
+  }
+  function enterEdit(){
+    document.body.classList.add("main-edit");
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const k=el.getAttribute("data-i18n");
+      if(k==="soon")return; /* leave the coming-soon badge */
+      el.setAttribute("contenteditable","true");
+      el.classList.add("main-editable");
+    });
+    showAdminBar();
+  }
+  function exitEdit(){
+    document.body.classList.remove("main-edit");
+    document.querySelectorAll(".main-editable").forEach(el=>{
+      el.removeAttribute("contenteditable");
+      el.classList.remove("main-editable");
+    });
+    const bar=document.getElementById("mainAdminBar"); if(bar)bar.remove();
+  }
+  function toggleEdit(){ document.body.classList.contains("main-edit")?exitEdit():enterEdit(); }
+  function collectEdits(){
+    if(!SAVED[lang])SAVED[lang]={};
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const k=el.getAttribute("data-i18n");
+      if(k==="soon")return;
+      SAVED[lang][k]=el.innerHTML.trim();
+    });
+  }
+  async function saveEdits(){
+    collectEdits();
+    const btn=document.getElementById("mainSaveBtn"); if(btn){btn.textContent="저장 중…";btn.disabled=true;}
+    try{
+      /* read the whole current config, then write back with copy.main updated —
+         this preserves every beauty-site field untouched */
+      const cfgR=await fetch("/api/config",{headers:authHeaders()});
+      const cfg=await cfgR.json();
+      const copy=cfg.copy||{};
+      copy.main=SAVED;
+      const r=await fetch("/api/admin/save",{method:"POST",headers:{"content-type":"application/json",...authHeaders()},body:JSON.stringify({...cfg,copy})});
+      if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||r.status);}
+      if(btn){btn.textContent="✔ 저장됨";setTimeout(()=>{btn.textContent="저장 (Save)";btn.disabled=false;},1500);}
+    }catch(e){
+      alert("저장 실패 / Save failed: "+e.message);
+      if(btn){btn.textContent="저장 (Save)";btn.disabled=false;}
+    }
+  }
+  function showAdminBar(){
+    if(document.getElementById("mainAdminBar"))return;
+    const bar=document.createElement("div");
+    bar.id="mainAdminBar";
+    bar.innerHTML='<span class="mab-note">✏️ 아무 글자나 클릭해서 수정 — 지금 <b>'+(LANG_LABEL[lang]||"EN")+'</b> 편집 중. 언어를 바꾸면 그 언어를 편집합니다.</span>'+
+      '<span class="mab-actions"><button id="mainSaveBtn" onclick="saveEdits()">저장 (Save)</button>'+
+      '<button class="mab-exit" onclick="exitEdit()">닫기</button></span>';
+    document.body.appendChild(bar);
+  }
 
   /* ---------- reveal interaction ---------- */
   (function(){
